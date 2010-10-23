@@ -4,21 +4,21 @@ LIBS=$(shell pkg-config QtCore QtWebKit --libs)
 SRCDIR=src
 BUILDDIR=build
 
-all: main
+all: build/main
 
-main: main.o Example.o moc_Example.o
+build/main: build/main.o build/Example.o build/moc_Example.o
 	$(CC) $(BUILDDIR)/main.o $(BUILDDIR)/Example.o $(BUILDDIR)/moc_Example.o -o $(BUILDDIR)/main $(LIBS)
 
-main.o: src/main.cpp
+build/main.o: src/main.cpp
 	$(CC) $(CFLAGS) $(SRCDIR)/main.cpp -o $(BUILDDIR)/main.o
 
-Example.o: src/Example.cpp
+build/Example.o: src/Example.cpp
 	$(CC) $(CFLAGS) $(SRCDIR)/Example.cpp -o $(BUILDDIR)/Example.o
 
-moc_Example.o: moc_Example.cpp
+build/moc_Example.o: src/moc_Example.cpp
 	$(CC) $(CFLAGS) $(SRCDIR)/moc_Example.cpp -o $(BUILDDIR)/moc_Example.o
 
-moc_Example.cpp: src/Example.cpp
+src/moc_Example.cpp: src/Example.cpp
 	moc-qt4 $(SRCDIR)/Example.h -o $(SRCDIR)/moc_Example.cpp
 
 make clean:
