@@ -23,17 +23,26 @@
 #include <QApplication>
 #include <iostream>
 #include <QTimer>
+#include <QtGui>
+
 #include "Example.h"
 
 int main(int argc, char **argv) {
-  QApplication app(argc,argv,false);
+  QApplication app(argc,argv,true);
   Example ex;
-  
+
+
   std::cout << "Downloading podcast toplists as text and json:" << std::endl;
   ex.startDownload(QUrl("http://gpodder.net/toplist/10.txt"));
   
   ex.startDownload(QUrl("http://gpodder.net/toplist/10.json"));
   
+  std::cout << "Downloading subscription lists for user ase23:" << std::endl;
+
+  ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.txt"));
+
+  ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.json"));
+
   QTimer::singleShot(5000, &app, SLOT(quit()));
 
   return app.exec();

@@ -27,6 +27,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QAuthenticator>
 
 class Example : public QObject {
   Q_OBJECT;
@@ -41,6 +42,7 @@ class Example : public QObject {
     
   public slots:
     void result(QNetworkReply* reply);
+    void authenticate(QNetworkReply * reply, QAuthenticator * authenticator);
   
 };
 

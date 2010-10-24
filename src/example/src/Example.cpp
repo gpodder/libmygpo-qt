@@ -25,8 +25,9 @@
 
 Example::Example() {
   connect(&man, SIGNAL(finished(QNetworkReply*)),this, SLOT(result(QNetworkReply*)));
+  connect(&man, SIGNAL(authenticationRequired(QNetworkReply*, QAuthenticator*)),this,
+		  SLOT(authenticate(QNetworkReply*, QAuthenticator*)));
 }
-
 
 void Example::startDownload(const QUrl& url) {
   man.get(QNetworkRequest(url));
@@ -34,5 +35,10 @@ void Example::startDownload(const QUrl& url) {
 
 void Example::result(QNetworkReply* reply) {
     std::cout << reply->readAll().data() << std::endl;
-    reply->deleteLater();	
+    reply->deleteLater();
+}
+
+void Example::authenticate(QNetworkReply * reply, QAuthenticator * authenticator) {
+	authenticator->setUser("ase23");
+	authenticator->setPassword("csf-sepm");
 }
