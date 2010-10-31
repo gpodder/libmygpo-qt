@@ -22,7 +22,7 @@
 
 
 #include "UrlBuilder.h"
-#include <qstring.h>
+
 
 using namespace mygpo;
 
@@ -33,7 +33,7 @@ UrlBuilder& UrlBuilder::instance()
   return _instance;
 }
 
-QUrl UrlBuilder::getToplist( short i )
+QUrl UrlBuilder::getToplistUrl( short i )
 {
   QString tmp;
   if( i < 1 ) {
@@ -42,21 +42,24 @@ QUrl UrlBuilder::getToplist( short i )
     i = 100;
   }
   tmp.setNum( i );
-  return QUrl( "www.gpodder.net/toplist/"+tmp+".json" );
+  return QUrl( "http://gpodder.net/toplist/"+tmp+".json" );
 }
 
 
-QUrl UrlBuilder::getSuggestions( short i ) {
+QUrl UrlBuilder::getSuggestionsUrl( short i ) {
   QString tmp;
   QUrl u;
-  
   if( i < 1 ) {
     i = 1;
   } else if ( i > 100 ) {
     i = 100;
   }
   tmp.setNum( i );
-  return QUrl( "www.gpodder.net/suggesstion/"+tmp+".json" );
+  return QUrl( "http://gpodder.net/suggesstion/"+tmp+".json" );
+}
+
+QUrl UrlBuilder::getPodcastSearchUrl( const QString& query ) {
+  return QUrl( "http://gpodder.net/search.json?q="+query+".json" );
 }
 
 

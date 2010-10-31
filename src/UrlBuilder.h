@@ -23,6 +23,7 @@
 #ifndef URLBUILDER_H
 #define URLBUILDER_H
 #include <qt4/QtCore/qurl.h>
+#include <qstring.h>
 
 namespace mygpo {
 class UrlBuilder
@@ -30,9 +31,9 @@ class UrlBuilder
   
   public:
     static UrlBuilder& instance();
-    QUrl getToplist( short i );
-    QUrl getSuggestions( short i );
-
+    QUrl getToplistUrl( short i );
+    QUrl getSuggestionsUrl( short i );
+    QUrl getPodcastSearchUrl( const QString& query );
     
     
   private:
