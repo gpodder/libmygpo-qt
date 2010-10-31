@@ -1,0 +1,4 @@
+[Project]
+Name=libmygpo-qt
+Manager=KDevCMakeManager
+VersionControl=
