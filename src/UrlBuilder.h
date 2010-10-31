@@ -26,13 +26,34 @@
 #include <qstring.h>
 
 namespace mygpo {
+  /**
+  * Helper class to generate request URL's.
+  * Helps to generate URL's for the gpodder requests.
+  * This class uses the singleton pattern, to retrieve a
+  * reference to the singleton object use the function instance().
+  */
 class UrlBuilder
 {
   
   public:
+    /**
+    * @return The instance of the UrlBuilder object.
+    */
     static UrlBuilder& instance();
+    /**
+    * @param i Any value between 1..100. If it's out of range it wil be set to 1 or 100.
+    * @return Request URL to retrieve a list of the top 'i' podcasts.
+    */
     QUrl getToplistUrl( short i );
+    /**
+     * @param i Any value between 1..100. If it's out of range it wil be set to 1 or 100.
+     * @return Rquest URL to retrieve 'i' podcast suggestions.
+     */
     QUrl getSuggestionsUrl( short i );
+    /**
+     * @param query The query to search in the podcasts name/descrption.
+     * @return Request URL to retrieve podcasts related to the query.
+     */
     QUrl getPodcastSearchUrl( const QString& query );
     
     
