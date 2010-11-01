@@ -1,0 +1,27 @@
+
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/extra/qjson/src )
+
+set ( LIBMYGPO_QT_SRC
+        ApiRequest.cpp
+        RequestHandler.cpp
+        UrlBuilder.cpp
+)
+
+set ( LIBMYGPO_QT_H
+        mygpo.h
+        mygpo_export.h
+        AoiRequest.h
+        RequestHandler.h
+        UrlBuilder.h
+)
+
+QT4_WRAP_CPP( ${LIBMYGPO_QT_H} )
+
+add_definitions( -Werror )
+
+add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} )
+target_link_libraries( mygpo-qt qjson ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
+set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_LIB_VERSION} SOVERSION ${MYGPO_LIB_VERSION_SONAME} )
+install( TARGETS mygpo-qt DESTINATION lib${LIB_SUFFIX} )
+
+install( FILES ${LIBMYGPO_QT_H} DESTINATION  include/mygpo-qt COMPONENT Devel )
