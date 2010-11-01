@@ -37,7 +37,7 @@ UrlBuilder& UrlBuilder::instance()
   return _instance;
 }
 
-QUrl UrlBuilder::getToplistUrl( unsigned short i, Format f )
+QUrl UrlBuilder::getToplistUrl( int i, Format f )
 {
   QString tmp;
   if( i == 0 ) i = 1;
@@ -46,7 +46,7 @@ QUrl UrlBuilder::getToplistUrl( unsigned short i, Format f )
 }
 
 
-QUrl UrlBuilder::getSuggestionsUrl( unsigned short i, Format f ) 
+QUrl UrlBuilder::getSuggestionsUrl( int i, Format f ) 
 {
   QString tmp;
   if( i == 0 ) i = 1;

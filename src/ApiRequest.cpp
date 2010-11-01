@@ -28,7 +28,7 @@
 using namespace mygpo;
 
 
-QByteArray mygpo::ApiRequest::toplistOpml(unsigned short int count)
+QByteArray mygpo::ApiRequest::toplistOpml(int count)
 {
   QUrl requestUrl = UrlBuilder::instance().getToplistUrl(count, UrlBuilder::OPML);
   return RequestHandler::instance().getRequest(requestUrl);

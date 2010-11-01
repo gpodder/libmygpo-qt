@@ -22,7 +22,8 @@
 
 #ifndef URLBUILDER_H
 #define URLBUILDER_H
-#include <qt4/QtCore/qurl.h>
+
+#include <qurl.h>
 #include <qstring.h>
 
 namespace mygpo {
@@ -48,12 +49,12 @@ class UrlBuilder
     * @param i Any value between 1..100. If it's out of range it wil be set to 1 or 100.
     * @return Request URL to retrieve a list of the top 'i' podcasts.
     */
-    QUrl getToplistUrl( unsigned short i, Format f = JSON );
+    QUrl getToplistUrl(int i, Format f = JSON );
     /**
      * @param i Any value between 1..100. If it's out of range it wil be set to 1 or 100.
      * @return Rquest URL to retrieve 'i' podcast suggestions.
      */
-    QUrl getSuggestionsUrl( unsigned short i, Format f = JSON );
+    QUrl getSuggestionsUrl( int i, Format f = JSON );
     /**
      * @param query The query to search in the podcasts name/descrption.
      * @return Request URL to retrieve podcasts related to the query.

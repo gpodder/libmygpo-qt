@@ -22,6 +22,13 @@
 
 #ifndef APIREQUEST_H
 #define APIREQUEST_H
+
+#define MYGPO_MAJOR_VERSION 0
+#define MYGPO_MINOR_VERSION 1
+#define MYGPO_PATCH_VERSION 0
+
+#include "mygpo_export.h"
+
 #include <QByteArray>
 
 namespace mygpo
@@ -30,7 +37,7 @@ namespace mygpo
 class ApiRequest
 {
 public:
-    QByteArray toplistOpml(unsigned short count);
+    QByteArray toplistOpml(int count);
     QByteArray searchOpml(const QString& query);
 };
 
