@@ -31,19 +31,39 @@ RequestHandler& RequestHandler::instance()
     return _instance;
 }
 
-QByteArray RequestHandler::getRequest(const QUrl& url)
+int RequestHandler::getRequest(QByteArray& response, const QUrl& url)
 {
+	errorFlag = QNetworkReply::NoError;
+
 	QNetworkRequest request(url);
 	QNetworkReply *reply = manager.get(request);
 	QEventLoop loop;
-	QObject::connect(reply, SIGNAL(readyRead()), &loop, SLOT(quit()));
+	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+	QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
+			         SLOT(handleError(QNetworkReply::NetworkError)));
+	QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop,
+			         SLOT(quit()));
 
 	// Execute the event loop here, now we will wait here until readyRead() signal is emitted
 	// which in turn will trigger event loop quit.
 	loop.exec();
 
-	return reply->readAll();
+	if (errorFlag == QNetworkReply::NoError) {
+		response = reply->readAll();
+	}
+	return errorFlag;
 }
+
+
+
+void RequestHandler::handleError(QNetworkReply::NetworkError code)
+{
+	errorFlag = code;
+}
+
+
+
+
 
 
 

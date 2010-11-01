@@ -38,18 +38,22 @@ public:
 	 */
 	static RequestHandler& instance();
 	/**
-	 * Sends a GET request with the given url and returns the servers response.
+	 * Sends a GET request with the given url and receives the servers response.
+	 * @param response The servers response will be written into this QByteArray
 	 * @param url The request url
-	 * @return The servers response
+	 * @return 0 if the request was successful, 1 if an error occurred.
 	 */
-	QByteArray getRequest(const QUrl& url);
+	int getRequest(QByteArray& response, const QUrl& url);
 
 private:
 	QNetworkAccessManager manager;
 	static RequestHandler _instance;
+	QNetworkReply::NetworkError errorFlag;
 
 	RequestHandler() {};
 	RequestHandler(const RequestHandler&) {};
+
+	void handleError(QNetworkReply::NetworkError code);
 };
 
 #endif /* REQUESTHANDLER_H_ */
