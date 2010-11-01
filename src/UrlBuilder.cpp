@@ -28,38 +28,47 @@ using namespace mygpo;
 
 UrlBuilder UrlBuilder::_instance;
 
+UrlBuilder::UrlBuilder(): _server( "http://gpodder.net" ) 
+{
+}
+
 UrlBuilder& UrlBuilder::instance()
 {
   return _instance;
 }
 
-QUrl UrlBuilder::getToplistUrl( short i )
+QUrl UrlBuilder::getToplistUrl( unsigned short i, Format f )
 {
   QString tmp;
-  if( i < 1 ) {
-    i = 1;
-  } else if ( i > 100 ) {
-    i = 100;
-  }
+  if( i == 0 ) i = 1;
   tmp.setNum( i );
-  return QUrl( "http://gpodder.net/toplist/"+tmp+".json" );
+  return QUrl( _server+"/toplist/"+tmp+getFormatExtension( f ) );
 }
 
 
-QUrl UrlBuilder::getSuggestionsUrl( short i ) {
+QUrl UrlBuilder::getSuggestionsUrl( unsigned short i, Format f ) 
+{
   QString tmp;
-  QUrl u;
-  if( i < 1 ) {
-    i = 1;
-  } else if ( i > 100 ) {
-    i = 100;
-  }
+  if( i == 0 ) i = 1;
   tmp.setNum( i );
-  return QUrl( "http://gpodder.net/suggesstion/"+tmp+".json" );
+  return QUrl( _server+"/suggestion/"+tmp+getFormatExtension( f ) );
 }
 
-QUrl UrlBuilder::getPodcastSearchUrl( const QString& query ) {
-  return QUrl( "http://gpodder.net/search.json?q="+query+".json" );
+QUrl UrlBuilder::getPodcastSearchUrl( const QString& query, Format f ) 
+{
+  return QUrl( _server+"/search.json?q="+query+getFormatExtension( f ) );
+}
+
+QString UrlBuilder::getFormatExtension(Format f)
+{
+  switch( f ) {
+    case JSON:
+      return QString( ".json" );
+      break;
+    case OPML:
+      return QString( ".opml" );
+      break;      
+  }
 }
 
 
