@@ -21,7 +21,7 @@
 ***************************************************************************/
 
 #include "RequestHandler.h"
-
+#include <QEventLoop>
 RequestHandler RequestHandler::_instance;
 
 RequestHandler& RequestHandler::instance()

@@ -20,36 +20,22 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef REQUESTHANDLER_H_
-#define REQUESTHANDLER_H_
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
+#include "ApiRequest.h"
+#include "UrlBuilder.h"
+#include "RequestHandler.h"
 
-/**
- * Class for sending HTTP requests and handle the servers response.
- */
-class RequestHandler {
-public:
-	/**
-	 * Gets an instance of the RequestHandler
-	 * @return The instance of the RequestHandler object.
-	 */
-	static RequestHandler& instance();
-	/**
-	 * Sends a GET request with the given url and returns the servers response.
-	 * @param url The request url
-	 * @return The servers response
-	 */
-	QByteArray getRequest(const QUrl& url);
+using namespace mygpo;
 
-private:
-	QNetworkAccessManager manager;
-	static RequestHandler _instance;
 
-	RequestHandler() {};
-	RequestHandler(const RequestHandler&) {};
-};
+QByteArray mygpo::ApiRequest::toplistOpml(unsigned short int count)
+{
+  QUrl requestUrl = UrlBuilder::instance().getToplistUrl(count, UrlBuilder::OPML);
+  return RequestHandler::instance().getRequest(requestUrl);
+}
 
-#endif /* REQUESTHANDLER_H_ */
+QByteArray mygpo::ApiRequest::searchOpml(const QString& query)
+{
+  QUrl requestUrl = UrlBuilder::instance().getPodcastSearchUrl(query, UrlBuilder::OPML);  
+  return RequestHandler::instance().getRequest(requestUrl);
+}

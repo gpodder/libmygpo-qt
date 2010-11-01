@@ -33,17 +33,16 @@ namespace mygpo {
   * reference to the singleton object use the function instance().
   */
   
-  
-  enum Format {
-    JSON,
-    OPML
-  };
-  
-  
 class UrlBuilder
 {
   
   public: 
+    
+    enum Format {
+      JSON,
+      OPML
+    };
+    
     static UrlBuilder& instance();
     /**
     * @param i Any value between 1..100. If it's out of range it wil be set to 1 or 100.

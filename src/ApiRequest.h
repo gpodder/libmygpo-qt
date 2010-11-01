@@ -20,36 +20,20 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef REQUESTHANDLER_H_
-#define REQUESTHANDLER_H_
+#ifndef APIREQUEST_H
+#define APIREQUEST_H
+#include <QByteArray>
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
+namespace mygpo
+{
 
-/**
- * Class for sending HTTP requests and handle the servers response.
- */
-class RequestHandler {
+class ApiRequest
+{
 public:
-	/**
-	 * Gets an instance of the RequestHandler
-	 * @return The instance of the RequestHandler object.
-	 */
-	static RequestHandler& instance();
-	/**
-	 * Sends a GET request with the given url and returns the servers response.
-	 * @param url The request url
-	 * @return The servers response
-	 */
-	QByteArray getRequest(const QUrl& url);
-
-private:
-	QNetworkAccessManager manager;
-	static RequestHandler _instance;
-
-	RequestHandler() {};
-	RequestHandler(const RequestHandler&) {};
+    QByteArray toplistOpml(unsigned short count);
+    QByteArray searchOpml(const QString& query);
 };
 
-#endif /* REQUESTHANDLER_H_ */
+}
+
+#endif

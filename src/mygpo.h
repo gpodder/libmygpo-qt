@@ -23,18 +23,7 @@
 #ifndef MYGPO_H
 #define MYGPO_H
 
-#include<QByteArray>
+#include "ApiRequest.h"
 
-namespace mygpo
-{
-
-class ApiRequest
-{
-public:
-    QByteArray toplistOpml(short count);
-    QByteArray searchOpml(const QString& query);
-};
-
-}
 
 #endif // MYGPO_H

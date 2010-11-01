@@ -42,7 +42,7 @@ QUrl UrlBuilder::getToplistUrl( unsigned short i, Format f )
   QString tmp;
   if( i == 0 ) i = 1;
   tmp.setNum( i );
-  return QUrl( _server+"/toplist/"+tmp+getFormatExtension( f ) );
+  return QUrl( _server+"/toplist/"+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 
@@ -51,12 +51,12 @@ QUrl UrlBuilder::getSuggestionsUrl( unsigned short i, Format f )
   QString tmp;
   if( i == 0 ) i = 1;
   tmp.setNum( i );
-  return QUrl( _server+"/suggestion/"+tmp+getFormatExtension( f ) );
+  return QUrl( _server+"/suggestion/"+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 QUrl UrlBuilder::getPodcastSearchUrl( const QString& query, Format f ) 
 {
-  return QUrl( _server+"/search.json?q="+query+getFormatExtension( f ) );
+  return QUrl( _server+"/search"+getFormatExtension( f )+"?q="+query, QUrl::TolerantMode );
 }
 
 QString UrlBuilder::getFormatExtension(Format f)
