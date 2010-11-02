@@ -28,7 +28,7 @@
 using namespace mygpo;
 
 
-QByteArray mygpo::ApiRequest::toplistOpml(int count)
+QByteArray ApiRequest::toplistOpml(int count)
 {
   QUrl requestUrl = UrlBuilder::instance().getToplistUrl(count, UrlBuilder::OPML);
   QByteArray response;
@@ -36,7 +36,7 @@ QByteArray mygpo::ApiRequest::toplistOpml(int count)
   return response;
 }
 
-QByteArray mygpo::ApiRequest::searchOpml(const QString& query)
+QByteArray ApiRequest::searchOpml(const QString& query)
 {
   QUrl requestUrl = UrlBuilder::instance().getPodcastSearchUrl(query, UrlBuilder::OPML);
   QByteArray response;

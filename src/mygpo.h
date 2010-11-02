@@ -24,6 +24,6 @@
 #define MYGPO_H
 
 #include "ApiRequest.h"
-
+#include "Podcast.h"
 
 #endif // MYGPO_H

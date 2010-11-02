@@ -27,6 +27,8 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
+namespace mygpo {
+
 /**
  * Class for sending HTTP requests and handle the servers response.
  */
@@ -58,5 +60,7 @@ private:
 
 	void handleError(QNetworkReply::NetworkError code);
 };
+
+}
 
 #endif /* REQUESTHANDLER_H_ */

@@ -34,7 +34,7 @@
 namespace mygpo
 {
 
-class ApiRequest
+class MYGPO_EXPORT ApiRequest
 {
 public:
     QByteArray toplistOpml(int count);

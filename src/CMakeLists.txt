@@ -12,7 +12,7 @@ set ( LIBMYGPO_QT_H
         mygpo.h
         mygpo_export.h
         Podcast.h
-        AoiRequest.h
+        ApiRequest.h
         RequestHandler.h
         UrlBuilder.h
 )

@@ -24,6 +24,8 @@
 
 #include <QEventLoop>
 
+using namespace mygpo;
+
 RequestHandler RequestHandler::_instance;
 
 RequestHandler& RequestHandler::instance()
