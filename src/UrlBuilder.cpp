@@ -23,12 +23,14 @@
 
 #include "UrlBuilder.h"
 
+#include <QLatin1String>
+
 
 using namespace mygpo;
 
 UrlBuilder UrlBuilder::_instance;
 
-UrlBuilder::UrlBuilder(): _server( "http://gpodder.net" ) 
+UrlBuilder::UrlBuilder(): _server(QLatin1String("http://gpodder.net")) 
 {
 }
 
@@ -42,7 +44,7 @@ QUrl UrlBuilder::getToplistUrl( int i, Format f )
   QString tmp;
   if( i == 0 ) i = 1;
   tmp.setNum( i );
-  return QUrl( _server+"/toplist/"+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+  return QUrl( _server+QLatin1String("/toplist/")+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 
@@ -51,22 +53,22 @@ QUrl UrlBuilder::getSuggestionsUrl( int i, Format f )
   QString tmp;
   if( i == 0 ) i = 1;
   tmp.setNum( i );
-  return QUrl( _server+"/suggestion/"+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+  return QUrl( _server+QLatin1String("/suggestion/")+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 QUrl UrlBuilder::getPodcastSearchUrl( const QString& query, Format f ) 
 {
-  return QUrl( _server+"/search"+getFormatExtension( f )+"?q="+query, QUrl::TolerantMode );
+  return QUrl( _server+QLatin1String("/search")+getFormatExtension( f )+QLatin1String("?q=")+query, QUrl::TolerantMode );
 }
 
 QString UrlBuilder::getFormatExtension(Format f)
 {
   switch( f ) {
     case JSON:
-      return QString( ".json" );
+      return QString(QLatin1String(".json"));
       break;
     case OPML:
-      return QString( ".opml" );
+      return QString(QLatin1String(".opml"));
       break;      
   }
 }
