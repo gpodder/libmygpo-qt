@@ -41,18 +41,14 @@ UrlBuilder& UrlBuilder::instance()
 
 QUrl UrlBuilder::getToplistUrl( int i, Format f )
 {
-  QString tmp;
-  if( i == 0 ) i = 1;
-  tmp.setNum( i );
+  QString tmp = QString::number((i<1) ? (1) : (i));
   return QUrl( _server+QLatin1String("/toplist/")+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 
 QUrl UrlBuilder::getSuggestionsUrl( int i, Format f ) 
 {
-  QString tmp;
-  if( i == 0 ) i = 1;
-  tmp.setNum( i );
+  QString tmp = QString::number((i<1) ? (1) : (i));
   return QUrl( _server+QLatin1String("/suggestion/")+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
