@@ -25,11 +25,21 @@
 #include <QTimer>
 #include <QtGui>
 
-#include "Example.h"
+#include "ApiRequest.h"
+
+//#include "Example.h"
 
 int main(int argc, char **argv) {
+  
   QApplication app(argc,argv,true);
-  Example ex;
+  
+  mygpo::ApiRequest req;
+  QByteArray result;
+  result = req.toplistOpml(10);
+  std::cout << result.data() << std::endl;
+  
+  
+  /*Example ex;
 
 
   std::cout << "Downloading podcast toplists as text and json:" << std::endl;
@@ -42,7 +52,7 @@ int main(int argc, char **argv) {
   ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.txt"));
 
   ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.json"));
-
+  */
   QTimer::singleShot(5000, &app, SLOT(quit()));
 
   return app.exec();

@@ -19,13 +19,13 @@ set ( LIBMYGPO_QT_H
         UrlBuilder.h
 )
 
-QT4_WRAP_CPP( ${LIBMYGPO_QT_H} )
+QT4_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${LIBMYGPO_QT_H} )
 
 add_definitions( -Werror )
 
-add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} )
+add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC})
 target_link_libraries( mygpo-qt qjson ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
-set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_LIB_VERSION} SOVERSION ${MYGPO_LIB_VERSION_SONAME} )
+set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_LIB_VERSION} SOVERSION ${MYGPO_LIB_VERSION_SONAME} DEFINE_SYMBOL MYGPO_MAKEDLL)
 install( TARGETS mygpo-qt DESTINATION lib${LIB_SUFFIX} )
 
 install( FILES ${LIBMYGPO_QT_H} DESTINATION  include/mygpo-qt COMPONENT Devel )

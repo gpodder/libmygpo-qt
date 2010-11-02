@@ -1,25 +1,16 @@
 CC=g++
-CFLAGS=-c -g -Wall $(shell pkg-config QtCore QtWebKit --cflags)
-LIBS=$(shell pkg-config QtCore QtWebKit --libs)
+CFLAGS=-c -g -Wall -I$(HOME)/kde/include/mygpo-qt/ $(shell pkg-config QtCore QtWebKit --cflags)
+LIBS=-L$(HOME)/kde/lib/ -l$(HOME)/kde/lib/libmygpo-qt.so $(shell pkg-config QtCore QtWebKit --libs)
 SRCDIR=src
-BUILDDIR=build
 
-all: build/main
+all: main
 
-build/main: build/main.o build/Example.o build/moc_Example.o
-	$(CC) $(BUILDDIR)/main.o $(BUILDDIR)/Example.o $(BUILDDIR)/moc_Example.o -o $(BUILDDIR)/main $(LIBS)
+main: main.o 
+	$(CC) $(SRCDIR)/main.o -o main $(LIBS)
 
 build/main.o: src/main.cpp
-	$(CC) $(CFLAGS) $(SRCDIR)/main.cpp -o $(BUILDDIR)/main.o
+	$(CC) $(CFLAGS) $(SRCDIR)/main.cpp -o $(SRCDIR)/main.o
 
-build/Example.o: src/Example.cpp
-	$(CC) $(CFLAGS) $(SRCDIR)/Example.cpp -o $(BUILDDIR)/Example.o
-
-build/moc_Example.o: src/moc_Example.cpp
-	$(CC) $(CFLAGS) $(SRCDIR)/moc_Example.cpp -o $(BUILDDIR)/moc_Example.o
-
-src/moc_Example.cpp: src/Example.cpp
-	moc-qt4 $(SRCDIR)/Example.h -o $(SRCDIR)/moc_Example.cpp
 
 make clean:
-	@rm -fr $(BUILDDIR)/* $(SRCDIR)/moc_Example.cpp
+	@rm -fr $(BUILDDIR)/* $(SRCDIR)/*.moc
