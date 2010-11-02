@@ -27,9 +27,11 @@
 #include <QUrl>
 #include <QString>
 
+#include "mygpo_export.h"
+
 namespace mygpo {
 
-class Podcast : public QObject
+class MYGPO_EXPORT Podcast : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QUrl url READ url CONSTANT)
@@ -37,7 +39,7 @@ class Podcast : public QObject
     Q_PROPERTY(QString description READ description CONSTANT)
     Q_PROPERTY(int subscribers READ subscribers CONSTANT)
     //Subscribers last Week not yet used because of a Bug in the gpodder.net API
-    //Q_PROPERTY(int subscriberstLastWeek READ subscriberstLastWeek CONSTANT)
+    //Q_PROPERTY(int subscribersLastWeek READ subscriberstLastWeek CONSTANT)
     Q_PROPERTY(QUrl logoUrl READ logoUrl CONSTANT)
     Q_PROPERTY(QUrl website READ website CONSTANT)
     Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)

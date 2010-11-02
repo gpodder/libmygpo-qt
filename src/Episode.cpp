@@ -20,11 +20,51 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef MYGPO_H
-#define MYGPO_H
-
-#include "ApiRequest.h"
-#include "Podcast.h"
 #include "Episode.h"
 
-#endif // MYGPO_H
+using namespace mygpo;
+
+Episode::Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_podcastUrl(podcastUrl), m_podcastTitle(podcastTitle), m_description(description), m_website(website), m_mygpoUrl(mygpoUrl)
+{
+
+}
+
+Episode::~Episode()
+{
+
+}
+
+const QUrl mygpo::Episode::url() const
+{
+    return m_url;
+}
+
+const QString mygpo::Episode::title() const
+{
+    return m_title;
+}
+
+const QUrl mygpo::Episode::podcastUrl() const
+{
+    return m_podcastUrl;
+}
+
+const QString mygpo::Episode::podcastTitle() const
+{
+    return m_podcastTitle;
+}
+
+const QString mygpo::Episode::description() const
+{
+    return m_description;
+}
+
+const QUrl mygpo::Episode::website() const
+{
+    return m_website;
+}
+
+const QUrl mygpo::Episode::mygpoUrl() const
+{
+    return m_mygpoUrl;
+}

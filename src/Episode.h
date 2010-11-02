@@ -20,11 +20,48 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef MYGPO_H
-#define MYGPO_H
+#ifndef EPISODE_H
+#define EPISODE_H
 
-#include "ApiRequest.h"
-#include "Podcast.h"
-#include "Episode.h"
+#include <QObject>
+#include <QUrl>
+#include <QString>
 
-#endif // MYGPO_H
+#include "mygpo_export.h"
+
+namespace mygpo {
+
+class MYGPO_EXPORT Episode : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QUrl url READ url CONSTANT)
+    Q_PROPERTY(QString title READ title CONSTANT)
+    Q_PROPERTY(QUrl podcastUrl READ url CONSTANT)
+    Q_PROPERTY(QString podcastTitle READ title CONSTANT)
+    Q_PROPERTY(QString description READ description CONSTANT)
+    Q_PROPERTY(QUrl website READ website CONSTANT)
+    Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
+    
+public:
+    Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
+    virtual ~Episode();
+    const QUrl url() const;
+    const QString title() const;
+    const QUrl podcastUrl() const;
+    const QString podcastTitle() const;
+    const QString description() const;
+    const QUrl website() const;
+    const QUrl mygpoUrl() const;
+private:
+    QUrl m_url;
+    QString m_title;
+    QUrl m_podcastUrl;
+    QString m_podcastTitle;
+    QString m_description;
+    QUrl m_website;
+    QUrl m_mygpoUrl;
+};
+
+}
+
+#endif // EPISODE_H

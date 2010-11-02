@@ -3,6 +3,7 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/extra/qjson
 
 set ( LIBMYGPO_QT_SRC 
         Podcast.cpp
+        Episode.cpp 
         ApiRequest.cpp
         RequestHandler.cpp
         UrlBuilder.cpp
@@ -12,6 +13,7 @@ set ( LIBMYGPO_QT_H
         mygpo.h
         mygpo_export.h
         Podcast.h
+        Episode.h
         ApiRequest.h
         RequestHandler.h
         UrlBuilder.h
