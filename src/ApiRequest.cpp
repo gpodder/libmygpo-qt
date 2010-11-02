@@ -31,11 +31,15 @@ using namespace mygpo;
 QByteArray mygpo::ApiRequest::toplistOpml(int count)
 {
   QUrl requestUrl = UrlBuilder::instance().getToplistUrl(count, UrlBuilder::OPML);
-  return RequestHandler::instance().getRequest(requestUrl);
+  QByteArray response;
+  RequestHandler::instance().getRequest(response, requestUrl);
+  return response;
 }
 
 QByteArray mygpo::ApiRequest::searchOpml(const QString& query)
 {
-  QUrl requestUrl = UrlBuilder::instance().getPodcastSearchUrl(query, UrlBuilder::OPML);  
-  return RequestHandler::instance().getRequest(requestUrl);
+  QUrl requestUrl = UrlBuilder::instance().getPodcastSearchUrl(query, UrlBuilder::OPML);
+  QByteArray response;
+  RequestHandler::instance().getRequest(response, requestUrl);
+  return response;
 }

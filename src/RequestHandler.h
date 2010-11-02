@@ -30,7 +30,10 @@
 /**
  * Class for sending HTTP requests and handle the servers response.
  */
-class RequestHandler {
+class RequestHandler : public QObject {
+
+	Q_OBJECT;
+
 public:
 	/**
 	 * Gets an instance of the RequestHandler
