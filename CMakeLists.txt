@@ -67,6 +67,21 @@ CONFIGURE_FILE(
 ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
+#add extra search paths for libraries and includes
+SET (LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
+SET (LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Directory where lib will install")
+SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "The directory the headers are installed in")
+# SET (CMAKE_MODULES_INSTALL_DIR "${CMAKE_ROOT}/Modules" CACHE PATH "The directory to install FindLibmygpo-qt.cmake to")
+
+# pkg-config
+IF (NOT WIN32)
+  CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libmygpo-qt.pc.in
+                  ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
+                  @ONLY)
+  INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
+           DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+ENDIF (NOT WIN32)
+
 add_subdirectory( src )
 add_subdirectory( extra )
 #add_subdirectory( tests )

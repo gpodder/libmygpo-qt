@@ -1,16 +1,16 @@
 CC=g++
-CFLAGS=-c -g -Wall -I$(HOME)/kde/include/mygpo-qt/ $(shell pkg-config QtCore QtWebKit --cflags)
-LIBS=-L$(HOME)/kde/lib/ -l$(HOME)/kde/lib/libmygpo-qt.so $(shell pkg-config QtCore QtWebKit --libs)
+CFLAGS=-c -g -Wall $(shell pkg-config QtGui QtCore QtWebKit libmygpo-qt --cflags)
+LIBS= $(shell pkg-config QtGui QtCore QtWebKit libmygpo-qt --libs)
 SRCDIR=src
 
 all: main
 
-main: main.o 
+main: $(SRCDIR)/main.o 
 	$(CC) $(SRCDIR)/main.o -o main $(LIBS)
 
-build/main.o: src/main.cpp
+$(SRCDIR)/main.o: $(SRCDIR)/main.cpp
 	$(CC) $(CFLAGS) $(SRCDIR)/main.cpp -o $(SRCDIR)/main.o
 
 
 make clean:
-	@rm -fr $(BUILDDIR)/* $(SRCDIR)/*.moc
+	rm -fr $(SRCDIR)/*.moc $(SRCDIR)/*.o main

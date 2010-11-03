@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=@LIB_INSTALL_DIR@
+includedir=@INCLUDE_INSTALL_DIR@
+
+Name: libmygpo-qt
+Description: libmygpo-qt is a C++/Qt Library that wraps the gpodder.net WebAPI
+Version: @MYGPO_LIB_MAJOR_VERSION@.@MYGPO_LIB_MINOR_VERSION@.@MYGPO_LIB_PATCH_VERSION@
+Requires: QtCore QtNetwork
+Libs: -L${libdir} -lmygpo-qt
+Cflags: -I${includedir}
