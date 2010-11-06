@@ -58,6 +58,7 @@ private:
 	RequestHandler() {};
 	RequestHandler(const RequestHandler&) {};
 
+private slots:
 	void handleError(QNetworkReply::NetworkError code);
 };
 
