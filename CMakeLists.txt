@@ -74,12 +74,29 @@ SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "
 # SET (CMAKE_MODULES_INSTALL_DIR "${CMAKE_ROOT}/Modules" CACHE PATH "The directory to install FindLibmygpo-qt.cmake to")
 
 # pkg-config
+find_package(PkgConfig)
 IF (NOT WIN32)
-  CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libmygpo-qt.pc.in
-                  ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
-                  @ONLY)
-  INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
-           DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+    IF (PKG_CONFIG_FOUND)
+        CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libmygpo-qt.pc.in
+                            ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
+                            @ONLY)
+        #Check for QtCore.pc to know where the .pc File should be installed
+        find_path(PKG_CONFIG_DIR NAMES QtCore.pc
+        HINTS
+        ~/usr/lib
+        /lib
+        /usr/lib
+        /usr/local/lib
+        /opt/lib
+        ~/kde/lib
+        PATH_SUFFIXES pkgconfig
+        )
+        IF (PKG_CONFIG_DIR)
+            
+            INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
+                     DESTINATION ${PKG_CONFIG_DIR})
+        ENDIF (PKG_CONFIG_DIR)
+    ENDIF (PKG_CONFIG_FOUND)
 ENDIF (NOT WIN32)
 
 add_subdirectory( src )
