@@ -46,7 +46,7 @@ public:
 	 * Sends a GET request with the given url and receives the servers response.
 	 * @param response The servers response will be written into this QByteArray
 	 * @param url The request url
-	 * @return 0 if the request was successful, 1 if an error occurred.
+	 * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
 	 */
 	int getRequest(QByteArray& response, const QUrl& url);
 

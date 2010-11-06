@@ -33,12 +33,30 @@
 
 namespace mygpo
 {
+    /**
+     * This Class is the Frontend of libmygpo-qt.
+     * Methods from this Class map the Web API of gpodder.net
+     * and return the Results of the Requests.
+     */
 
 class MYGPO_EXPORT ApiRequest
 {
 public:
+    
+    /**
+     * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
+     * @param count The number of Podcasts that should be returned - will be set to 1 if < 1 and to 100 if > 100 
+     * @return QByteArray containing the OPM Data
+     */
     QByteArray toplistOpml(int count);
+    
+    /**
+     * Returns the OPML Result for the Simple API Call "Searching for Podcasts"
+     * @param query The String you want to search for
+     * @return QByteArray containing the OPM Data
+     */
     QByteArray searchOpml(const QString& query);
+    
 };
 
 }
