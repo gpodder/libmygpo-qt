@@ -24,10 +24,12 @@
 #define APIREQUEST_H
 
 #define MYGPO_MAJOR_VERSION 0
-#define MYGPO_MINOR_VERSION 1
+#define MYGPO_MINOR_VERSION 2
 #define MYGPO_PATCH_VERSION 0
 
 #include "mygpo_export.h"
+#include "Podcast.h"
+#include "Episode.h"
 
 #include <QByteArray>
 
@@ -56,6 +58,24 @@ public:
      * @return QByteArray containing the OPM Data
      */
     QByteArray searchOpml(const QString& query);
+    
+    //still missing for v0.2: retrieving Top Tags & Add/Remove Subscriptions
+    
+    QList<Podcast> toplist(int count);
+    
+    QList<Podcast> search(const QString& query);
+    
+    QList<Podcast> suggestions(int count);
+    
+    QList<Podcast> podcastsOfTag(int count, const QString& tag);
+    
+    Podcast podcastData(const QUrl& podcasturl);
+    
+    Episode episodeData(const QUrl& podcasturl, const QUrl& episodeurl);
+    
+    QList<Episode> favoriteEpisode(const QString& username);
+    
+    
     
 };
 
