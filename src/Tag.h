@@ -20,55 +20,31 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef PODCAST_H
-#define PODCAST_H
+#ifndef TAG_H
+#define TAG_H
 
 #include <QObject>
-#include <QUrl>
-#include <QString>
-
-#include "mygpo_export.h"
 
 namespace mygpo {
 
-class MYGPO_EXPORT Podcast : public QObject
+class Tag : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl url READ url CONSTANT)
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QString description READ description CONSTANT)
-    Q_PROPERTY(uint subscribers READ subscribers CONSTANT)
-    //Subscribers last Week not yet used because of a Bug in the gpodder.net API
-    //Q_PROPERTY(uint subscribersLastWeek READ subscriberstLastWeek CONSTANT)
-    Q_PROPERTY(QUrl logoUrl READ logoUrl CONSTANT)
-    Q_PROPERTY(QUrl website READ website CONSTANT)
-    Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
-    
+    Q_PROPERTY(QString tag READ tag CONSTANT)
+    Q_PROPERTY(uint usage READ usage CONSTANT)
+
 public:
-    Podcast(QUrl url, QString title, QString description, uint subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
-    Podcast(const mygpo::Podcast& other);
-    virtual ~Podcast();
-    Podcast operator=(const mygpo::Podcast& other);
-    //Getters
-    const QUrl url() const;
-    const QString title() const;
-    const QString description() const;
-    const uint subscribers() const;
-    //const uint subscriberstLastWeek();
-    const QUrl logoUrl() const;
-    const QUrl website() const;
-    const QUrl mygpoUrl() const;
+    Tag(QString tag, uint usage, QObject* parent = 0);
+    Tag(const Tag& other);
+    virtual ~Tag();
+    Tag operator=(const Tag& other);
+    const QString tag() const;
+    const uint usage() const;
 private:
-    QUrl m_url;
-    QString m_title;
-    QString m_description;
-    uint m_subscribers;
-    //uint m_SubscribersLastWeek;
-    QUrl m_logoUrl;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
+    QString m_tag;
+    uint m_usage;
 };
 
 }
 
-#endif // PODCAST_H
+#endif // TAG_H

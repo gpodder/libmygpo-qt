@@ -45,6 +45,8 @@ class MYGPO_EXPORT Episode : public QObject
 public:
     Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
+    Episode(const mygpo::Episode& other);
+    Episode operator=(const mygpo::Episode& other);
     const QUrl url() const;
     const QString title() const;
     const QUrl podcastUrl() const;

@@ -24,7 +24,13 @@
 
 using namespace mygpo;
 
-Podcast::Podcast(QUrl url, QString title, QString description, int subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_description(description), m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpoUrl)
+Podcast::Podcast(QUrl url, QString title, QString description, uint subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_description(description), m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpoUrl)
+{
+
+}
+
+
+Podcast::Podcast(const Podcast& other): QObject(other.parent()), m_url(other.url()), m_title(other.title()), m_description(other.description()), m_subscribers(other.subscribers()), m_logoUrl(other.logoUrl()), m_website(other.website()), m_mygpoUrl(other.mygpoUrl())
 {
 
 }
@@ -33,6 +39,12 @@ Podcast::~Podcast()
 {
 
 }
+
+Podcast Podcast::Podcast::operator=(const mygpo::Podcast& other)
+{
+    return Podcast(other);
+}
+
 
 const QUrl mygpo::Podcast::url() const
 {
@@ -49,7 +61,7 @@ const QString Podcast::description() const
     return m_description;
 }
 
-const int mygpo::Podcast::subscribers() const
+const uint mygpo::Podcast::subscribers() const
 {
     return m_subscribers;
 }

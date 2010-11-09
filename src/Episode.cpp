@@ -34,6 +34,17 @@ Episode::~Episode()
 
 }
 
+Episode::Episode(const mygpo::Episode& other): QObject(other.parent()), m_url(other.url()), m_title(other.title()), m_podcastUrl(other.podcastUrl()), m_podcastTitle(other.podcastTitle()), m_description(other.description()), m_website(other.website()), m_mygpoUrl(other.mygpoUrl())
+{
+
+}
+
+Episode Episode::operator=(const mygpo::Episode& other)
+{
+    return Episode(other);
+}
+
+
 const QUrl mygpo::Episode::url() const
 {
     return m_url;
