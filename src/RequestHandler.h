@@ -48,7 +48,15 @@ public:
 	 * @param url The request url
 	 * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
 	 */
-	int getRequest(QByteArray& response, const QUrl& url);
+	int getRequest( QByteArray& response, const QUrl& url );
+	
+	/**
+	 * Sends a POST request with the given url and data.
+	 * @param data The data to send to the url
+	 * @param url The request url
+	 * @return 0 if the request was succesful, corresponding ErrorCode if unsuccesful
+	 */
+	int postRequest( QByteArray& response, const QByteArray& data, const QUrl& url );
 
 private:
 	QNetworkAccessManager manager;
@@ -59,7 +67,7 @@ private:
 	RequestHandler(const RequestHandler&) {};
 
 private slots:
-	void handleError(QNetworkReply::NetworkError code);
+	void handleError( QNetworkReply::NetworkError code );
 };
 
 }

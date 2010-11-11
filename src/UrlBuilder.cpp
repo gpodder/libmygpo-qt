@@ -30,7 +30,7 @@ using namespace mygpo;
 
 UrlBuilder UrlBuilder::_instance;
 
-UrlBuilder::UrlBuilder(): _server(QLatin1String("http://gpodder.net")) 
+UrlBuilder::UrlBuilder(): _server( QLatin1String( "http://gpodder.net" ) ), _api2( QLatin1String( "/api/2" ) ), _api1( QLatin1String( "/api/1" ) ) 
 {
 }
 
@@ -39,34 +39,66 @@ UrlBuilder& UrlBuilder::instance()
   return _instance;
 }
 
-QUrl UrlBuilder::getToplistUrl( int i, Format f )
+QUrl UrlBuilder::getToplistUrl( unsigned int i, Format f )
 {
-  QString tmp = QString::number((i<1) ? (1) : (i));
-  return QUrl( _server+QLatin1String("/toplist/")+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+  QString tmp = QString::number( (i==0) ? 1 : i );
+  return QUrl( _server+QLatin1String( "/toplist/" )+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 
-QUrl UrlBuilder::getSuggestionsUrl( int i, Format f ) 
+QUrl UrlBuilder::getSuggestionsUrl( unsigned int i, Format f ) 
 {
-  QString tmp = QString::number((i<1) ? (1) : (i));
-  return QUrl( _server+QLatin1String("/suggestion/")+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+  QString tmp = QString::number( (i==0) ? 1 : i );
+  return QUrl( _server+QLatin1String( "/suggestion/" )+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 QUrl UrlBuilder::getPodcastSearchUrl( const QString& query, Format f ) 
 {
-  return QUrl( _server+QLatin1String("/search")+getFormatExtension( f )+QLatin1String("?q=")+query, QUrl::TolerantMode );
+  return QUrl( _server+QLatin1String( "/search" )+getFormatExtension( f )+QLatin1String("?q=")+query, QUrl::TolerantMode );
+}
+
+QUrl UrlBuilder::getTopTagsUrl( unsigned int i, Format f )
+{
+  QString tmp = QString::number( (i==0) ? 1 : i );
+  return QUrl( _server+_api2+QLatin1String( "/tags/" )+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+}
+
+QUrl UrlBuilder::getPodcastsOfTagUrl( const QString& tag, unsigned int i, Format f ) 
+{
+  QString tmp = QString::number( (i==0) ? 1 : i );
+  return QUrl( _server+_api2+QLatin1String( "/tag/" )+tag+QLatin1String( "/" )+tmp+getFormatExtension( f ) );
+}
+
+QUrl UrlBuilder::getPodcastDataUrl(const QString& url, Format f)
+{
+  return QUrl( _server+_api2+QLatin1String( "/data/podcast" )+getFormatExtension( f )+QLatin1String( "?url=" )+url );
+}
+
+QUrl UrlBuilder::getEpisodeDataUrl( const QString& podcastUrl, const QString& episodeUrl, Format f ) 
+{
+  return QUrl( _server+_api2+QLatin1String( "/data/episode" )+getFormatExtension( f )+
+	 QLatin1String( "?podcast=" )+podcastUrl+QLatin1String( "&url=" )+episodeUrl);
+}
+
+QUrl UrlBuilder::getFavEpisodesUrl( const QString& username, Format f)
+{
+  return QUrl( _server+_api2+QLatin1String( "/favorites/" )+username+getFormatExtension( f ) );
+}
+
+
+QUrl UrlBuilder::getAddRemoveSubUrl( const QString& username, const QString& deviceId, Format f )
+{
+  return QUrl( _server+_api1+QLatin1String( "/subscriptions/" )+username+QLatin1String( "/" )+deviceId+getFormatExtension( f ) );
 }
 
 QString UrlBuilder::getFormatExtension(Format f)
 {
   switch( f ) {
     case JSON:
-      return QString(QLatin1String(".json"));
+      return QString( QLatin1String( ".json" ) );
       break;
     case OPML:
-      return QString(QLatin1String(".opml"));
+      return QString( QLatin1String( ".opml" ) );
       break;      
   }
 }
-
-

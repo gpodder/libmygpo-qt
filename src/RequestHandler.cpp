@@ -58,6 +58,33 @@ int RequestHandler::getRequest(QByteArray& response, const QUrl& url)
 
 
 
+int RequestHandler::postRequest( QByteArray& response, const QByteArray& data, const QUrl& url )
+{
+  /*NOTE: using the same variable for error handling as getRequest.
+   * (If we want to implement asynchronous calls for get/post-Request, use 
+   * a new variable and error handling function (slot) for each request-function.)
+   * Also use a copy of data for asynchronous calls!
+   */
+  
+  errorFlag = QNetworkReply::NoError;
+  QNetworkRequest request( url );
+  QNetworkReply *reply = manager.post( request, data );
+  QEventLoop loop;
+  QObject::connect( reply, SIGNAL( finished() ), &loop, SLOT( quit() ) );
+  QObject::connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this,
+		    SLOT( handleError( QNetworkReply::NetworkError ) ) );
+  QObject::connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), &loop,
+		    SLOT( quit() ) );
+
+  loop.exec();
+  
+  if( errorFlag == QNetworkReply::NoError ) {
+    response = reply->readAll();
+  }
+  return errorFlag;
+}
+
+
 void RequestHandler::handleError(QNetworkReply::NetworkError code)
 {
 	errorFlag = code;
