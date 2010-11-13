@@ -20,55 +20,34 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef PODCAST_H
-#define PODCAST_H
+#ifndef JSONPARSER_H
+#define JSONPARSER_H
 
-#include <QObject>
-#include <QUrl>
-#include <QString>
+#include "Podcast.h"
+#include "Episode.h"
+#include "Tag.h"
 
-#include "mygpo_export.h"
+#include <QList>
 
 namespace mygpo {
 
-class MYGPO_EXPORT Podcast : public QObject
+class JsonParser
 {
-    Q_OBJECT
-    Q_PROPERTY(QUrl url READ url CONSTANT)
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QString description READ description CONSTANT)
-    Q_PROPERTY(uint subscribers READ subscribers CONSTANT)
-    //Subscribers last Week not yet used because of a Bug in the gpodder.net API
-    //Q_PROPERTY(uint subscribersLastWeek READ subscriberstLastWeek CONSTANT)
-    Q_PROPERTY(QUrl logoUrl READ logoUrl CONSTANT)
-    Q_PROPERTY(QUrl website READ website CONSTANT)
-    Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
-    
+
 public:
-    Podcast(QUrl url, QString title, QString description, uint subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
-    Podcast(const mygpo::Podcast& other);
-    virtual ~Podcast();
-    Podcast operator=(const mygpo::Podcast& other);
-    //Getters
-    const QUrl url() const;
-    const QString title() const;
-    const QString description() const;
-    const uint subscribers() const;
-    //const uint subscriberstLastWeek();
-    const QUrl logoUrl() const;
-    const QUrl website() const;
-    const QUrl mygpoUrl() const;
+    JsonParser();
+    virtual ~JsonParser();
+    QList<Podcast> toPodcastList(const QByteArray& jsonData);
+    Podcast toPodcast(const QByteArray& jsonData);
+    QList<Episode> toEpisodeList(const QByteArray& jsonData);
+    Episode toEpisode(const QByteArray& jsonData);
+    QList<Tag> toTagList(const QByteArray& jsonData);
 private:
-    QUrl m_url;
-    QString m_title;
-    QString m_description;
-    uint m_subscribers;
-    //uint m_SubscribersLastWeek;
-    QUrl m_logoUrl;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
+    Podcast qvariantToPodcast(QVariant& variantData);
+    Episode qvariantToEpisode(QVariant& variantData);
+    Tag qvariantToTag(QVariant& variantData);
 };
 
 }
 
-#endif // PODCAST_H
+#endif // JSONPARSER_H

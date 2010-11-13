@@ -30,6 +30,7 @@
 #include "mygpo_export.h"
 #include "Podcast.h"
 #include "Episode.h"
+#include "Tag.h"
 
 #include <QByteArray>
 
@@ -50,7 +51,7 @@ public:
      * @param count The number of Podcasts that should be returned - will be set to 1 if < 1 and to 100 if > 100 
      * @return QByteArray containing the OPM Data
      */
-    QByteArray toplistOpml(int count);
+    QByteArray toplistOpml(uint count);
     
     /**
      * Returns the OPML Result for the Simple API Call "Searching for Podcasts"
@@ -59,15 +60,15 @@ public:
      */
     QByteArray searchOpml(const QString& query);
     
-    //still missing for v0.2: retrieving Top Tags & Add/Remove Subscriptions
+    //still missing for v0.2: Add/Remove Subscriptions
     
-    QList<Podcast> toplist(int count);
+    QList<Podcast> toplist(uint count);
     
     QList<Podcast> search(const QString& query);
     
-    QList<Podcast> suggestions(int count);
+    QList<Podcast> suggestions(uint count);
     
-    QList<Podcast> podcastsOfTag(int count, const QString& tag);
+    QList<Podcast> podcastsOfTag(uint count, const QString& tag);
     
     Podcast podcastData(const QUrl& podcasturl);
     
@@ -75,7 +76,7 @@ public:
     
     QList<Episode> favoriteEpisode(const QString& username);
     
-    
+    QList<Tag> topTags(uint count);
     
 };
 

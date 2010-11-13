@@ -20,55 +20,37 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef PODCAST_H
-#define PODCAST_H
+#include "Tag.h"
 
-#include <QObject>
-#include <QUrl>
-#include <QString>
+using namespace mygpo;
 
-#include "mygpo_export.h"
-
-namespace mygpo {
-
-class MYGPO_EXPORT Podcast : public QObject
+Tag::Tag(QString tag, uint usage, QObject* parent): QObject(parent), m_tag(tag), m_usage(usage)
 {
-    Q_OBJECT
-    Q_PROPERTY(QUrl url READ url CONSTANT)
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QString description READ description CONSTANT)
-    Q_PROPERTY(uint subscribers READ subscribers CONSTANT)
-    //Subscribers last Week not yet used because of a Bug in the gpodder.net API
-    //Q_PROPERTY(uint subscribersLastWeek READ subscriberstLastWeek CONSTANT)
-    Q_PROPERTY(QUrl logoUrl READ logoUrl CONSTANT)
-    Q_PROPERTY(QUrl website READ website CONSTANT)
-    Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
-    
-public:
-    Podcast(QUrl url, QString title, QString description, uint subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
-    Podcast(const mygpo::Podcast& other);
-    virtual ~Podcast();
-    Podcast operator=(const mygpo::Podcast& other);
-    //Getters
-    const QUrl url() const;
-    const QString title() const;
-    const QString description() const;
-    const uint subscribers() const;
-    //const uint subscriberstLastWeek();
-    const QUrl logoUrl() const;
-    const QUrl website() const;
-    const QUrl mygpoUrl() const;
-private:
-    QUrl m_url;
-    QString m_title;
-    QString m_description;
-    uint m_subscribers;
-    //uint m_SubscribersLastWeek;
-    QUrl m_logoUrl;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
-};
 
 }
 
-#endif // PODCAST_H
+
+Tag::Tag(const Tag& other): QObject(other.parent()), m_tag(other.tag()), m_usage(other.usage())
+{
+
+}
+
+Tag::~Tag()
+{
+
+}
+
+Tag Tag::operator=(const Tag& other)
+{
+    return Tag(other);
+}
+
+const QString Tag::tag() const
+{
+    return m_tag;
+}
+
+const uint Tag::usage() const
+{
+    return m_usage;
+}
