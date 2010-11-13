@@ -311,4 +311,3 @@ void UrlBuilderTest::testGetAddRemoveSubUrlSpecialCharacters() {
 }
 
 QTEST_MAIN(UrlBuilderTest)
-#include "moc_UrlBuilderTest.cpp"

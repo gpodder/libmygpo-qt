@@ -26,11 +26,11 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
-#option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
+option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
 
-#if(MYGPO_BUILD_TESTS)
-#  enable_testing()
-#endif(MYGPO_BUILD_TESTS)
+if(MYGPO_BUILD_TESTS)
+  enable_testing()
+endif(MYGPO_BUILD_TESTS)
 
 set( CPACK_GENERATOR "TBZ2" "DEB" )
 set( CPACK_PACKAGE_VERSION_MAJOR "${MYGPO_LIB_MAJOR_VERSION}" )
@@ -101,4 +101,4 @@ ENDIF (NOT WIN32)
 
 add_subdirectory( src )
 add_subdirectory( extra )
-#add_subdirectory( tests )
+add_subdirectory( tests )
