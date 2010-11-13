@@ -22,7 +22,7 @@
 
 #include <QVariant>
 
-#include "qjson/parser.h"
+#include "parser.h"
 
 #include "JsonParser.h"
 
