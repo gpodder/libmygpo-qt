@@ -28,21 +28,15 @@
 
 using namespace mygpo;
 
-UrlBuilder UrlBuilder::_instance;
+const QString UrlBuilder::_server = QLatin1String( "http://gpodder.net" );
+const QString UrlBuilder::_api2 = QLatin1String( "/api/2" );
+const QString UrlBuilder::_api1 = QLatin1String( "/api/1" );
 
-UrlBuilder::UrlBuilder(): _server( QLatin1String( "http://gpodder.net" ) ), _api2( QLatin1String( "/api/2" ) ), _api1( QLatin1String( "/api/1" ) ) 
-{
-}
-
-UrlBuilder& UrlBuilder::instance()
-{
-  return _instance;
-}
 
 QUrl UrlBuilder::getToplistUrl( unsigned int i, Format f )
 {
   QString tmp = QString::number( (i==0) ? 1 : i );
-  return QUrl( _server+QLatin1String( "/toplist/" )+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+  return QUrl( UrlBuilder::_server+QLatin1String( "/toplist/" )+tmp+UrlBuilder::getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 
