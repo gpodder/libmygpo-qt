@@ -2,6 +2,7 @@
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/extra/qjson/src )
 
 set ( LIBMYGPO_QT_SRC
+        AddRemoveResult.cpp
         Tag.cpp 
         JsonParser.cpp 
         Podcast.cpp
@@ -12,6 +13,7 @@ set ( LIBMYGPO_QT_SRC
 )
 
 set ( LIBMYGPO_QT_H
+        AddRemoveResult.h
         JsonParser.h
         mygpo.h
         mygpo_export.h

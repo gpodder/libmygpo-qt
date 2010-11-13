@@ -32,6 +32,7 @@
 #include "Podcast.h"
 #include "Episode.h"
 #include "Tag.h"
+#include "AddRemoveResult.h"
 
 
 #include <QByteArray>
@@ -84,6 +85,8 @@ public:
     QList<Episode> favoriteEpisode(const QString& username);
     
     QList<Tag> topTags(uint count);
+    
+    AddRemoveResult addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove);
     
 private:
     

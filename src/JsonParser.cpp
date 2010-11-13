@@ -128,3 +128,49 @@ Tag JsonParser::qvariantToTag(QVariant& variantData)
     return tag;
 }
 
+QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList< QUrl >& remove)
+{
+    QString jsonData = QString(QLatin1String("{\"add\":[%1],\"remove\":[%2]}")).arg(urlListToString(add)).arg(urlListToString(remove));
+    QByteArray jsonByteArray;
+    jsonByteArray.append(jsonData.toAscii());
+    return jsonByteArray;
+}
+
+
+QString JsonParser::urlListToString(const QList< QUrl >& urls)
+{
+    QString urlsString;
+    int max = urls.size();
+    for (int i=0;i<max;i++)
+    {
+        urlsString.append(QString(QLatin1String("\"%1\"")).arg(urls.at(i).toString()));
+        if (i!=(max-1))
+        {
+            urlsString.append(QLatin1String(","));
+        }
+    }
+    return urlsString;
+}
+
+AddRemoveResult JsonParser::toAddRemoveResult(const QByteArray& jsonData)
+{
+    QJson::Parser parser;
+    QVariantMap resultMap = parser.parse(jsonData).toMap();
+    qulonglong timestamp = resultMap.value(QLatin1String("timestamp")).toULongLong();
+    QVariantList updateVarList = resultMap.value(QLatin1String("update_urls")).toList();
+    QList<QPair<QUrl, QUrl > > updateUrls;
+    foreach (QVariant urlVar, updateVarList)
+    {
+        updateUrls.append(toUpdatePair(urlVar));
+    }
+    AddRemoveResult result(timestamp,updateUrls);
+    return result;
+}
+
+QPair< QUrl, QUrl > mygpo::JsonParser::toUpdatePair(QVariant& variantData)
+{
+    QVariantList urlList = variantData.toList();
+    QUrl first = QUrl(urlList.at(0).toString());
+    QUrl second = QUrl(urlList.at(1).toString());
+    return qMakePair(first,second);
+}

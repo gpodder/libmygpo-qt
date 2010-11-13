@@ -20,39 +20,34 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
+#ifndef ADDREMOVERESULT_H
+#define ADDREMOVERESULT_H
 
-#include "Podcast.h"
-#include "Episode.h"
-#include "Tag.h"
-#include "AddRemoveResult.h"
-
+#include <QObject>
 #include <QList>
+#include <QUrl>
+
+#include "mygpo_export.h"
 
 namespace mygpo {
 
-class JsonParser
+class MYGPO_EXPORT AddRemoveResult : public QObject
 {
-
+    Q_OBJECT
+    Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
+    //updateUrls not (yet) available in Property System because they would have to be saved as QVariant
+    //Q_PROPERTY(QList<QPair<QUrl,QUrl>> updateUrls READ updateUrls CONSTANT)
 public:
-    JsonParser();
-    virtual ~JsonParser();
-    QList<Podcast> toPodcastList(const QByteArray& jsonData);
-    Podcast toPodcast(const QByteArray& jsonData);
-    QList<Episode> toEpisodeList(const QByteArray& jsonData);
-    Episode toEpisode(const QByteArray& jsonData);
-    QList<Tag> toTagList(const QByteArray& jsonData);
-    AddRemoveResult toAddRemoveResult(const QByteArray& jsonData);
-    QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
+    AddRemoveResult(qulonglong timestamp, const QList<QPair<QUrl, QUrl> >& updateUrls ,QObject* parent = 0);
+    AddRemoveResult(const AddRemoveResult& other);
+    AddRemoveResult operator=(const AddRemoveResult& other);
+    const qulonglong timestamp() const;
+    const QList<QPair<QUrl, QUrl> > updateUrls() const;
 private:
-    Podcast qvariantToPodcast(QVariant& variantData);
-    Episode qvariantToEpisode(QVariant& variantData);
-    Tag qvariantToTag(QVariant& variantData);
-    QPair<QUrl, QUrl> toUpdatePair(QVariant& variantData);
-    QString urlListToString(const QList<QUrl>& urls);
+    qulonglong m_timestamp;
+    QList<QPair<QUrl, QUrl> > m_updateUrls;
 };
 
 }
 
-#endif // JSONPARSER_H
+#endif // ADDREMOVERESULT_H

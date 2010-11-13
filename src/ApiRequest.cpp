@@ -128,3 +128,14 @@ QList< Podcast > ApiRequest::suggestions(uint count)
     QList<Podcast> podcastList = parser.toPodcastList(response);
     return podcastList;
 }
+
+AddRemoveResult ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove)
+{
+    QUrl requesturl = UrlBuilder::getAddRemoveSubUrl(username,device);
+    JsonParser parser;
+    QByteArray data = parser.addRemoveSubsToJSON(add,remove);
+    QByteArray response;
+    requestHandler.postRequest(response,data,requesturl);
+    AddRemoveResult result = parser.toAddRemoveResult(response);
+    return result;
+}

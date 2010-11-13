@@ -20,39 +20,31 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
-
-#include "Podcast.h"
-#include "Episode.h"
-#include "Tag.h"
 #include "AddRemoveResult.h"
 
-#include <QList>
+using namespace mygpo;
 
-namespace mygpo {
-
-class JsonParser
+AddRemoveResult::AddRemoveResult(qulonglong timestamp, const QList< QPair< QUrl, QUrl > >& updateUrls, QObject* parent): QObject(parent), m_timestamp(timestamp), m_updateUrls(updateUrls)
 {
-
-public:
-    JsonParser();
-    virtual ~JsonParser();
-    QList<Podcast> toPodcastList(const QByteArray& jsonData);
-    Podcast toPodcast(const QByteArray& jsonData);
-    QList<Episode> toEpisodeList(const QByteArray& jsonData);
-    Episode toEpisode(const QByteArray& jsonData);
-    QList<Tag> toTagList(const QByteArray& jsonData);
-    AddRemoveResult toAddRemoveResult(const QByteArray& jsonData);
-    QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
-private:
-    Podcast qvariantToPodcast(QVariant& variantData);
-    Episode qvariantToEpisode(QVariant& variantData);
-    Tag qvariantToTag(QVariant& variantData);
-    QPair<QUrl, QUrl> toUpdatePair(QVariant& variantData);
-    QString urlListToString(const QList<QUrl>& urls);
-};
 
 }
 
-#endif // JSONPARSER_H
+AddRemoveResult::AddRemoveResult(const AddRemoveResult& other): QObject(other.parent()), m_timestamp(other.timestamp()), m_updateUrls(other.updateUrls())
+{
+
+}
+
+AddRemoveResult AddRemoveResult::operator=(const AddRemoveResult& other)
+{
+    return AddRemoveResult(other);
+}
+
+const qulonglong AddRemoveResult::timestamp() const
+{
+    return m_timestamp;
+}
+
+const QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrls() const
+{
+    return m_updateUrls;
+}
