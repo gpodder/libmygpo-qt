@@ -21,16 +21,19 @@
 ***************************************************************************/
 
 #include "RequestHandler.h"
-
+#include <QAuthenticator>
 #include <QEventLoop>
 
 using namespace mygpo;
 
-RequestHandler RequestHandler::_instance;
-
-RequestHandler& RequestHandler::instance()
+RequestHandler::RequestHandler(const QString& username, const QString& password) : m_username(username), m_password(password)
 {
-    return _instance;
+  QObject::connect(&manager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, 
+		   SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
+}
+
+RequestHandler::RequestHandler()
+{
 }
 
 int RequestHandler::getRequest(QByteArray& response, const QUrl& url)
@@ -75,7 +78,6 @@ int RequestHandler::postRequest( QByteArray& response, const QByteArray& data, c
 		    SLOT( handleError( QNetworkReply::NetworkError ) ) );
   QObject::connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), &loop,
 		    SLOT( quit() ) );
-
   loop.exec();
   
   if( errorFlag == QNetworkReply::NoError ) {
@@ -91,7 +93,11 @@ void RequestHandler::handleError(QNetworkReply::NetworkError code)
 }
 
 
-
+void RequestHandler::authenticate( QNetworkReply* reply, QAuthenticator* authenticator )
+{
+  authenticator->setUser(m_username);
+  authenticator->setPassword(m_password);
+}
 
 
 

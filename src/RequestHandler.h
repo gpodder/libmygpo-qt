@@ -23,6 +23,8 @@
 #ifndef REQUESTHANDLER_H_
 #define REQUESTHANDLER_H_
 
+#include "mygpo_export.h"
+
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
@@ -32,16 +34,19 @@ namespace mygpo {
 /**
  * Class for sending HTTP requests and handle the servers response.
  */
-class RequestHandler : public QObject {
+class MYGPO_EXPORT RequestHandler : public QObject {
 
 	Q_OBJECT;
 
 public:
+  
 	/**
-	 * Gets an instance of the RequestHandler
-	 * @return The instance of the RequestHandler object.
+	 * @param username The username that should be used for authentication if required.
+	 * @param password The password that should be used for authentication if required
 	 */
-	static RequestHandler& instance();
+	RequestHandler(const QString& username, const QString& password);
+	RequestHandler();
+	
 	/**
 	 * Sends a GET request with the given url and receives the servers response.
 	 * @param response The servers response will be written into this QByteArray
@@ -60,14 +65,13 @@ public:
 
 private:
 	QNetworkAccessManager manager;
-	static RequestHandler _instance;
 	QNetworkReply::NetworkError errorFlag;
-
-	RequestHandler() {};
-	RequestHandler(const RequestHandler&) {};
-
+	QString m_username;
+	QString m_password;
+	
 private slots:
 	void handleError( QNetworkReply::NetworkError code );
+	void authenticate( QNetworkReply* reply, QAuthenticator* authentiactor );
 };
 
 }

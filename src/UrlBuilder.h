@@ -41,7 +41,8 @@ class UrlBuilder
     
     enum Format {
       JSON,
-      OPML
+      OPML,
+      TEXT
     };
     
     /**

@@ -43,7 +43,7 @@ QUrl UrlBuilder::getToplistUrl( uint i, Format f )
 QUrl UrlBuilder::getSuggestionsUrl( uint i, Format f ) 
 {
   QString tmp = QString::number( (i==0) ? 1 : i );
-  return QUrl( _server+QLatin1String( "/suggestion/" )+tmp+getFormatExtension( f ), QUrl::TolerantMode );
+  return QUrl( _server+QLatin1String( "/suggestions/" )+tmp+getFormatExtension( f ), QUrl::TolerantMode );
 }
 
 QUrl UrlBuilder::getPodcastSearchUrl( const QString& query, Format f ) 
@@ -87,12 +87,17 @@ QUrl UrlBuilder::getAddRemoveSubUrl( const QString& username, const QString& dev
 
 QString UrlBuilder::getFormatExtension(Format f)
 {
+  QString ret;
   switch( f ) {
     case JSON:
-      return QString( QLatin1String( ".json" ) );
+      ret = QString( QLatin1String( ".json" ) );
       break;
     case OPML:
-      return QString( QLatin1String( ".opml" ) );
-      break;      
+      ret = QString( QLatin1String( ".opml" ) );
+      break;
+    case TEXT:
+      ret = QString( QLatin1String( ".txt" ) );
+      break;
   }
+  return ret;
 }

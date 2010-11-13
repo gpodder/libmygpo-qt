@@ -101,4 +101,4 @@ ENDIF (NOT WIN32)
 
 add_subdirectory( src )
 add_subdirectory( extra )
-add_subdirectory( tests )
+# add_subdirectory( tests )

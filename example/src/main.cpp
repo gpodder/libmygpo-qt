@@ -25,18 +25,23 @@
 #include <QTimer>
 #include <QtGui>
 
-#include "ApiRequest.h"
+#include <Podcast.h>
+#include <ApiRequest.h>
 
+using namespace mygpo;
 //#include "Example.h"
 
 int main(int argc, char **argv) {
   
   QApplication app(argc,argv,true);
+  QList<Podcast> list;
   
-  mygpo::ApiRequest req;
+  ApiRequest req("ase23","csf-sepm");
   QByteArray result;
-  result = req.toplistOpml(10);
-  std::cout << result.data() << std::endl;
+  //result = req.toplistOpml(10);
+  //std::cout << result.data() << std::endl;
+  
+  list = req.suggestions(10);
   
   
   /*Example ex;

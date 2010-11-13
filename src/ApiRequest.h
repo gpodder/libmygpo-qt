@@ -27,15 +27,19 @@
 #define MYGPO_MINOR_VERSION 2
 #define MYGPO_PATCH_VERSION 0
 
+#include "RequestHandler.h"
 #include "mygpo_export.h"
 #include "Podcast.h"
 #include "Episode.h"
 #include "Tag.h"
 
+
 #include <QByteArray>
+
 
 namespace mygpo
 {
+  
     /**
      * This Class is the Frontend of libmygpo-qt.
      * Methods from this Class map the Web API of gpodder.net
@@ -46,6 +50,9 @@ class MYGPO_EXPORT ApiRequest
 {
 public:
     
+  
+    ApiRequest(const QString& username, const QString& password);
+    ApiRequest() {};
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to 1 if < 1 and to 100 if > 100 
@@ -77,6 +84,10 @@ public:
     QList<Episode> favoriteEpisode(const QString& username);
     
     QList<Tag> topTags(uint count);
+    
+private:
+    
+    RequestHandler requestHandler;
     
 };
 
