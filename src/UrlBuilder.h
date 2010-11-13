@@ -48,13 +48,13 @@ class UrlBuilder
     * @param i Any value between 1..100. If i <= 0 it will be set to 1.
     * @return Request URL to retrieve a list of the top 'i' podcasts.
     */
-    static QUrl getToplistUrl( unsigned int i, Format f = JSON );
+    static QUrl getToplistUrl( uint i, Format f = JSON );
     
     /**
      * @param i Any value between 1..100. If i <= 0 it will be set to 1.
      * @return Rquest URL to retrieve 'i' podcast suggestions.
      */
-    static QUrl getSuggestionsUrl( unsigned int i, Format f = JSON );
+    static QUrl getSuggestionsUrl( uint i, Format f = JSON );
     
     /**
      * @param query The query to search in the podcasts name/descrption.
@@ -66,39 +66,39 @@ class UrlBuilder
      * @param i Amount of tags. If i == 0 it will be set to 1.
      * @return Request URL to retrieve the 'i' most used tags.
      */
-    static QUrl getTopTagsUrl( unsigned int i, Format f = JSON );
+    static QUrl getTopTagsUrl( uint i );
     
     /**
      * @param i Amount of podcasts. If i == 0 it will be set to 1.
      * @return Request URL to retrieve the 'i' most-subscribed podcats that are tagged with tag.
      */
-    static QUrl getPodcastsOfTagUrl( const QString& tag, unsigned int i, Format f = JSON );
+    static QUrl getPodcastsOfTagUrl( const QString& tag, uint i );
     
     /**
      * @param url The URL of the podcast
      * @return Request URL to retrieve information about the podcast with the given url.
      */
-    static QUrl getPodcastDataUrl( const QString& url, Format f = JSON );
+    static QUrl getPodcastDataUrl( const QString& url );
     
     /**
      * @param podcastUrl URL of the podcast
      * @param episodeUrl URL of the episode that belongs to the podcast-url
      * @return Request URL to retrieve information about the episode with the given episode-url.
      */
-    static QUrl getEpisodeDataUrl( const QString& podcastUrl, const QString& episodeUrl, Format f = JSON );
+    static QUrl getEpisodeDataUrl( const QString& podcastUrl, const QString& episodeUrl );
     
     /**
      * @param username User name (gpodder.net). You need to be logged in with username.
      * @return Request URL to retrieve a list of all favorite episodes.
      */
-    static QUrl getFavEpisodesUrl( const QString& username, Format f = JSON );
+    static QUrl getFavEpisodesUrl( const QString& username );
     
     /**
      * @param username User name (gpodder.net). You need to be logged in with username.
      * @param deviceId The id of the device.
      * @return Request URL to to update the subscription list for a given device.
      */
-    static QUrl getAddRemoveSubUrl( const QString& username, const QString& deviceId, Format f = JSON );
+    static QUrl getAddRemoveSubUrl( const QString& username, const QString& deviceId );
     
   private:
     UrlBuilder() {};
