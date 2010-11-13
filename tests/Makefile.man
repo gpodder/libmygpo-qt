@@ -1,0 +1,32 @@
+CC=g++
+MOCFLAGS=-i $(shell pkg-config QtTest QtCore --cflags)
+CFLAGS=-pedantic -c -g -Wall $(shell pkg-config QtTest QtCore --cflags)
+LIBS=$(shell pkg-config QtTest QtCore --libs)
+MYGPOSRCDIR=../src
+
+all: UrlBuilderTest
+
+UrlBuilderTest: UrlBuilderTest.o UrlBuilder.o
+	$(CC) UrlBuilderTest.o UrlBuilder.o -o UrlBuilderTest $(LIBS)
+	
+UrlBuilderTest.o: UrlBuilderTest.cpp moc_UrlBuilderTest.cpp
+	$(CC) $(CFLAGS) UrlBuilderTest.cpp -o UrlBuilderTest.o
+	
+moc_%.cpp: %.h
+	moc-qt4 $(MOCFLAGS) $< -o $@
+	
+# Build mygpo classes
+Episode.o: $(MYGPOSRCDIR)/Episode.cpp
+	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/Episode.cpp -o Episode.o
+	
+Podcast.o: $(MYGPOSRCDIR)/Podcast.cpp
+	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/Podcast.cpp -o Podcast.o
+	
+RequestHandler.o: $(MYGPOSRCDIR)/RequestHandler.cpp
+	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/RequestHandler.cpp -o RequestHandler.o
+
+UrlBuilder.o: $(MYGPOSRCDIR)/UrlBuilder.cpp
+	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/UrlBuilder.cpp -o UrlBuilder.o	
+	
+make clean:
+	@rm -fr *.o UrlBuilderTest moc_UrlBuilderTest.cpp

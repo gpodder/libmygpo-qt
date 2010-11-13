@@ -53,9 +53,14 @@ int main(int argc, char **argv) {
 
   ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.json"));
   */
-  QTimer::singleShot(5000, &app, SLOT(quit()));
 
+  /* These two lines are no longer needed, RequestHandler waits itself
+   * for messages
+  QTimer::singleShot(5000, &app, SLOT(quit()));
   return app.exec();
+  */
+
+  return 0;
 }
 
 
