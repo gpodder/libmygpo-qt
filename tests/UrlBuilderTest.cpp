@@ -68,9 +68,9 @@ void UrlBuilderTest::testGetToplistUrlHigh() {
 
 void UrlBuilderTest::testGetToplistUrlNegative() {
 	QCOMPARE(UrlBuilder::getToplistUrl(-534, UrlBuilder::JSON),
-			QUrl(_server + QLatin1String("/toplist/1.json"), QUrl::TolerantMode));
+			QUrl(_server + QLatin1String("/toplist/4294966762.json"), QUrl::TolerantMode));
 	QCOMPARE(UrlBuilder::getToplistUrl(-534, UrlBuilder::OPML),
-			QUrl(_server + QLatin1String("/toplist/1.opml"), QUrl::TolerantMode));
+			QUrl(_server + QLatin1String("/toplist/4294966762.opml"), QUrl::TolerantMode));
 }
 
 void UrlBuilderTest::testGetToplistUrlZero() {
@@ -99,9 +99,9 @@ void UrlBuilderTest::testGetSuggestionsUrlHigh() {
 
 void UrlBuilderTest::testGetSuggestionsUrlNegative() {
 	QCOMPARE(UrlBuilder::getSuggestionsUrl(-534, UrlBuilder::JSON),
-			QUrl(_server + QLatin1String("/suggestions/1.json"), QUrl::TolerantMode));
+			QUrl(_server + QLatin1String("/suggestions/4294966762.json"), QUrl::TolerantMode));
 	QCOMPARE(UrlBuilder::getSuggestionsUrl(-534, UrlBuilder::OPML),
-			QUrl(_server + QLatin1String("/suggestions/1.opml"), QUrl::TolerantMode));
+			QUrl(_server + QLatin1String("/suggestions/4294966762.opml"), QUrl::TolerantMode));
 }
 
 void UrlBuilderTest::testGetSuggestionsUrlZero() {
@@ -154,7 +154,7 @@ void UrlBuilderTest::testGetTopTagsUrlHigh() {
 
 void UrlBuilderTest::testGetTopTagsUrlNegative() {
 	QCOMPARE(UrlBuilder::getTopTagsUrl(-534),
-			QUrl(_server + _api2 + QLatin1String("/tags/1.json"), QUrl::TolerantMode));
+			QUrl(_server + _api2 + QLatin1String("/tags/4294966762.json"), QUrl::TolerantMode));
 }
 
 void UrlBuilderTest::testGetTopTagsUrlZero() {
@@ -169,7 +169,7 @@ void UrlBuilderTest::testGetPodcastsOfTagUrl() {
 	QCOMPARE(UrlBuilder::getPodcastsOfTagUrl(QLatin1String("linux"), 2),
 			QUrl(_server + _api2 + QLatin1String("/tag/linux/2.json"), QUrl::TolerantMode));
 	QCOMPARE(UrlBuilder::getPodcastsOfTagUrl(QLatin1String("linux lastfm"), -534),
-			QUrl(_server + _api2 + QLatin1String("/tag/linux lastfm/1.json"), QUrl::TolerantMode));
+			QUrl(_server + _api2 + QLatin1String("/tag/linux lastfm/4294966762.json"), QUrl::TolerantMode));
 }
 
 void UrlBuilderTest::testGetPodcastsOfTagUrlEmpty() {
