@@ -24,6 +24,7 @@
 #include <QAuthenticator>
 #include <QEventLoop>
 
+
 using namespace mygpo;
 
 RequestHandler::RequestHandler(const QString& username, const QString& password) : m_username(username), m_password(password)
@@ -38,21 +39,13 @@ RequestHandler::RequestHandler()
 
 int RequestHandler::getRequest(QByteArray& response, const QUrl& url)
 {
+	m_loginFailed = false;
 	errorFlag = QNetworkReply::NoError;
-
 	QNetworkRequest request(url);
 	QNetworkReply *reply = manager.get(request);
-	QEventLoop loop;
-	QObject::connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
-	QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
-			         SLOT(handleError(QNetworkReply::NetworkError)));
-	QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), &loop,
-			         SLOT(quit()));
-
-	// Execute the event loop here, now we will wait here until readyRead() signal is emitted
-	// which in turn will trigger event loop quit.
-	loop.exec();
-
+	
+	waitForReply(*reply);
+	
 	if (errorFlag == QNetworkReply::NoError) {
 		response = reply->readAll();
 	}
@@ -68,17 +61,12 @@ int RequestHandler::postRequest( QByteArray& response, const QByteArray& data, c
    * a new variable and error handling function (slot) for each request-function.)
    * Also use a copy of data for asynchronous calls!
    */
-  
+  m_loginFailed = false;
   errorFlag = QNetworkReply::NoError;
   QNetworkRequest request( url );
   QNetworkReply *reply = manager.post( request, data );
-  QEventLoop loop;
-  QObject::connect( reply, SIGNAL( finished() ), &loop, SLOT( quit() ) );
-  QObject::connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this,
-		    SLOT( handleError( QNetworkReply::NetworkError ) ) );
-  QObject::connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), &loop,
-		    SLOT( quit() ) );
-  loop.exec();
+  
+  waitForReply(*reply);
   
   if( errorFlag == QNetworkReply::NoError ) {
     response = reply->readAll();
@@ -86,6 +74,16 @@ int RequestHandler::postRequest( QByteArray& response, const QByteArray& data, c
   return errorFlag;
 }
 
+void RequestHandler::waitForReply( const QNetworkReply& reply )
+{
+  QEventLoop loop;
+  QObject::connect( &reply, SIGNAL( finished() ), &loop, SLOT( quit() ) );
+  QObject::connect( &reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this,
+		    SLOT( handleError( QNetworkReply::NetworkError ) ) );
+  QObject::connect( &reply, SIGNAL( error( QNetworkReply::NetworkError ) ), &loop,
+		    SLOT( quit() ) );
+  loop.exec();
+}
 
 void RequestHandler::handleError(QNetworkReply::NetworkError code)
 {
@@ -95,8 +93,13 @@ void RequestHandler::handleError(QNetworkReply::NetworkError code)
 
 void RequestHandler::authenticate( QNetworkReply* reply, QAuthenticator* authenticator )
 {
-  authenticator->setUser(m_username);
-  authenticator->setPassword(m_password);
+  if(m_loginFailed) {
+    reply->abort();
+  } else {
+    m_loginFailed = true;
+    authenticator->setUser(m_username);
+    authenticator->setPassword(m_password);
+  }
 }
 
 

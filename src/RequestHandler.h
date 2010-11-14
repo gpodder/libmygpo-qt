@@ -63,11 +63,13 @@ public:
 	 */
 	int postRequest( QByteArray& response, const QByteArray& data, const QUrl& url );
 
-private:
+private: 
 	QNetworkAccessManager manager;
 	QNetworkReply::NetworkError errorFlag;
 	QString m_username;
 	QString m_password;
+	bool m_loginFailed;
+	void waitForReply( const QNetworkReply& reply );
 	
 private slots:
 	void handleError( QNetworkReply::NetworkError code );
