@@ -1,16 +1,25 @@
 CC=g++
-MOCFLAGS=-i $(shell pkg-config QtTest QtCore --cflags)
-CFLAGS=-pedantic -c -g -Wall $(shell pkg-config QtTest QtCore --cflags)
-LIBS=$(shell pkg-config QtTest QtCore --libs)
+MOCFLAGS=$(shell pkg-config QtTest QtCore QtWebKit --cflags)
+CFLAGS=-pedantic -c -g -Wall -I../src/ -I../extra/qjson/src/ $(shell pkg-config QtTest QtCore QtWebKit --cflags)
+LIBS=$(shell pkg-config QtTest QtCore QtWebKit --libs)
 MYGPOSRCDIR=../src
 
-all: UrlBuilderTest
+all: RequestHandlerTest UrlBuilderTest
 
-UrlBuilderTest: UrlBuilderTest.o UrlBuilder.o
-	$(CC) UrlBuilderTest.o UrlBuilder.o -o UrlBuilderTest $(LIBS)
+RequestHandlerTest: RequestHandlerTest.o RequestHandler.o moc_RequestHandlerTest.o moc_RequestHandler.o
+	$(CC) RequestHandlerTest.o RequestHandler.o moc_RequestHandlerTest.o moc_RequestHandler.o -o RequestHandlerTest $(LIBS)
 	
-UrlBuilderTest.o: UrlBuilderTest.cpp moc_UrlBuilderTest.cpp
+RequestHandlerTest.o: RequestHandlerTest.cpp
+	$(CC) $(CFLAGS) RequestHandlerTest.cpp -o RequestHandlerTest.o
+
+UrlBuilderTest: UrlBuilderTest.o UrlBuilder.o moc_UrlBuilderTest.o
+	$(CC) UrlBuilderTest.o UrlBuilder.o moc_UrlBuilderTest.o -o UrlBuilderTest $(LIBS)
+	
+UrlBuilderTest.o: UrlBuilderTest.cpp
 	$(CC) $(CFLAGS) UrlBuilderTest.cpp -o UrlBuilderTest.o
+	
+moc_%.o: moc_%.cpp
+	$(CC) $(CFLAGS) $< -o $@	
 	
 moc_%.cpp: %.h
 	moc-qt4 $(MOCFLAGS) $< -o $@
@@ -24,9 +33,18 @@ Podcast.o: $(MYGPOSRCDIR)/Podcast.cpp
 	
 RequestHandler.o: $(MYGPOSRCDIR)/RequestHandler.cpp
 	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/RequestHandler.cpp -o RequestHandler.o
+	
+moc_RequestHandler.o: moc_RequestHandler.cpp
+	$(CC) $(CFLAGS) $< -o $@	
+	
+moc_RequestHandler.cpp: $(MYGPOSRCDIR)/RequestHandler.h
+	moc-qt4 $(MOCFLAGS) $< -o $@
 
 UrlBuilder.o: $(MYGPOSRCDIR)/UrlBuilder.cpp
 	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/UrlBuilder.cpp -o UrlBuilder.o	
 	
+JsonParser.o: $(MYGPOSRCDIR)/JsonParser.cpp
+	$(CC) $(CFLAGS) $(MYGPOSRCDIR)/JsonParser.cpp -o JsonParser.o	
+	
 make clean:
-	@rm -fr *.o UrlBuilderTest moc_UrlBuilderTest.cpp
+	@rm -fr *.o UrlBuilderTest RequestHandlerTest moc_*.cpp

@@ -24,7 +24,7 @@
 #define URLBUILDERTEST_H_
 
 #include <QtTest/QtTest>
-#include "../src/UrlBuilder.h"
+#include "UrlBuilder.h"
 
 namespace mygpo {
 
