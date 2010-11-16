@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QList>
 #include <QUrl>
+#include <QVariant>
 
 #include "mygpo_export.h"
 
@@ -35,17 +36,17 @@ class MYGPO_EXPORT AddRemoveResult : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
-    //updateUrls not (yet) available in Property System because they would have to be saved as QVariant
-    //Q_PROPERTY(QList<QPair<QUrl,QUrl>> updateUrls READ updateUrls CONSTANT)
+    Q_PROPERTY(QVariant updateUrlsVar READ updateUrlsVar CONSTANT)
 public:
-    AddRemoveResult(qulonglong timestamp, const QList<QPair<QUrl, QUrl> >& updateUrls ,QObject* parent = 0);
+    AddRemoveResult(qulonglong timestamp, const QVariant& updateUrlsVar ,QObject* parent = 0);
     AddRemoveResult(const AddRemoveResult& other);
     AddRemoveResult operator=(const AddRemoveResult& other);
+    QVariant updateUrlsVar() const;
     const qulonglong timestamp() const;
     const QList<QPair<QUrl, QUrl> > updateUrls() const;
 private:
     qulonglong m_timestamp;
-    QList<QPair<QUrl, QUrl> > m_updateUrls;
+    QVariant m_updateUrlsVar;
 };
 
 }

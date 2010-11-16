@@ -28,16 +28,6 @@
 
 using namespace mygpo;
 
-JsonParser::JsonParser()
-{
-
-}
-
-JsonParser::~JsonParser()
-{
-
-}
-
 QList< Podcast > JsonParser::toPodcastList(const QByteArray& jsonData)
 {
     QJson::Parser parser;
@@ -157,15 +147,22 @@ AddRemoveResult JsonParser::toAddRemoveResult(const QByteArray& jsonData)
     QJson::Parser parser;
     QVariantMap resultMap = parser.parse(jsonData).toMap();
     qulonglong timestamp = resultMap.value(QLatin1String("timestamp")).toULongLong();
-    QVariantList updateVarList = resultMap.value(QLatin1String("update_urls")).toList();
+    QVariant updateVar = resultMap.value(QLatin1String("update_urls"));
+    AddRemoveResult result(timestamp,updateVar);
+    return result;
+}
+
+QList< QPair< QUrl, QUrl > > JsonParser::toUrlPairList(const QVariant& variantData)
+{
+    QVariantList updateVarList = variantData.toList();
     QList<QPair<QUrl, QUrl > > updateUrls;
     foreach (QVariant urlVar, updateVarList)
     {
         updateUrls.append(toUpdatePair(urlVar));
     }
-    AddRemoveResult result(timestamp,updateUrls);
-    return result;
+    return updateUrls;
 }
+
 
 QPair< QUrl, QUrl > mygpo::JsonParser::toUpdatePair(QVariant& variantData)
 {

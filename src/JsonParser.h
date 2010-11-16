@@ -36,21 +36,20 @@ class JsonParser
 {
 
 public:
-    JsonParser();
-    virtual ~JsonParser();
-    QList<Podcast> toPodcastList(const QByteArray& jsonData);
-    Podcast toPodcast(const QByteArray& jsonData);
-    QList<Episode> toEpisodeList(const QByteArray& jsonData);
-    Episode toEpisode(const QByteArray& jsonData);
-    QList<Tag> toTagList(const QByteArray& jsonData);
-    AddRemoveResult toAddRemoveResult(const QByteArray& jsonData);
-    QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
+    static QList<Podcast> toPodcastList(const QByteArray& jsonData);
+    static Podcast toPodcast(const QByteArray& jsonData);
+    static QList<Episode> toEpisodeList(const QByteArray& jsonData);
+    static Episode toEpisode(const QByteArray& jsonData);
+    static QList<Tag> toTagList(const QByteArray& jsonData);
+    static AddRemoveResult toAddRemoveResult(const QByteArray& jsonData);
+    static QList<QPair<QUrl,QUrl> > toUrlPairList(const QVariant& variantData);
+    static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
 private:
-    Podcast qvariantToPodcast(QVariant& variantData);
-    Episode qvariantToEpisode(QVariant& variantData);
-    Tag qvariantToTag(QVariant& variantData);
-    QPair<QUrl, QUrl> toUpdatePair(QVariant& variantData);
-    QString urlListToString(const QList<QUrl>& urls);
+    static Podcast qvariantToPodcast(QVariant& variantData);
+    static Episode qvariantToEpisode(QVariant& variantData);
+    static Tag qvariantToTag(QVariant& variantData);
+    static QPair<QUrl, QUrl> toUpdatePair(QVariant& variantData);
+    static QString urlListToString(const QList<QUrl>& urls);
 };
 
 }

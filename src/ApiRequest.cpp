@@ -28,7 +28,11 @@
 
 using namespace mygpo;
 
-ApiRequest::ApiRequest(const QString& username, const QString &password) : requestHandler(username, password)
+ApiRequest::ApiRequest(const QString& username, const QString &password) : m_requestHandler(username, password)
+{
+}
+
+ApiRequest::ApiRequest() : m_requestHandler()
 {
 }
 
@@ -36,8 +40,7 @@ QByteArray ApiRequest::toplistOpml(uint count)
 {
     QUrl requestUrl = UrlBuilder::getToplistUrl(count, UrlBuilder::OPML);
     QByteArray response;
-    RequestHandler r;
-    r.getRequest(response, requestUrl);
+    m_requestHandler.getRequest(response, requestUrl);
     return response;
 }
 
@@ -45,7 +48,7 @@ QByteArray ApiRequest::searchOpml(const QString& query)
 {
     QUrl requestUrl = UrlBuilder::getPodcastSearchUrl(query, UrlBuilder::OPML);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
+    m_requestHandler.getRequest(response, requestUrl);
     return response;
 }
 
@@ -53,9 +56,9 @@ QList< Podcast > ApiRequest::toplist(uint count)
 {
     QUrl requestUrl = UrlBuilder::getToplistUrl(count);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    QList<Podcast> podcastList = parser.toPodcastList(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
     return podcastList;
 }
 
@@ -63,9 +66,9 @@ QList< Podcast > ApiRequest::search(const QString& query)
 {
     QUrl requestUrl = UrlBuilder::getPodcastSearchUrl(query);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    QList<Podcast> podcastList = parser.toPodcastList(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
     return podcastList;
 }
 
@@ -73,9 +76,9 @@ Episode ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeurl)
 {
     QUrl requestUrl = UrlBuilder::getEpisodeDataUrl(podcasturl.toString(),episodeurl.toString());
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    Episode episode = parser.toEpisode(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    Episode episode = JsonParser::toEpisode(response);
     return episode;
 }
 
@@ -83,9 +86,9 @@ QList< Episode > ApiRequest::favoriteEpisode(const QString& username)
 {
     QUrl requestUrl = UrlBuilder::getFavEpisodesUrl(username);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    QList<Episode> episodeList = parser.toEpisodeList(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    QList<Episode> episodeList = JsonParser::toEpisodeList(response);
     return episodeList;
 }
 
@@ -93,9 +96,9 @@ Podcast ApiRequest::podcastData(const QUrl& podcasturl)
 {
     QUrl requestUrl = UrlBuilder::getPodcastDataUrl(podcasturl.toString());
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    Podcast podcast = parser.toPodcast(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    Podcast podcast = JsonParser::toPodcast(response);
     return podcast;
 }
 
@@ -103,9 +106,9 @@ QList< Podcast > ApiRequest::podcastsOfTag(uint count, const QString& tag)
 {
     QUrl requestUrl = UrlBuilder::getPodcastsOfTagUrl(tag,count);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    QList<Podcast> podcastList = parser.toPodcastList(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
     return podcastList;
 }
 
@@ -113,9 +116,9 @@ QList< Tag > ApiRequest::topTags(uint count)
 {
     QUrl requestUrl = UrlBuilder::getTopTagsUrl(count);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    QList<Tag> tagList = parser.toTagList(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    QList<Tag> tagList = JsonParser::toTagList(response);
     return tagList;
 }
 
@@ -123,19 +126,19 @@ QList< Podcast > ApiRequest::suggestions(uint count)
 {
     QUrl requestUrl = UrlBuilder::getSuggestionsUrl(count);
     QByteArray response;
-    requestHandler.getRequest(response, requestUrl);
-    JsonParser parser;
-    QList<Podcast> podcastList = parser.toPodcastList(response);
+    m_requestHandler.getRequest(response, requestUrl);
+    
+    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
     return podcastList;
 }
 
 AddRemoveResult ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove)
 {
     QUrl requesturl = UrlBuilder::getAddRemoveSubUrl(username,device);
-    JsonParser parser;
-    QByteArray data = parser.addRemoveSubsToJSON(add,remove);
+    
+    QByteArray data = JsonParser::addRemoveSubsToJSON(add,remove);
     QByteArray response;
-    requestHandler.postRequest(response,data,requesturl);
-    AddRemoveResult result = parser.toAddRemoveResult(response);
+    m_requestHandler.postRequest(response,data,requesturl);
+    AddRemoveResult result = JsonParser::toAddRemoveResult(response);
     return result;
 }

@@ -22,14 +22,16 @@
 
 #include "AddRemoveResult.h"
 
+#include "JsonParser.h"
+
 using namespace mygpo;
 
-AddRemoveResult::AddRemoveResult(qulonglong timestamp, const QList< QPair< QUrl, QUrl > >& updateUrls, QObject* parent): QObject(parent), m_timestamp(timestamp), m_updateUrls(updateUrls)
+AddRemoveResult::AddRemoveResult(qulonglong timestamp, const QVariant& updateUrlsVar, QObject* parent): QObject(parent), m_timestamp(timestamp), m_updateUrlsVar(updateUrlsVar)
 {
 
 }
 
-AddRemoveResult::AddRemoveResult(const AddRemoveResult& other): QObject(other.parent()), m_timestamp(other.timestamp()), m_updateUrls(other.updateUrls())
+AddRemoveResult::AddRemoveResult(const AddRemoveResult& other): QObject(other.parent()), m_timestamp(other.timestamp()), m_updateUrlsVar(other.updateUrlsVar())
 {
 
 }
@@ -44,7 +46,13 @@ const qulonglong AddRemoveResult::timestamp() const
     return m_timestamp;
 }
 
+QVariant AddRemoveResult::updateUrlsVar() const
+{
+    return m_updateUrlsVar;
+}
+
+
 const QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrls() const
 {
-    return m_updateUrls;
+    return JsonParser::toUrlPairList(m_updateUrlsVar);
 }

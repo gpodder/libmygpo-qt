@@ -36,7 +36,7 @@ namespace mygpo {
  */
 class MYGPO_EXPORT RequestHandler : public QObject {
 
-	Q_OBJECT;
+	Q_OBJECT
 
 public:
   

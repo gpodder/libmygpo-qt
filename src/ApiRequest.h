@@ -45,6 +45,7 @@ namespace mygpo
      * This Class is the Frontend of libmygpo-qt.
      * Methods from this Class map the Web API of gpodder.net
      * and return the Results of the Requests.
+     * Web API Documentation can be found here: http://wiki.gpodder.org/wiki/Web_Services/API_2
      */
 
 class MYGPO_EXPORT ApiRequest
@@ -53,44 +54,94 @@ public:
     
   
     ApiRequest(const QString& username, const QString& password);
-    ApiRequest() {};
+    ApiRequest();
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
-     * @param count The number of Podcasts that should be returned - will be set to 1 if < 1 and to 100 if > 100 
-     * @return QByteArray containing the OPM Data
+     * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return QByteArray containing the OPML Data
      */
     QByteArray toplistOpml(uint count);
     
     /**
      * Returns the OPML Result for the Simple API Call "Searching for Podcasts"
      * @param query The String you want to search for
-     * @return QByteArray containing the OPM Data
+     * @return QByteArray containing the OPML Data
      */
     QByteArray searchOpml(const QString& query);
     
-    //still missing for v0.2: Add/Remove Subscriptions
     
+    /**
+     * Returns the Result for the Simple API Call "Downloading Podcast Toplists"
+     * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return List of Podcast Objects containing the Data from gPodder
+     */
     QList<Podcast> toplist(uint count);
     
+    /**
+     * Returns the Result for the Simple API Call "Searching for Podcasts"
+     * @param query The String you want to search for
+     * @return List of Podcast Objects containing the Data from gPodder
+     */
     QList<Podcast> search(const QString& query);
     
+    /**
+     * Returns the Result for the Simple API Call "Downloading podcast suggestions"
+     * Requires Authentication
+     * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return List of Podcast Objects containing the Data from gPodder
+     */
     QList<Podcast> suggestions(uint count);
     
+    /**
+     * Returns the Result for the Advanced API Call "Retrieving Podcasts of a Tag"
+     * @param query The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @param tag The Tag for which Podcasts should be retrieved
+     * @return List of Podcast Objects containing the Data from gPodder
+     */
     QList<Podcast> podcastsOfTag(uint count, const QString& tag);
     
+    /**
+     * Returns the Result for the Advanced API Call "Retrieving Podcast Data"
+     * @param podcasturl Url of the Podcast for which Data should be retrieved
+     * @return Podcast Object containing the Data from gPodder
+     */
     Podcast podcastData(const QUrl& podcasturl);
     
+    /**
+     * Returns the Result for the Advanced API Call "Retrieving Episode Data"
+     * @param podcasturl Url of the Podcast that contains the Episode
+     * @param episodeurl Url of the Episode Data for which Data should be retrieved
+     * @return Podcast Object containing the Data from gPodder
+     */    
     Episode episodeData(const QUrl& podcasturl, const QUrl& episodeurl);
     
+    /**
+     * Returns the Result for the Advanced API Call "Listing Favorite Episodes"
+     * @param username The User whose Favorite Episodes should be retrieved
+     * @return List of Episode Objects containing the Data from gPodder
+     */
     QList<Episode> favoriteEpisode(const QString& username);
     
+    /**
+     * Returns the Result for the Advanced API Call "Retrieving Top Tags"
+     * @param count The number of Tags that should be returned - will be set to to 100 if > 100 or < 1
+     * @return List of Tag Objects containing the Data from gPodder
+     */
     QList<Tag> topTags(uint count);
     
+    /**
+     * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
+     * Requires Authentication
+     * @param username User for which this API Call should be executed
+     * @param device gPodder Device for which this API Call should be executed
+     * @param add URLs of Podcasts that should be added to the Subscriptions of the User
+     * @param remove URLs of Podcasts that should be removed from the Subscriptions of the User
+     */
     AddRemoveResult addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove);
     
 private:
     
-    RequestHandler requestHandler;
+    RequestHandler m_requestHandler;
     
 };
 
