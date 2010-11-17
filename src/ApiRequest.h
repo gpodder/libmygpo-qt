@@ -25,7 +25,7 @@
 
 #define MYGPO_MAJOR_VERSION 0
 #define MYGPO_MINOR_VERSION 2
-#define MYGPO_PATCH_VERSION 0
+#define MYGPO_PATCH_VERSION 5 
 
 #include "RequestHandler.h"
 #include "mygpo_export.h"
