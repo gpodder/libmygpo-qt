@@ -39,7 +39,7 @@ public:
     virtual ~Tag();
     Tag operator=(const Tag& other);
     const QString tag() const;
-    const uint usage() const;
+    uint usage() const;
 private:
     QString m_tag;
     uint m_usage;

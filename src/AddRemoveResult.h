@@ -42,7 +42,7 @@ public:
     AddRemoveResult(const AddRemoveResult& other);
     AddRemoveResult operator=(const AddRemoveResult& other);
     QVariant updateUrlsVar() const;
-    const qulonglong timestamp() const;
+    qulonglong timestamp() const;
     const QList<QPair<QUrl, QUrl> > updateUrls() const;
 private:
     qulonglong m_timestamp;

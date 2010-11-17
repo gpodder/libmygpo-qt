@@ -50,7 +50,7 @@ const QString Tag::tag() const
     return m_tag;
 }
 
-const uint Tag::usage() const
+uint Tag::usage() const
 {
     return m_usage;
 }

@@ -61,7 +61,7 @@ const QString Podcast::description() const
     return m_description;
 }
 
-const uint mygpo::Podcast::subscribers() const
+uint mygpo::Podcast::subscribers() const
 {
     return m_subscribers;
 }

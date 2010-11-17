@@ -53,7 +53,7 @@ public:
     const QUrl url() const;
     const QString title() const;
     const QString description() const;
-    const uint subscribers() const;
+    uint subscribers() const;
     //const uint subscriberstLastWeek();
     const QUrl logoUrl() const;
     const QUrl website() const;

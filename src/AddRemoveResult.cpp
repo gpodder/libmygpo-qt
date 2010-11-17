@@ -41,7 +41,7 @@ AddRemoveResult AddRemoveResult::operator=(const AddRemoveResult& other)
     return AddRemoveResult(other);
 }
 
-const qulonglong AddRemoveResult::timestamp() const
+qulonglong AddRemoveResult::timestamp() const
 {
     return m_timestamp;
 }
