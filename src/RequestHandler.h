@@ -59,7 +59,7 @@ public:
 	 * Sends a POST request with the given url and data.
 	 * @param data The data to send to the url
 	 * @param url The request url
-	 * @return 0 if the request was succesful, corresponding ErrorCode if unsuccesful
+	 * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
 	 */
 	int postRequest( QByteArray& response, const QByteArray& data, const QUrl& url );
 
