@@ -10,6 +10,7 @@ set ( LIBMYGPO_QT_SRC
         ApiRequest.cpp
         RequestHandler.cpp
         UrlBuilder.cpp
+        RequestExceptions.cpp
 )
 
 set ( LIBMYGPO_QT_H
@@ -23,6 +24,7 @@ set ( LIBMYGPO_QT_H
         ApiRequest.h
         RequestHandler.h
         UrlBuilder.h
+        RequestExceptions.h
 )
 
 QT4_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${LIBMYGPO_QT_H} )

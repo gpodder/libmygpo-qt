@@ -1,6 +1,6 @@
 CC=g++
 MOCFLAGS=$(shell pkg-config QtTest QtCore QtWebKit --cflags)
-CFLAGS=-pedantic -c -g -Wall -I../src/ -I../extra/qjson/src/ $(shell pkg-config QtTest QtCore QtWebKit --cflags)
+CFLAGS=-pedantic -c -g -Wall -ansi -I../src/ -I../extra/qjson/src/ $(shell pkg-config QtTest QtCore QtWebKit --cflags)
 LIBS=$(shell pkg-config QtTest QtCore QtWebKit --libs)
 MYGPOSRCDIR=../src
 
