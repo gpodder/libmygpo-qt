@@ -36,44 +36,44 @@ namespace mygpo {
  */
 class MYGPO_EXPORT RequestHandler : public QObject {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-  
-	/**
-	 * @param username The username that should be used for authentication if required.
-	 * @param password The password that should be used for authentication if required
-	 */
-	RequestHandler(const QString& username, const QString& password);
-	RequestHandler();
-	
-	/**
-	 * Sends a GET request with the given url and receives the servers response.
-	 * @param response The servers response will be written into this QByteArray
-	 * @param url The request url
-	 * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
-	 */
-	int getRequest( QByteArray& response, const QUrl& url );
-	
-	/**
-	 * Sends a POST request with the given url and data.
-	 * @param data The data to send to the url
-	 * @param url The request url
-	 * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
-	 */
-	int postRequest( QByteArray& response, const QByteArray& data, const QUrl& url );
 
-private: 
-	QNetworkAccessManager manager;
-	QNetworkReply::NetworkError errorFlag;
-	QString m_username;
-	QString m_password;
-	bool m_loginFailed;
-	void waitForReply( const QNetworkReply& reply );
-	
+    /**
+     * @param username The username that should be used for authentication if required.
+     * @param password The password that should be used for authentication if required
+     */
+    RequestHandler(const QString& username, const QString& password);
+    RequestHandler();
+
+    /**
+     * Sends a GET request with the given url and receives the servers response.
+     * @param response The servers response will be written into this QByteArray
+     * @param url The request url
+     * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
+     */
+    int getRequest( QByteArray& response, const QUrl& url );
+
+    /**
+     * Sends a POST request with the given url and data.
+     * @param data The data to send to the url
+     * @param url The request url
+     * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
+     */
+    int postRequest( QByteArray& response, const QByteArray& data, const QUrl& url );
+
+private:
+    QNetworkAccessManager manager;
+    QNetworkReply::NetworkError m_errorFlag;
+    QString m_username;
+    QString m_password;
+    bool m_loginFailed;
+    void waitForReply( const QNetworkReply& reply );
+
 private slots:
-	void handleError( QNetworkReply::NetworkError code );
-	void authenticate( QNetworkReply* reply, QAuthenticator* authentiactor );
+    void handleError( QNetworkReply::NetworkError code );
+    void authenticate( QNetworkReply* reply, QAuthenticator* authentiactor );
 };
 
 }
