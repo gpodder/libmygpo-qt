@@ -33,7 +33,7 @@ QList< Podcast > JsonParser::toPodcastList(const QByteArray& jsonData)
     QJson::Parser parser;
     QList<QVariant>  podcastVarList = parser.parse(jsonData).toList();
     QList<Podcast> podcastList;
-    foreach (QVariant podcastVar, podcastVarList)
+    foreach (const QVariant& podcastVar, podcastVarList)
     {
         podcastList.append(qvariantToPodcast(podcastVar));
     }
@@ -53,7 +53,7 @@ QList<Episode> JsonParser::toEpisodeList(const QByteArray& jsonData)
     QJson::Parser parser;
     QList<QVariant>  episodeVarList = parser.parse(jsonData).toList();
     QList<Episode> episodeList;
-    foreach (QVariant episodeVar, episodeVarList)
+    foreach (const QVariant& episodeVar, episodeVarList)
     {
         episodeList.append(qvariantToEpisode(episodeVar));
     }
@@ -72,7 +72,7 @@ QList< Tag > JsonParser::toTagList(const QByteArray& jsonData)
     QJson::Parser parser;
     QList<QVariant>  tagVarList = parser.parse(jsonData).toList();
     QList<Tag> tagList;
-    foreach (QVariant tagVar, tagVarList)
+    foreach (const QVariant& tagVar, tagVarList)
     {
         tagList.append(qvariantToTag(tagVar));
     }
@@ -80,7 +80,7 @@ QList< Tag > JsonParser::toTagList(const QByteArray& jsonData)
 }
 
 
-Podcast JsonParser::qvariantToPodcast(QVariant& variantData)
+Podcast JsonParser::qvariantToPodcast(const QVariant& variantData)
 {
     QVariantMap podcastMap = variantData.toMap();
     QUrl url = podcastMap.value(QLatin1String("url")).toUrl();
@@ -95,7 +95,7 @@ Podcast JsonParser::qvariantToPodcast(QVariant& variantData)
 }
 
 
-Episode JsonParser::qvariantToEpisode(QVariant& variantData)
+Episode JsonParser::qvariantToEpisode(const QVariant& variantData)
 {
     QVariantMap episodeMap = variantData.toMap();
     QUrl url = episodeMap.value(QLatin1String("url")).toUrl();
@@ -109,7 +109,7 @@ Episode JsonParser::qvariantToEpisode(QVariant& variantData)
     return episode;
 }
 
-Tag JsonParser::qvariantToTag(QVariant& variantData)
+Tag JsonParser::qvariantToTag(const QVariant& variantData)
 {
     QVariantMap tagMap = variantData.toMap();
     QString tagString = tagMap.value(QLatin1String("tag")).toString();
@@ -156,7 +156,7 @@ QList< QPair< QUrl, QUrl > > JsonParser::toUrlPairList(const QVariant& variantDa
 {
     QVariantList updateVarList = variantData.toList();
     QList<QPair<QUrl, QUrl > > updateUrls;
-    foreach (QVariant urlVar, updateVarList)
+    foreach (const QVariant& urlVar, updateVarList)
     {
         updateUrls.append(toUpdatePair(urlVar));
     }
@@ -164,7 +164,7 @@ QList< QPair< QUrl, QUrl > > JsonParser::toUrlPairList(const QVariant& variantDa
 }
 
 
-QPair< QUrl, QUrl > mygpo::JsonParser::toUpdatePair(QVariant& variantData)
+QPair< QUrl, QUrl > mygpo::JsonParser::toUpdatePair(const QVariant& variantData)
 {
     QVariantList urlList = variantData.toList();
     QUrl first = QUrl(urlList.at(0).toString());

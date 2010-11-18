@@ -45,10 +45,10 @@ public:
     static QList<QPair<QUrl,QUrl> > toUrlPairList(const QVariant& variantData);
     static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
 private:
-    static Podcast qvariantToPodcast(QVariant& variantData);
-    static Episode qvariantToEpisode(QVariant& variantData);
-    static Tag qvariantToTag(QVariant& variantData);
-    static QPair<QUrl, QUrl> toUpdatePair(QVariant& variantData);
+    static Podcast qvariantToPodcast(const QVariant& variantData);
+    static Episode qvariantToEpisode(const QVariant& variantData);
+    static Tag qvariantToTag(const QVariant& variantData);
+    static QPair<QUrl, QUrl> toUpdatePair(const QVariant& variantData);
     static QString urlListToString(const QList<QUrl>& urls);
 };
 
