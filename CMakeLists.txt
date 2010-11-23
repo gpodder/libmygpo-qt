@@ -2,10 +2,13 @@ project( libmygpo-qt )
 
 cmake_minimum_required( VERSION 2.6 )
 
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
 find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
 set( QT_DONT_USE_QTGUI TRUE )
+
+find_package(QJSON REQUIRED)
 
 include( ${QT_USE_FILE} )
 
@@ -100,5 +103,5 @@ IF (NOT WIN32)
 ENDIF (NOT WIN32)
 
 add_subdirectory( src )
-add_subdirectory( extra )
+#add_subdirectory( extra )
 add_subdirectory( tests )

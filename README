@@ -9,6 +9,7 @@ Created 2010 by Stefan Derkits, Christian Wagner & Felix Winter
 Requirements:
 -) Qt 4.6 or higher
 -) Cmake 2.6 or higher
+-) QJson
 
 Git Repo: http://www.gitorious.org/libmygpo-qt/libmygpo-qt
 Doxygen Documentation: http://stefan.derkits.at/libmygpo-doc/ 

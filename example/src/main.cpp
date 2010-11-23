@@ -41,9 +41,12 @@ int main(int argc, char **argv) {
   //result = req.toplistOpml(10);
   //std::cout << result.data() << std::endl;
   
-  list = req.suggestions(10);
-  
-  
+  list = req.toplist(10);
+  std::cout << list.size() << std::endl; 
+  foreach (const Podcast& podcast,list) {
+	qDebug() << podcast.title();
+	qDebug() << podcast.subscribers();
+  }  
   /*Example ex;
 
 
