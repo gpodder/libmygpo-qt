@@ -56,8 +56,8 @@ class MYGPO_EXPORT ApiRequest
 public:
     
   
-    ApiRequest(const QString& username, const QString& password);
-    ApiRequest();
+    ApiRequest(const QString& username, const QString& password, QNetworkAccessManager* nam = 0);
+    ApiRequest(QNetworkAccessManager* nam = 0);
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1

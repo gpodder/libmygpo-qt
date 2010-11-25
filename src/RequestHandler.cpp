@@ -24,39 +24,47 @@
 #include <QAuthenticator>
 #include <QEventLoop>
 
-
 using namespace mygpo;
 
-RequestHandler::RequestHandler(const QString& username, const QString& password, const QNetworkAccessManager& manager) : m_username(username), m_password(password), m_loginFailed(false), m_nam(manager)
+RequestHandler::RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_username(username), m_password(password), m_loginFailed(false), m_nam(nam), m_deleteNam(false)
 {
-    QObject::connect(&manager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,
+    if (m_nam==0)
+    {
+        m_nam = new QNetworkAccessManager();
+        m_deleteNam = true;
+    }   
+    QObject::connect(m_nam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,
                      SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
 }
 
-RequestHandler::RequestHandler() : m_username(), m_password(), m_loginFailed(false)
+RequestHandler::RequestHandler(QNetworkAccessManager* nam) : m_password(), m_loginFailed(false), m_nam(nam), m_deleteNam(false)
 {
+    if (m_nam==0)
+    {
+        m_nam = new QNetworkAccessManager();
+        m_deleteNam = true;
+    }
+}
+
+RequestHandler::~RequestHandler()
+{
+    if (m_deleteNam)
+        delete m_nam;
 }
 
 QNetworkReply* RequestHandler::getRequest(const QUrl& url)
 {
     m_loginFailed = false;
     QNetworkRequest request(url);
-    QNetworkReply* reply = m_nam.get(request);
+    QNetworkReply* reply = m_nam->get(request);
     return reply;
 }
 
-
-
-QNetworkReply* RequestHandler::postRequest(const QByteArray& data, const QUrl& url )
+QNetworkReply* RequestHandler::postRequest(const QByteArray data, const QUrl& url )
 {
-    /*NOTE: using the same variable for error handling as getRequest.
-     * (If we want to implement asynchronous calls for get/post-Request, use
-     * a new variable and error handling function (slot) for each request-function.)
-     * Also use a copy of data for asynchronous calls!
-     */
     m_loginFailed = false;
     QNetworkRequest request( url );
-    QNetworkReply* reply = m_nam.post( request, data );
+    QNetworkReply* reply = m_nam->post( request, data );
     return reply;
 }
 

@@ -29,11 +29,11 @@
 
 using namespace mygpo;
 
-ApiRequest::ApiRequest(const QString& username, const QString &password) : m_requestHandler(username, password)
+ApiRequest::ApiRequest(const QString& username, const QString &password, QNetworkAccessManager* nam) : m_requestHandler(username, password, nam)
 {
 }
 
-ApiRequest::ApiRequest() : m_requestHandler()
+ApiRequest::ApiRequest(QNetworkAccessManager* nam) : m_requestHandler(nam)
 {
 }
 
