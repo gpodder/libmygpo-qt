@@ -23,11 +23,13 @@
 #ifndef EPISODELIST_H_
 #define EPISODELIST_H_
 
+#include <QNetworkReply>
+
 namespace mygpo {
 
 class EpisodeList {
 public:
-	EpisodeList();
+	EpisodeList(QNetworkReply* reply);
 	virtual ~EpisodeList();
 };
 

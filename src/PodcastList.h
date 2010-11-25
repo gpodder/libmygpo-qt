@@ -23,11 +23,13 @@
 #ifndef PODCASTLIST_H_
 #define PODCASTLIST_H_
 
+#include <QNetworkReply>
+
 namespace mygpo {
 
 class PodcastList {
 public:
-	PodcastList();
+	PodcastList(QNetworkReply* reply);
 	virtual ~PodcastList();
 };
 

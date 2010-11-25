@@ -9,7 +9,7 @@
 
 namespace mygpo {
 
-PodcastList::PodcastList() {
+PodcastList::PodcastList(QNetworkReply* reply) {
 	// TODO Auto-generated constructor stub
 
 }
