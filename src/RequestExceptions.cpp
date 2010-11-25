@@ -25,17 +25,17 @@
 
 using namespace mygpo;
 
-RequestException::RequestException(const QString &s, int errorFlag)
+RequestException::RequestException(const QString &s, QNetworkReply::NetworkError errorFlag)
 					: std::runtime_error(s.toStdString()), errorFlag(errorFlag) { }
 
 InvalidDeviceIdException::InvalidDeviceIdException()
-					: RequestException(QLatin1String("Invalid device id."), 203) { }
+					: RequestException(QLatin1String("Invalid device id."), QNetworkReply::ContentNotFoundError) { }
 
 InvalidUserException::InvalidUserException()
-					: RequestException(QLatin1String("Invalid username."), 201) { }
+					: RequestException(QLatin1String("Invalid username."), QNetworkReply::ContentAccessDenied) { }
 
 InvalidAuthException::InvalidAuthException()
-					: RequestException(QLatin1String("Authentication failed."), 201) { }
+					: RequestException(QLatin1String("Authentication failed."), QNetworkReply::ContentAccessDenied) { }
 
 ServerNotFoundException::ServerNotFoundException()
-					: RequestException(QLatin1String("Server not found."), 204) { }
+					: RequestException(QLatin1String("Server not found."), QNetworkReply::AuthenticationRequiredError) { }

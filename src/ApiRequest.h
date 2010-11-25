@@ -168,7 +168,7 @@ private:
     /**
      * Throws the appropriate exception for the given error flag
      */
-    void checkErrorFlag(int errorFlag);
+    void checkErrorFlag(QNetworkReply::NetworkError errorFlag);
 
     RequestHandler m_requestHandler;
 

@@ -203,9 +203,9 @@ AddRemoveResult ApiRequest::addRemoveSubscriptions(const QString& username, cons
 	return addRemoveResult;
 }
 
-void ApiRequest::checkErrorFlag(int errorFlag)
+void ApiRequest::checkErrorFlag(QNetworkReply::NetworkError errorFlag)
 {
-	if (errorFlag != 0) {
+	if (errorFlag != QNetworkReply::NoError) {
 		switch (errorFlag) {
 		case 3: throw ServerNotFoundException(); break;
 		case 201: throw InvalidUserException(); break;

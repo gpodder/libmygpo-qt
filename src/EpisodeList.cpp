@@ -9,9 +9,12 @@
 
 namespace mygpo {
 
-EpisodeList::EpisodeList(QNetworkReply* reply) {
-	// TODO Auto-generated constructor stub
+EpisodeList::EpisodeList(QNetworkReply* reply, QObject* parent) {
+	this->reply = reply;
+}
 
+EpisodeList::EpisodeList(const EpisodeList& episodeList) {
+	this-> reply = episodeList.reply;
 }
 
 EpisodeList::~EpisodeList() {

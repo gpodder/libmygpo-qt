@@ -25,6 +25,7 @@
 
 #include <stdexcept>
 #include <QString>
+#include <QNetworkReply>
 
 namespace mygpo {
 
@@ -36,12 +37,12 @@ namespace mygpo {
 
 class RequestException : public std::runtime_error {
 public:
-	RequestException(const QString &s, int errorFlag);
+	RequestException(const QString &s, QNetworkReply::NetworkError errorFlag);
 	/**
 	 * errorFlag contains information about possible server errors.
 	 * It can be interpreted like values from QNetworkReply::NetworkError
 	 */
-	const int errorFlag;
+	const QNetworkReply::NetworkError errorFlag;
 
 	virtual ~RequestException() throw() { }
 };

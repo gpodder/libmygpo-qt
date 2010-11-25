@@ -24,13 +24,19 @@
 #define EPISODELIST_H_
 
 #include <QNetworkReply>
+#include <QList>
+#include <QObject>
 
 namespace mygpo {
 
-class EpisodeList {
+class EpisodeList : QObject {
+	Q_OBJECT
 public:
-	EpisodeList(QNetworkReply* reply);
+	EpisodeList(QNetworkReply* reply, QObject* parent = 0);
+	EpisodeList(const EpisodeList& episodeList);
 	virtual ~EpisodeList();
+private:
+	QNetworkReply* reply;
 };
 
 }
