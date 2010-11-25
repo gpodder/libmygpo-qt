@@ -9,7 +9,7 @@
 
 namespace mygpo {
 
-TagList::TagList() {
+TagList::TagList(QNetworkReply* reply) {
 	// TODO Auto-generated constructor stub
 
 }

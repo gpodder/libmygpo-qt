@@ -23,11 +23,13 @@
 #ifndef TAGLIST_H_
 #define TAGLIST_H_
 
+#include <QNetworkReply>
+
 namespace mygpo {
 
 class TagList {
 public:
-	TagList();
+	TagList(QNetworkReply* reply);
 	virtual ~TagList();
 };
 
