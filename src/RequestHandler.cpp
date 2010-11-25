@@ -57,8 +57,6 @@ QNetworkReply* RequestHandler::postRequest(const QByteArray& data, const QUrl& u
     m_loginFailed = false;
     QNetworkRequest request( url );
     QNetworkReply* reply = manager.post( request, data );
-
-
     return reply;
 }
 

@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QUrl>
 #include <QString>
+#include <QNetworkReply>
 
 #include "mygpo_export.h"
 
@@ -45,7 +46,7 @@ class MYGPO_EXPORT Podcast : public QObject
     Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
     
 public:
-    Podcast(QUrl url, QString title, QString description, uint subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
+    Podcast(QNetworkReply* reply,QObject* parent = 0);
     Podcast(const mygpo::Podcast& other);
     virtual ~Podcast();
     Podcast operator=(const mygpo::Podcast& other);
@@ -67,6 +68,13 @@ private:
     QUrl m_logoUrl;
     QUrl m_website;
     QUrl m_mygpoUrl;
+    QNetworkReply::NetworkError m_error;
+    
+public slots:
+    void parseData();
+
+signals:
+    void finished();
 };
 
 }

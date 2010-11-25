@@ -24,7 +24,7 @@
 
 using namespace mygpo;
 
-Episode::Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_podcastUrl(podcastUrl), m_podcastTitle(podcastTitle), m_description(description), m_website(website), m_mygpoUrl(mygpoUrl)
+Episode::Episode(QNetworkReply* reply,QObject* parent)
 {
 
 }

@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QUrl>
 #include <QString>
+#include <QNetworkReply>
 
 #include "mygpo_export.h"
 
@@ -43,7 +44,7 @@ class MYGPO_EXPORT Episode : public QObject
     Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
     
 public:
-    Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
+    Episode(QNetworkReply* reply, QObject* parent = 0);
     virtual ~Episode();
     Episode(const mygpo::Episode& other);
     Episode operator=(const mygpo::Episode& other);

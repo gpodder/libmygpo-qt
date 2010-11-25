@@ -24,6 +24,7 @@
 #define TAG_H
 
 #include <QObject>
+#include <QNetworkReply>
 
 namespace mygpo {
 
@@ -34,7 +35,7 @@ class Tag : public QObject
     Q_PROPERTY(uint usage READ usage CONSTANT)
 
 public:
-    Tag(QString tag, uint usage, QObject* parent = 0);
+    Tag(QNetworkReply* reply,QObject* parent = 0);
     Tag(const Tag& other);
     virtual ~Tag();
     Tag operator=(const Tag& other);

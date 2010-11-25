@@ -20,15 +20,17 @@
 * USA                                                                      *
 ***************************************************************************/
 
+
 #include "Podcast.h"
 
 using namespace mygpo;
 
-Podcast::Podcast(QUrl url, QString title, QString description, uint subscribers, QUrl logoUrl, QUrl website, QUrl mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_description(description), m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpoUrl)
+Podcast::Podcast(QNetworkReply* reply, QObject* parent) : m_error(QNetworkReply::NoError)
 {
-
+    QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
+		      this,SLOT(error(QNetworkReply::NetworkError)));
 }
-
 
 Podcast::Podcast(const Podcast& other): QObject(other.parent()), m_url(other.url()), m_title(other.title()), m_description(other.description()), m_subscribers(other.subscribers()), m_logoUrl(other.logoUrl()), m_website(other.website()), m_mygpoUrl(other.mygpoUrl())
 {
@@ -46,37 +48,47 @@ Podcast Podcast::Podcast::operator=(const mygpo::Podcast& other)
 }
 
 
-const QUrl mygpo::Podcast::url() const
+QUrl Podcast::url() const
 {
     return m_url;
 }
 
-const QString mygpo::Podcast::title() const
+QString Podcast::title() const
 {
     return m_title;
 }
 
-const QString Podcast::description() const
+QString Podcast::description() const
 {
     return m_description;
 }
 
-uint mygpo::Podcast::subscribers() const
+uint Podcast::subscribers() const
 {
     return m_subscribers;
 }
 
-const QUrl mygpo::Podcast::logoUrl() const
+QUrl Podcast::logoUrl() const
 {
     return m_logoUrl;
 }
 
-const QUrl mygpo::Podcast::website() const
+QUrl Podcast::website() const
 {
     return m_website;
 }
 
-const QUrl mygpo::Podcast::mygpoUrl() const
+QUrl Podcast::mygpoUrl() const
 {
     return m_mygpoUrl;
+}
+
+void Podcast::parseData() {
+    //parsen und signal senden
+    
+    emit finished();
+}
+
+void Podcast::error(QNetworkReply::NetworkError error) {
+    this->m_error = error;
 }
