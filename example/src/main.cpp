@@ -24,6 +24,7 @@
 #include <iostream>
 #include <QTimer>
 #include <QtGui>
+#include <QEventLoop>
 
 #include <Podcast.h>
 #include <ApiRequest.h>
@@ -37,16 +38,27 @@ int main(int argc, char **argv) {
   QList<Podcast> list;
   
   ApiRequest req("ase23","csf-sepm");
-  QByteArray result;
+//  QByteArray result;
   //result = req.toplistOpml(10);
   //std::cout << result.data() << std::endl;
+//
+//  list = req.toplist(10);
+//  std::cout << list.size() << std::endl;
+//  foreach (const Podcast& podcast,list) {
+//	qDebug() << podcast.title();
+//	qDebug() << podcast.subscribers();
+//  }
+  QEventLoop loop;
   
-  list = req.toplist(10);
-  std::cout << list.size() << std::endl; 
-  foreach (const Podcast& podcast,list) {
-	qDebug() << podcast.title();
-	qDebug() << podcast.subscribers();
-  }  
+  Podcast podcast = req.podcastData(QUrl(QLatin1String("http://feeds.feedburner.com/linuxoutlaws")));
+  loop.connect(&podcast, SIGNAL(finished()), SLOT(quit()));
+  loop.exec();
+
+  qDebug() << podcast.title();
+  qDebug() << podcast.description();
+  qDebug() << podcast.url();
+
+
   /*Example ex;
 
 

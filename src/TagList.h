@@ -24,13 +24,26 @@
 #define TAGLIST_H_
 
 #include <QNetworkReply>
+#include <QObject>
+#include <QList>
+
+#include "Tag.h"
 
 namespace mygpo {
 
-class TagList {
+class TagList : QObject{
+	Q_OBJECT
+	Q_PROPERTY(QVariant tags READ tagsVar CONSTANT)
 public:
-	TagList(QNetworkReply* reply);
+	TagList(QNetworkReply* reply, QObject* parent = 0);
+	TagList(const TagList& other);
 	virtual ~TagList();
+
+	QList<Tag> tags() const;
+	QVariant tagsVar() const;
+private:
+	QNetworkReply* m_reply;
+	QVariant m_tags;
 };
 
 }

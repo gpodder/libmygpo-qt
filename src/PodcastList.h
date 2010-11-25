@@ -24,13 +24,27 @@
 #define PODCASTLIST_H_
 
 #include <QNetworkReply>
+#include <QObject>
+#include <QList>
+
+#include "Podcast.h"
 
 namespace mygpo {
 
-class PodcastList {
+class PodcastList : QObject{
+	Q_OBJECT
+	Q_PROPERTY(QVariant podcasts READ podcastsVar CONSTANT)
 public:
-	PodcastList(QNetworkReply* reply);
+	PodcastList(QNetworkReply* reply, QObject* parent = 0);
+	PodcastList(const PodcastList& other);
 	virtual ~PodcastList();
+
+	QList<Podcast> podcasts() const;
+	QVariant podcastsVar() const;
+
+private:
+	QNetworkReply* m_reply;
+	QVariant m_podcasts;
 };
 
 }

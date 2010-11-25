@@ -26,17 +26,38 @@
 #include <QNetworkReply>
 #include <QList>
 #include <QObject>
+#include <QVariant>
+#include "Episode.h"
 
 namespace mygpo {
 
 class EpisodeList : QObject {
 	Q_OBJECT
+	Q_PROPERTY(QVariant episodes READ episodesVar CONSTANT)
 public:
 	EpisodeList(QNetworkReply* reply, QObject* parent = 0);
-	EpisodeList(const EpisodeList& episodeList);
+	EpisodeList(const EpisodeList& other);
 	virtual ~EpisodeList();
+
+	QList<Episode> episodes() const;
+	QVariant episodesVar() const;
 private:
-	QNetworkReply* reply;
+	QNetworkReply* m_reply;
+	QVariant m_episodes;
+    bool parse(const QVariant& data);
+    bool parse(const QByteArray& data);
+
+public slots:
+    void parseData();
+    void error(QNetworkReply::NetworkError error);
+
+signals:
+    /**Gets emitted when the data is ready to read*/
+    void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError(QNetworkReply::NetworkError error);
 };
 
 }
