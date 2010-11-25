@@ -44,6 +44,7 @@ class MYGPO_EXPORT Episode : public QObject
     Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
     
 public:
+    Episode();
     Episode(QNetworkReply* reply, QObject* parent = 0);
     Episode(const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
@@ -66,7 +67,7 @@ private:
     QUrl m_mygpoUrl;
     QNetworkReply* m_reply;
     QNetworkReply::NetworkError m_error;
-    void parse(const QVariant& data);
+    bool parse(const QVariant& data);
     bool parse(const QByteArray& data);
 	
 public slots:
@@ -83,5 +84,7 @@ signals:
 };
 
 }
+
+Q_DECLARE_METATYPE(mygpo::Episode);
 
 #endif // EPISODE_H

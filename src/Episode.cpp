@@ -38,6 +38,11 @@ Episode::Episode(QNetworkReply* reply,QObject* parent) : m_reply(reply), m_error
 
 }
 
+Episode::Episode()
+{
+  
+}
+
 Episode::~Episode()
 {
 
@@ -90,16 +95,40 @@ QUrl Episode::mygpoUrl() const
 }
 
 
-void Episode::parse(const QVariant& data) 
+bool Episode::parse(const QVariant& data) 
 {
+    if (!data.canConvert(QVariant::Map) )      
+      return false;
     QVariantMap episodeMap = data.toMap();
+    QVariant s = episodeMap.value(QLatin1String("url"));
+    if (!s.canConvert(QVariant::Url)) 
+      return false;
     m_url = episodeMap.value(QLatin1String("url")).toUrl();
+    s = episodeMap.value(QLatin1String("title"));
+    if (!s.canConvert(QVariant::String)) 
+      return false;
     m_title = episodeMap.value(QLatin1String("title")).toString();
+    s = episodeMap.value(QLatin1String("podcast_url"));
+    if (!s.canConvert(QVariant::Url))
+      return false;
     m_podcastUrl = episodeMap.value(QLatin1String("podcast_url")).toUrl();
+    s = episodeMap.value(QLatin1String("podcast_title"));
+    if (!s.canConvert(QVariant::String))
+      return false;
     m_podcastTitle = episodeMap.value(QLatin1String("podcast_title")).toString();
+    s = episodeMap.value(QLatin1String("description"));
+    if (!s.canConvert(QVariant::String))
+      return false;
     m_description = episodeMap.value(QLatin1String("description")).toString();
+    s = episodeMap.value(QLatin1String("website"));
+    if(!s.canConvert(QVariant::Url))
+      return false;
     m_website = episodeMap.value(QLatin1String("website")).toUrl();
+    s = episodeMap.value(QLatin1String("mygpo_link"));
+    if(!s.canConvert(QVariant::Url))
+      return false;
     m_mygpoUrl = episodeMap.value(QLatin1String("mygpo_link")).toUrl();
+    return true;
 }
 
 bool Episode::parse(const QByteArray& data)
@@ -108,7 +137,7 @@ bool Episode::parse(const QByteArray& data)
     bool ok;
     QVariant variant = parser.parse( data, &ok );
     if( ok ) {
-      parse( variant );
+      if (!parse( variant )) return false;
       return true;
     } else {
       return false;

@@ -49,6 +49,7 @@ public:
     Podcast(QNetworkReply* reply,QObject* parent = 0);
     Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent = NULL);
     Podcast(const mygpo::Podcast& other);
+    Podcast();
     virtual ~Podcast();
     Podcast operator=(const mygpo::Podcast& other);
     //Getters
@@ -70,15 +71,26 @@ private:
     QUrl m_website;
     QUrl m_mygpoUrl;
     QNetworkReply::NetworkError m_error;
+    QNetworkReply* m_reply;
+    
+    bool parse(const QVariant& data);
+    bool parse(const QByteArray& data);
     
 public slots:
     void parseData();
     void error(QNetworkReply::NetworkError error);
 
 signals:
+    /**Gets emitted when the data is ready to read*/
     void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError(QNetworkReply::NetworkError error);
 };
 
 }
+
+Q_DECLARE_METATYPE(mygpo::Podcast);
 
 #endif // PODCAST_H

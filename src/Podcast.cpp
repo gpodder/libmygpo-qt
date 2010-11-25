@@ -22,6 +22,7 @@
 
 
 #include "Podcast.h"
+#include <parser.h>
 
 using namespace mygpo;
 
@@ -30,8 +31,13 @@ Podcast::Podcast(const QUrl& url, const QString& title, const QString& descripti
 
 }
 
+Podcast::Podcast()
+{
 
-Podcast::Podcast(QNetworkReply* reply, QObject* parent) : m_error(QNetworkReply::NoError)
+}
+
+
+Podcast::Podcast(QNetworkReply* reply, QObject* parent) : m_error(QNetworkReply::NoError), m_reply(reply)
 {
     QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
     QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
@@ -89,12 +95,66 @@ QUrl Podcast::mygpoUrl() const
     return m_mygpoUrl;
 }
 
+bool Podcast::parse(const QVariant& data) 
+{
+    if(!data.canConvert(QVariant::Map))
+      return false;
+    QVariantMap podcastMap = data.toMap();
+    QVariant v = podcastMap.value(QLatin1String("url"));
+    if(!v.canConvert(QVariant::Url))
+      return false;
+    m_url = podcastMap.value(QLatin1String("url")).toUrl();
+    v = podcastMap.value(QLatin1String("title"));
+    if(!v.canConvert(QVariant::String)) 
+      return false;
+    m_title = podcastMap.value(QLatin1String("title")).toString();
+    v = podcastMap.value(QLatin1String("title"));
+    if(!v.canConvert(QVariant::String))
+      return false;
+    m_description = podcastMap.value(QLatin1String("description")).toString();
+    v = podcastMap.value(QLatin1String("subscribers"));
+    if(!v.canConvert(QVariant::Int))
+      return false;
+    m_subscribers = podcastMap.value(QLatin1String("subscribers")).toUInt();
+    v = podcastMap.value(QLatin1String("logo_url"));
+    if(!v.canConvert(QVariant::Url))
+      return false;
+    m_logoUrl = podcastMap.value(QLatin1String("logo_url")).toUrl();
+    v = podcastMap.value(QLatin1String("website"));
+    if(!v.canConvert(QVariant::Url))
+      return false;
+    m_website = podcastMap.value(QLatin1String("website")).toUrl();
+    v = podcastMap.value(QLatin1String("mygpo_link"));
+    if(!v.canConvert(QVariant::Url))
+      return false;
+    m_mygpoUrl = podcastMap.value(QLatin1String("mygpo_link")).toUrl();
+    return true;
+}
+
+bool Podcast::parse(const QByteArray& data)
+{	
+    QJson::Parser parser;
+    bool ok;
+    QVariant variant = parser.parse( data, &ok );
+    if( ok ) {
+      if (!parse( variant )) return false;
+      return true;
+    } else {
+      return false;
+    }
+}
+
 void Podcast::parseData() {
     //parsen und signal senden
-    
-    emit finished();
+    QJson::Parser parser;
+    if (parse( m_reply->readAll() ) ) { 
+      emit finished();
+    } else {
+      emit parseError();
+    }
 }
 
 void Podcast::error(QNetworkReply::NetworkError error) {
     this->m_error = error;
+    emit requestError(error);
 }
