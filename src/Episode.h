@@ -45,17 +45,17 @@ class MYGPO_EXPORT Episode : public QObject
     
 public:
     Episode(QNetworkReply* reply, QObject* parent = 0);
-    Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
+    Episode(const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
     Episode(const mygpo::Episode& other);
     Episode operator=(const mygpo::Episode& other);
-    const QUrl url() const;
-    const QString title() const;
-    const QUrl podcastUrl() const;
-    const QString podcastTitle() const;
-    const QString description() const;
-    const QUrl website() const;
-    const QUrl mygpoUrl() const;
+    QUrl url() const;
+    QString title() const;
+    QUrl podcastUrl() const;
+    QString podcastTitle() const;
+    QString description() const;
+    QUrl website() const;
+    QUrl mygpoUrl() const;
 private:
     QUrl m_url;
     QString m_title;
@@ -64,6 +64,22 @@ private:
     QString m_description;
     QUrl m_website;
     QUrl m_mygpoUrl;
+    QNetworkReply* m_reply;
+    QNetworkReply::NetworkError m_error;
+    void parse(const QVariant& data);
+    bool parse(const QByteArray& data);
+	
+public slots:
+    void parseData();
+    void error(QNetworkReply::NetworkError error);
+
+signals:
+    /**Gets emitted when the data is ready to read*/
+    void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError(QNetworkReply::NetworkError error);
 };
 
 }

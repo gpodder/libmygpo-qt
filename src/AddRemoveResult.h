@@ -49,6 +49,14 @@ public:
 private:
     qulonglong m_timestamp;
     QVariant m_updateUrlsVar;
+    QNetworkReply::NetworkError m_error;
+    
+public slots:
+    void parseData();
+    void error(QNetworkReply::NetworkError error);
+
+signals:
+    void finished();
 };
 
 }

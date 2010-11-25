@@ -21,15 +21,20 @@
 ***************************************************************************/
 
 #include "Episode.h"
+#include "JsonParser.h"
+#include <parser.h>
 
 using namespace mygpo;
 
-Episode::Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_podcastUrl(podcastUrl), m_podcastTitle(podcastTitle), m_description(description), m_website(website), m_mygpoUrl(mygpoUrl) {
+Episode::Episode(const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent): QObject(parent), m_url(url), m_title(title), m_podcastUrl(podcastUrl), m_podcastTitle(podcastTitle), m_description(description), m_website(website), m_mygpoUrl(mygpoUrl), m_error(QNetworkReply::NoError) {
   
 }
 
-Episode::Episode(QNetworkReply* reply,QObject* parent)
+Episode::Episode(QNetworkReply* reply,QObject* parent) : m_reply(reply), m_error(QNetworkReply::NoError)
 {
+  QObject::connect(m_reply,SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(m_reply,SIGNAL(error(QNetworkReply::NetworkError)),
+		      this,SLOT(error(QNetworkReply::NetworkError)));
 
 }
 
@@ -49,37 +54,78 @@ Episode Episode::operator=(const mygpo::Episode& other)
 }
 
 
-const QUrl mygpo::Episode::url() const
+QUrl Episode::url() const
 {
     return m_url;
 }
 
-const QString mygpo::Episode::title() const
+QString Episode::title() const
 {
     return m_title;
 }
 
-const QUrl mygpo::Episode::podcastUrl() const
+QUrl Episode::podcastUrl() const
 {
     return m_podcastUrl;
 }
 
-const QString mygpo::Episode::podcastTitle() const
+QString Episode::podcastTitle() const
 {
     return m_podcastTitle;
 }
 
-const QString mygpo::Episode::description() const
+QString Episode::description() const
 {
     return m_description;
 }
 
-const QUrl mygpo::Episode::website() const
+QUrl Episode::website() const
 {
     return m_website;
 }
 
-const QUrl mygpo::Episode::mygpoUrl() const
+QUrl Episode::mygpoUrl() const
 {
     return m_mygpoUrl;
+}
+
+
+void Episode::parse(const QVariant& data) 
+{
+    QVariantMap episodeMap = data.toMap();
+    m_url = episodeMap.value(QLatin1String("url")).toUrl();
+    m_title = episodeMap.value(QLatin1String("title")).toString();
+    m_podcastUrl = episodeMap.value(QLatin1String("podcast_url")).toUrl();
+    m_podcastTitle = episodeMap.value(QLatin1String("podcast_title")).toString();
+    m_description = episodeMap.value(QLatin1String("description")).toString();
+    m_website = episodeMap.value(QLatin1String("website")).toUrl();
+    m_mygpoUrl = episodeMap.value(QLatin1String("mygpo_link")).toUrl();
+}
+
+bool Episode::parse(const QByteArray& data)
+{	
+    QJson::Parser parser;
+    bool ok;
+    QVariant variant = parser.parse( data, &ok );
+    if( ok ) {
+      parse( variant );
+      return true;
+    } else {
+      return false;
+    }
+}
+
+void Episode::parseData() {
+    //parsen und signal senden
+    QJson::Parser parser;
+    if (parse( m_reply->readAll() ) ) { 
+      emit finished();
+    } else {
+      emit parseError();
+    }
+}
+
+void Episode::error(QNetworkReply::NetworkError error) {
+    this->m_error = error;
+    emit requestError(error);
 }

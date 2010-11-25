@@ -31,10 +31,11 @@ AddRemoveResult::AddRemoveResult(qulonglong timestamp, const QVariant& updateUrl
   
 }
 
-
 AddRemoveResult::AddRemoveResult(QNetworkReply* reply, QObject* parent)
 {
-
+    QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
+		      this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
 AddRemoveResult::AddRemoveResult(const AddRemoveResult& other): QObject(other.parent()), m_timestamp(other.timestamp()), m_updateUrlsVar(other.updateUrlsVar())
@@ -61,4 +62,15 @@ QVariant AddRemoveResult::updateUrlsVar() const
 const QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrls() const
 {
     return JsonParser::toUrlPairList(m_updateUrlsVar);
+}
+
+
+void AddRemoveResult::parseData() {
+    //parsen und signal senden
+    
+    emit finished();
+}
+
+void AddRemoveResult::error(QNetworkReply::NetworkError error) {
+    this->m_error = error;
 }
