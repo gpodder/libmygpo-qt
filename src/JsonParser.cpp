@@ -22,7 +22,8 @@
 
 #include <QVariant>
 
-#include "parser.h"
+#include <serializer.h>
+#include <parser.h>
 
 #include "JsonParser.h"
 
@@ -79,7 +80,6 @@ QList< Tag > JsonParser::toTagList(const QByteArray& jsonData)
     return tagList;
 }
 
-
 Podcast JsonParser::qvariantToPodcast(const QVariant& variantData)
 {
     QVariantMap podcastMap = variantData.toMap();
@@ -93,7 +93,6 @@ Podcast JsonParser::qvariantToPodcast(const QVariant& variantData)
     mygpo::Podcast podcast(url,title,description,subscribers,logoUrl,website,mygpoLink);
     return podcast;
 }
-
 
 Episode JsonParser::qvariantToEpisode(const QVariant& variantData)
 {
@@ -120,26 +119,25 @@ Tag JsonParser::qvariantToTag(const QVariant& variantData)
 
 QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList< QUrl >& remove)
 {
-    QString jsonData = QString(QLatin1String("{\"add\":[%1],\"remove\":[%2]}")).arg(urlListToString(add)).arg(urlListToString(remove));
-    QByteArray jsonByteArray;
-    jsonByteArray.append(jsonData.toAscii());
+    QJson::Serializer serializer;
+    QVariantMap jsonData;
+    QVariant addVar(urlListToQVariantList(add));
+    QVariant removeVar(urlListToQVariantList(remove));
+    jsonData.insert(QString(QLatin1String("add")),addVar);
+    jsonData.insert(QString(QLatin1String("remove")),addVar);
+    QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
     return jsonByteArray;
 }
 
 
-QString JsonParser::urlListToString(const QList< QUrl >& urls)
+QVariantList JsonParser::urlListToQVariantList(const QList< QUrl >& urls)
 {
-    QString urlsString;
-    int max = urls.size();
-    for (int i=0;i<max;i++)
-    {
-        urlsString.append(QString(QLatin1String("\"%1\"")).arg(urls.at(i).toString()));
-        if (i!=(max-1))
-        {
-            urlsString.append(QLatin1String(","));
-        }
+    QVariantList list;
+    foreach (const QUrl& url,urls) {
+        QVariant var(url.toString());
+        list.append(var);
     }
-    return urlsString;
+    return list;
 }
 
 AddRemoveResult JsonParser::toAddRemoveResult(const QByteArray& jsonData)

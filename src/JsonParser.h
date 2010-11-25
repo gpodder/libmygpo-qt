@@ -49,7 +49,7 @@ private:
     static Episode qvariantToEpisode(const QVariant& variantData);
     static Tag qvariantToTag(const QVariant& variantData);
     static QPair<QUrl, QUrl> toUpdatePair(const QVariant& variantData);
-    static QString urlListToString(const QList<QUrl>& urls);
+    static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
 };
 
 }
