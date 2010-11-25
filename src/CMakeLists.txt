@@ -11,6 +11,9 @@ set ( LIBMYGPO_QT_SRC
         RequestHandler.cpp
         UrlBuilder.cpp
         RequestExceptions.cpp
+        TagList.cpp
+        EpisodeList.cpp
+        PodcastList.cpp
 )
 
 set ( LIBMYGPO_QT_H
@@ -25,6 +28,9 @@ set ( LIBMYGPO_QT_H
         RequestHandler.h
         UrlBuilder.h
         RequestExceptions.h
+        TagList.h
+        EpisodeList.h
+        PodcastList.h
 )
 
 QT4_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${LIBMYGPO_QT_H} )

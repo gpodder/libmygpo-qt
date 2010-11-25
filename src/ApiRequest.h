@@ -33,6 +33,9 @@
 #include "Episode.h"
 #include "Tag.h"
 #include "AddRemoveResult.h"
+#include "EpisodeList.h"
+#include "PodcastList.h"
+#include "TagList.h"
 
 #include <QByteArray>
 #include <QString>
@@ -81,7 +84,7 @@ public:
      *
      * Throws a RequestException if the request fails
      */
-    QList<Podcast> toplist(uint count);
+    PodcastList toplist(uint count);
     
     /**
      * Returns the Result for the Simple API Call "Searching for Podcasts"
@@ -90,7 +93,7 @@ public:
      *
      * Throws a RequestException if the request fails
      */
-    QList<Podcast> search(const QString& query);
+    PodcastList search(const QString& query);
     
     /**
      * Returns the Result for the Simple API Call "Downloading podcast suggestions"
@@ -100,7 +103,7 @@ public:
      *
      * Throws a RequestException if the request fails
      */
-    QList<Podcast> suggestions(uint count);
+    PodcastList suggestions(uint count);
     
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcasts of a Tag"
@@ -110,7 +113,7 @@ public:
      *
      * Throws a RequestException if the request fails
      */
-    QList<Podcast> podcastsOfTag(uint count, const QString& tag);
+    PodcastList podcastsOfTag(uint count, const QString& tag);
     
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcast Data"
@@ -138,7 +141,7 @@ public:
      *
      * Throws a RequestException if the request fails
      */
-    QList<Episode> favoriteEpisode(const QString& username);
+    EpisodeList favoriteEpisode(const QString& username);
     
     /**
      * Returns the Result for the Advanced API Call "Retrieving Top Tags"
@@ -147,7 +150,7 @@ public:
      *
      * Throws a RequestException if the request fails
      */
-    QList<Tag> topTags(uint count);
+    TagList topTags(uint count);
     
     /**
      * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
