@@ -53,7 +53,7 @@ public:
      * @param url The request url
      * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
      */
-    int getRequest( QByteArray& response, const QUrl& url );
+    QNetworkReply* getRequest(const QUrl& url );
 
     /**
      * Sends a POST request with the given url and data.
@@ -61,18 +61,15 @@ public:
      * @param url The request url
      * @return 0 if the request was successful, corresponding ErrorCode if unsuccessful
      */
-    int postRequest( QByteArray& response, const QByteArray& data, const QUrl& url );
+    QNetworkReply* postRequest(const QByteArray& data, const QUrl& url );
 
 private:
     QNetworkAccessManager manager;
-    QNetworkReply::NetworkError m_errorFlag;
     QString m_username;
     QString m_password;
     bool m_loginFailed;
-    void waitForReply( const QNetworkReply& reply );
 
 private slots:
-    void handleError( QNetworkReply::NetworkError code );
     void authenticate( QNetworkReply* reply, QAuthenticator* authentiactor );
 };
 
