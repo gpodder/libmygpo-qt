@@ -84,7 +84,6 @@ IF (NOT WIN32)
                             ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
                             @ONLY)
          INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
-        ENDIF (PKG_CONFIG_DIR)
     ENDIF (PKG_CONFIG_FOUND)
 ENDIF (NOT WIN32)
 
