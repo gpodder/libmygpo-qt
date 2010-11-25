@@ -25,6 +25,12 @@
 
 using namespace mygpo;
 
+Podcast::Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent) : m_url(url), m_title(title), m_description(description), m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpolink)
+{
+
+}
+
+
 Podcast::Podcast(QNetworkReply* reply, QObject* parent) : m_error(QNetworkReply::NoError)
 {
     QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));

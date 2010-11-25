@@ -24,6 +24,11 @@
 
 using namespace mygpo;
 
+Tag::Tag(QString tag, uint usage, QObject* parent): QObject(parent), m_tag(tag), m_usage(usage)
+{
+    
+}
+
 Tag::Tag(QNetworkReply* reply,QObject* parent)
 {
 

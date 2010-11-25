@@ -47,18 +47,19 @@ class MYGPO_EXPORT Podcast : public QObject
     
 public:
     Podcast(QNetworkReply* reply,QObject* parent = 0);
+    Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent = NULL);
     Podcast(const mygpo::Podcast& other);
     virtual ~Podcast();
     Podcast operator=(const mygpo::Podcast& other);
     //Getters
-    const QUrl url() const;
-    const QString title() const;
-    const QString description() const;
+    QUrl url() const;
+    QString title() const;
+    QString description() const;
     uint subscribers() const;
     //const uint subscriberstLastWeek();
-    const QUrl logoUrl() const;
-    const QUrl website() const;
-    const QUrl mygpoUrl() const;
+    QUrl logoUrl() const;
+    QUrl website() const;
+    QUrl mygpoUrl() const;
 private:
     QUrl m_url;
     QString m_title;
@@ -72,6 +73,7 @@ private:
     
 public slots:
     void parseData();
+    void error(QNetworkReply::NetworkError error);
 
 signals:
     void finished();

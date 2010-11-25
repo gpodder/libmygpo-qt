@@ -26,6 +26,12 @@
 
 using namespace mygpo;
 
+
+AddRemoveResult::AddRemoveResult(qulonglong timestamp, const QVariant& updateUrlsVar, QObject* parent): QObject(parent), m_timestamp(timestamp), m_updateUrlsVar(updateUrlsVar) {
+  
+}
+
+
 AddRemoveResult::AddRemoveResult(QNetworkReply* reply, QObject* parent)
 {
 

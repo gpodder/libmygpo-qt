@@ -36,6 +36,7 @@ class Tag : public QObject
 
 public:
     Tag(QNetworkReply* reply,QObject* parent = 0);
+    Tag(QString tag, uint usage, QObject* parent = 0);
     Tag(const Tag& other);
     virtual ~Tag();
     Tag operator=(const Tag& other);

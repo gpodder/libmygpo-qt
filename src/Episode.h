@@ -45,6 +45,7 @@ class MYGPO_EXPORT Episode : public QObject
     
 public:
     Episode(QNetworkReply* reply, QObject* parent = 0);
+    Episode(QUrl url, QString title, QUrl podcastUrl, QString podcastTitle, QString description, QUrl website, QUrl mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
     Episode(const mygpo::Episode& other);
     Episode operator=(const mygpo::Episode& other);

@@ -40,6 +40,7 @@ class MYGPO_EXPORT AddRemoveResult : public QObject
     Q_PROPERTY(QVariant updateUrlsVar READ updateUrlsVar CONSTANT)
 public:
     AddRemoveResult(QNetworkReply* reply ,QObject* parent = 0);
+    AddRemoveResult(qulonglong timestamp, const QVariant& updateUrlsVar ,QObject* parent = 0);
     AddRemoveResult(const AddRemoveResult& other);
     AddRemoveResult operator=(const AddRemoveResult& other);
     QVariant updateUrlsVar() const;
