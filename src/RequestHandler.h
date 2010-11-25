@@ -44,7 +44,7 @@ public:
      * @param username The username that should be used for authentication if required.
      * @param password The password that should be used for authentication if required
      */
-    RequestHandler(const QString& username, const QString& password);
+    RequestHandler(const QString& username, const QString& password, const QNetworkAccessManager& manager = QNetworkAccessManager());
     RequestHandler();
 
     /**
@@ -64,7 +64,7 @@ public:
     QNetworkReply* postRequest(const QByteArray& data, const QUrl& url );
 
 private:
-    QNetworkAccessManager manager;
+    QNetworkAccessManager m_nam;
     QString m_username;
     QString m_password;
     bool m_loginFailed;

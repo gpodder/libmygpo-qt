@@ -27,7 +27,7 @@
 
 using namespace mygpo;
 
-RequestHandler::RequestHandler(const QString& username, const QString& password) : m_username(username), m_password(password), m_loginFailed(false)
+RequestHandler::RequestHandler(const QString& username, const QString& password, const QNetworkAccessManager& manager) : m_username(username), m_password(password), m_loginFailed(false), m_nam(manager)
 {
     QObject::connect(&manager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,
                      SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
@@ -37,11 +37,11 @@ RequestHandler::RequestHandler() : m_username(), m_password(), m_loginFailed(fal
 {
 }
 
-QNetworkReply* RequestHandler::getRequest(QByteArray& response, const QUrl& url)
+QNetworkReply* RequestHandler::getRequest(const QUrl& url)
 {
     m_loginFailed = false;
     QNetworkRequest request(url);
-    QNetworkReply* reply = manager.get(request);
+    QNetworkReply* reply = m_nam.get(request);
     return reply;
 }
 
@@ -56,7 +56,7 @@ QNetworkReply* RequestHandler::postRequest(const QByteArray& data, const QUrl& u
      */
     m_loginFailed = false;
     QNetworkRequest request( url );
-    QNetworkReply* reply = manager.post( request, data );
+    QNetworkReply* reply = m_nam.post( request, data );
     return reply;
 }
 
