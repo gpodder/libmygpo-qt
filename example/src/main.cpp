@@ -26,6 +26,7 @@
 #include <QtGui>
 #include <QEventLoop>
 
+
 #include <Podcast.h>
 #include <ApiRequest.h>
 
@@ -33,54 +34,70 @@ using namespace mygpo;
 //#include "Example.h"
 
 int main(int argc, char **argv) {
-  
-  QApplication app(argc,argv,true);
-  QList<Podcast> list;
-  
-  ApiRequest req("ase23","csf-sepm");
+
+    QApplication app(argc,argv,true);
+    //QList<Podcast> list;
+
+    ApiRequest req("ase23","csf-sepm");
 //  QByteArray result;
-  //result = req.toplistOpml(10);
-  //std::cout << result.data() << std::endl;
+    //result = req.toplistOpml(10);
+    //std::cout << result.data() << std::endl;
 //
 //  list = req.toplist(10);
 //  std::cout << list.size() << std::endl;
 //  foreach (const Podcast& podcast,list) {
-//	qDebug() << podcast.title();
-//	qDebug() << podcast.subscribers();
+//  qDebug() << podcast.title();
+//  qDebug() << podcast.subscribers();
 //  }
-  QEventLoop loop;
-  
-  Podcast podcast = req.podcastData(QUrl(QLatin1String("http://feeds.feedburner.com/linuxoutlaws")));
-  loop.connect(&podcast, SIGNAL(finished()), SLOT(quit()));
-  loop.exec();
 
-  qDebug() << podcast.title();
-  qDebug() << podcast.description();
-  qDebug() << podcast.url();
+    PodcastList plist = req.toplist(10);
+    QEventLoop loop;
+    loop.connect(&plist,SIGNAL(finished()),SLOT(quit()));
+    loop.exec();
+    QList<Podcast> liste = plist.list();
+    qDebug() << liste.size();
+    foreach(Podcast pcast,liste)
+    {
+        qDebug() << pcast.title();
+        qDebug() << pcast.description();
+        qDebug() << pcast.url();
+    }
+
+    QVariant variant = plist.podcasts();
+    qDebug() << variant.type();
+    QVariantList list = variant.toList();
+    qDebug() << list.at(0).type();
+    Podcast pc = list.at(0).value<mygpo::Podcast>();
+    qDebug() << pc.url();
+    //put a Podcast Object into a QVariant
+    QVariant varPodcast;
+    varPodcast.setValue<mygpo::Podcast>(pc);
+    qDebug() << varPodcast.type();
+    //get the Podcast from the QVariant
+    Podcast pcFromVariant = varPodcast.value<mygpo::Podcast>();
+    qDebug() << pcFromVariant.title();
+    /*Example ex;
 
 
-  /*Example ex;
+    std::cout << "Downloading podcast toplists as text and json:" << std::endl;
+    ex.startDownload(QUrl("http://gpodder.net/toplist/10.txt"));
 
+    ex.startDownload(QUrl("http://gpodder.net/toplist/10.json"));
 
-  std::cout << "Downloading podcast toplists as text and json:" << std::endl;
-  ex.startDownload(QUrl("http://gpodder.net/toplist/10.txt"));
-  
-  ex.startDownload(QUrl("http://gpodder.net/toplist/10.json"));
-  
-  std::cout << "Downloading subscription lists for user ase23:" << std::endl;
+    std::cout << "Downloading subscription lists for user ase23:" << std::endl;
 
-  ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.txt"));
+    ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.txt"));
 
-  ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.json"));
-  */
+    ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.json"));
+    */
 
-  /* These two lines are no longer needed, RequestHandler waits itself
-   * for messages
-  QTimer::singleShot(5000, &app, SLOT(quit()));
-  return app.exec();
-  */
+    /* These two lines are no longer needed, RequestHandler waits itself
+     * for messages
+    QTimer::singleShot(5000, &app, SLOT(quit()));
+    return app.exec();
+    */
 
-  return 0;
+    return 0;
 }
 
 

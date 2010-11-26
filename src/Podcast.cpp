@@ -24,6 +24,8 @@
 #include "Podcast.h"
 #include <parser.h>
 
+#include <QDebug>
+
 using namespace mygpo;
 
 Podcast::Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent) : m_url(url), m_title(title), m_description(description), m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpolink)
@@ -43,6 +45,12 @@ Podcast::Podcast(QNetworkReply* reply, QObject* parent) : m_error(QNetworkReply:
     QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
 		      this,SLOT(error(QNetworkReply::NetworkError)));
 }
+
+Podcast::Podcast(const QVariant& variant, QObject* parent): QObject(parent), m_error(QNetworkReply::NoError), m_reply(0)
+{
+    parse(variant);
+}
+
 
 Podcast::Podcast(const Podcast& other): QObject(other.parent()), m_url(other.url()), m_title(other.title()), m_description(other.description()), m_subscribers(other.subscribers()), m_logoUrl(other.logoUrl()), m_website(other.website()), m_mygpoUrl(other.mygpoUrl())
 {

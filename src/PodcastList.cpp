@@ -22,23 +22,89 @@
 
 #include "PodcastList.h"
 
+#include <parser.h>
+
 namespace mygpo {
 
-PodcastList::PodcastList(QNetworkReply* reply, QObject* parent) : QObject(parent), m_reply(reply) {
+PodcastList::PodcastList() : m_reply(0), m_podcasts(QVariant())
+{
 
 }
 
-PodcastList::PodcastList(const PodcastList& other): QObject(other.parent()), m_reply(other.m_reply), m_podcasts(other.m_podcasts) {
+    
+PodcastList::PodcastList(QNetworkReply* reply, QObject* parent) : QObject(parent), m_reply(reply)
+{
+    QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
+              this,SLOT(error(QNetworkReply::NetworkError)));
+}
+
+PodcastList::PodcastList(const PodcastList& other): QObject(other.parent()), m_reply(other.m_reply), m_podcasts(other.m_podcasts)
+{
 }
 
 PodcastList::~PodcastList() {
 }
 
-QList<Podcast> PodcastList::podcasts() const {
-	return QList<Podcast>();
+QList<Podcast> PodcastList::list() const
+{
+	QList<Podcast> list;
+    QVariantList varList = m_podcasts.toList();
+    foreach(QVariant var,varList)
+    {
+        list.append(var.value<mygpo::Podcast>());
+    }
+    return list;        
 }
 
-QVariant PodcastList::podcastsVar() const {
+bool PodcastList::parse(const QVariant& data)
+{
+    if (!data.canConvert(QVariant::List))
+        return false;
+    QVariantList varList = data.toList();
+    QVariantList podcastList;
+    foreach (QVariant var,varList)
+    {
+        QVariant v;
+        v.setValue<mygpo::Podcast>(Podcast(var));
+        podcastList.append(v);
+    }
+    m_podcasts = QVariant(podcastList);
+    return true;
+}
+
+bool PodcastList::parse(const QByteArray& data)
+{
+    QJson::Parser parser;
+    bool ok;
+    QVariant variant = parser.parse( data, &ok );
+    if( ok ) {
+      ok = (parse( variant ));
+    }
+    return ok;
+}
+
+
+void PodcastList::parseData()
+{
+    QJson::Parser parser;
+    if (parse( m_reply->readAll() ) ) { 
+      emit finished();
+    } else {
+      emit parseError();
+    }
+}
+
+void PodcastList::error(QNetworkReply::NetworkError error)
+{
+    this->m_error = error;
+    emit requestError(error);
+}
+
+
+QVariant PodcastList::podcasts() const
+{
 	return m_podcasts;
 }
+
 }
