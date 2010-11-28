@@ -28,22 +28,40 @@
 #include <QList>
 
 #include "Tag.h"
+#include "mygpo_export.h"
 
-namespace mygpo {
+namespace mygpo
+{
 
-class TagList : QObject{
-	Q_OBJECT
-	Q_PROPERTY(QVariant tags READ tagsVar CONSTANT)
+class MYGPO_EXPORT TagList : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY ( QVariant tags READ tags CONSTANT )
 public:
-	TagList(QNetworkReply* reply, QObject* parent = 0);
-	TagList(const TagList& other);
-	virtual ~TagList();
+    TagList ( QNetworkReply* reply, QObject* parent = 0 );
+    TagList ( const TagList& other );
+    virtual ~TagList();
 
-	QList<Tag> tags() const;
-	QVariant tagsVar() const;
+    QList<Tag> list() const;
+    QVariant tags() const;
 private:
-	QNetworkReply* m_reply;
-	QVariant m_tags;
+    QNetworkReply* m_reply;
+    QVariant m_tags;
+    
+    QNetworkReply::NetworkError m_error;
+
+    bool parse ( const QVariant& data );
+    bool parse ( const QByteArray& data );
+private slots:
+    void parseData();
+    void error(QNetworkReply::NetworkError error);
+signals:
+    /**Gets emitted when the data is ready to read*/
+    void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError(QNetworkReply::NetworkError error);
 };
 
 }

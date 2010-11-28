@@ -33,25 +33,25 @@
 namespace mygpo {
 
 class MYGPO_EXPORT PodcastList : public QObject {
-	Q_OBJECT
-	Q_PROPERTY(QVariant podcasts READ podcasts CONSTANT)
+    Q_OBJECT
+    Q_PROPERTY(QVariant podcasts READ podcasts CONSTANT)
 public:
+    PodcastList(QNetworkReply* reply, QObject* parent = 0);
+    PodcastList(const PodcastList& other);
     PodcastList();
-	PodcastList(QNetworkReply* reply, QObject* parent = 0);
-	PodcastList(const PodcastList& other);
-	virtual ~PodcastList();
+    virtual ~PodcastList();
 
-	QList<Podcast> list() const;
-	QVariant podcasts() const;
+    QList<Podcast> list() const;
+    QVariant podcasts() const;
 
 private:
-	QNetworkReply* m_reply;
-	QVariant m_podcasts;
+    QVariant m_podcasts;
     
+    QNetworkReply* m_reply;
     QNetworkReply::NetworkError m_error;
-    
-    bool parse(const QVariant& data);
-    bool parse(const QByteArray& data);
+
+    bool parse ( const QVariant& data );
+    bool parse ( const QByteArray& data );
 private slots:
     void parseData();
     void error(QNetworkReply::NetworkError error);

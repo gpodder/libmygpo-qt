@@ -28,22 +28,24 @@
 #include <QObject>
 #include <QVariant>
 #include "Episode.h"
+#include "mygpo_export.h"
 
 namespace mygpo {
 
-class EpisodeList : QObject {
+class MYGPO_EXPORT EpisodeList : public QObject {
 	Q_OBJECT
-	Q_PROPERTY(QVariant episodes READ episodesVar CONSTANT)
+	Q_PROPERTY(QVariant episodes READ episodes CONSTANT)
 public:
 	EpisodeList(QNetworkReply* reply, QObject* parent = 0);
 	EpisodeList(const EpisodeList& other);
 	virtual ~EpisodeList();
 
-	QList<Episode> episodes() const;
-	QVariant episodesVar() const;
+	QList<Episode> list() const;
+	QVariant episodes() const;
 private:
 	QNetworkReply* m_reply;
 	QVariant m_episodes;
+    QNetworkReply::NetworkError m_error;
     bool parse(const QVariant& data);
     bool parse(const QByteArray& data);
 

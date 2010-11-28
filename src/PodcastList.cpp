@@ -24,62 +24,66 @@
 
 #include <parser.h>
 
-namespace mygpo {
+using namespace mygpo;
 
-PodcastList::PodcastList() : m_reply(0), m_podcasts(QVariant())
+
+PodcastList::PodcastList() : m_podcasts ( QVariant() ), m_reply ( 0 )
 {
 
 }
 
-    
-PodcastList::PodcastList(QNetworkReply* reply, QObject* parent) : QObject(parent), m_reply(reply)
+
+PodcastList::PodcastList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply )
 {
-    QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
-              this,SLOT(error(QNetworkReply::NetworkError)));
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-PodcastList::PodcastList(const PodcastList& other): QObject(other.parent()), m_reply(other.m_reply), m_podcasts(other.m_podcasts)
+PodcastList::PodcastList ( const PodcastList& other ) : QObject ( other.parent() ), m_podcasts ( other.m_podcasts ), m_reply ( other.m_reply )
 {
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-PodcastList::~PodcastList() {
+PodcastList::~PodcastList()
+{
 }
 
 QList<Podcast> PodcastList::list() const
 {
-	QList<Podcast> list;
+    QList<Podcast> list;
     QVariantList varList = m_podcasts.toList();
-    foreach(QVariant var,varList)
+    foreach ( QVariant var,varList )
     {
-        list.append(var.value<mygpo::Podcast>());
+        list.append ( var.value<mygpo::Podcast>() );
     }
-    return list;        
+    return list;
 }
 
-bool PodcastList::parse(const QVariant& data)
+bool PodcastList::parse ( const QVariant& data )
 {
-    if (!data.canConvert(QVariant::List))
+    if ( !data.canConvert ( QVariant::List ) )
         return false;
     QVariantList varList = data.toList();
     QVariantList podcastList;
-    foreach (QVariant var,varList)
+    foreach ( QVariant var,varList )
     {
         QVariant v;
-        v.setValue<mygpo::Podcast>(Podcast(var));
-        podcastList.append(v);
+        v.setValue<mygpo::Podcast> ( Podcast ( var ) );
+        podcastList.append ( v );
     }
-    m_podcasts = QVariant(podcastList);
+    m_podcasts = QVariant ( podcastList );
     return true;
 }
 
-bool PodcastList::parse(const QByteArray& data)
+bool PodcastList::parse ( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
-    QVariant variant = parser.parse( data, &ok );
-    if( ok ) {
-      ok = (parse( variant ));
+    QVariant variant = parser.parse ( data, &ok );
+    if ( ok )
+    {
+        ok = ( parse ( variant ) );
     }
     return ok;
 }
@@ -88,23 +92,24 @@ bool PodcastList::parse(const QByteArray& data)
 void PodcastList::parseData()
 {
     QJson::Parser parser;
-    if (parse( m_reply->readAll() ) ) { 
-      emit finished();
-    } else {
-      emit parseError();
+    if ( parse ( m_reply->readAll() ) )
+    {
+        emit finished();
+    }
+    else
+    {
+        emit parseError();
     }
 }
 
-void PodcastList::error(QNetworkReply::NetworkError error)
+void PodcastList::error ( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit requestError(error);
+    emit requestError ( error );
 }
 
 
 QVariant PodcastList::podcasts() const
 {
-	return m_podcasts;
-}
-
+    return m_podcasts;
 }

@@ -27,18 +27,21 @@
 #include <QEventLoop>
 
 
-#include <Podcast.h>
+#include <PodcastList.h>
+#include <EpisodeList.h>
+#include <TagList.h>
 #include <ApiRequest.h>
 
 using namespace mygpo;
 //#include "Example.h"
 
-int main(int argc, char **argv) {
+int main ( int argc, char **argv )
+{
 
-    QApplication app(argc,argv,true);
+    QApplication app ( argc,argv,true );
     //QList<Podcast> list;
 
-    ApiRequest req("ase23","csf-sepm");
+    ApiRequest req ( "ase23","csf-sepm" );
 //  QByteArray result;
     //result = req.toplistOpml(10);
     //std::cout << result.data() << std::endl;
@@ -50,6 +53,94 @@ int main(int argc, char **argv) {
 //  qDebug() << podcast.subscribers();
 //  }
 
+    QList<QUrl> add;
+    QList<QUrl> remove;
+
+    add.append ( QUrl ( QLatin1String ( "http://feeds.feedburner.com/coverville" ) ) );
+    remove.append( QUrl ( QLatin1String( "http://feeds.feedburner.com/Bsdtalk" ) ) );
+    
+    AddRemoveResult result = req.addRemoveSubscriptions ( QLatin1String ( "ase23" ),QLatin1String ( "dev0" ),add,remove );
+
+    QEventLoop loop;
+    loop.connect ( &result,SIGNAL ( finished() ),SLOT ( quit() ) );
+    loop.exec();
+
+    qDebug() << result.timestamp();
+
+    QList< QPair< QUrl, QUrl > > pairlist = result.updateUrlsList();
+
+    for ( int i=0;i<pairlist.size();i++ )
+    {
+        QPair< QUrl, QUrl > pair = pairlist.at ( i );
+        qDebug() << pair.first;
+        qDebug() << pair.second;
+    }
+    /*
+    TagList taglist = req.topTags(15);
+
+    QEventLoop loop;
+    loop.connect(&taglist,SIGNAL(finished()),SLOT(quit()));
+    loop.exec();
+
+    QList<mygpo::Tag> tags = taglist.list();
+
+    foreach(mygpo::Tag tag, tags)
+    {
+        qDebug() << tag.usage();
+        qDebug() << tag.tag();
+    }
+
+    QVariantList variantlist = taglist.tags().toList();
+
+    foreach(QVariant variant, variantlist)
+    {
+        qDebug() << variant.value<mygpo::Tag>().usage();
+        qDebug() << variant.value<mygpo::Tag>().tag();
+    }
+    */
+
+    /*
+    EpisodeList eplist = req.favoriteEpisode(QString(QLatin1String("ase23")));
+
+    QEventLoop loop;
+    loop.connect(&eplist,SIGNAL(finished()),SLOT(quit()));
+    loop.connect(&eplist,SIGNAL(parseError()),SLOT(quit()));
+    loop.connect(&eplist,SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
+    qDebug() << QLatin1String("signals connected");
+    loop.exec();
+
+    qDebug() << QLatin1String("Loop finished");
+    QList<mygpo::Episode> episodes = eplist.list();
+
+    foreach (Episode episode, episodes)
+    {
+        qDebug() << QLatin1String("Iteration over Episodes");
+        qDebug() << episode.title();
+        qDebug() << episode.url();
+        qDebug() << episode.podcastTitle();
+        qDebug() << episode.podcastUrl();
+
+    }
+    QVariantList varlist = eplist.episodes().toList();
+
+    foreach (QVariant variant, varlist)
+    {
+        qDebug() << QLatin1String("Iteration over Variants");
+        qDebug() << variant.type();
+        qDebug() << variant.value<mygpo::Episode>().title();
+    }*/
+
+    /*
+    Episode ep = req.episodeData(QUrl(QLatin1String("http://feeds.feedburner.com/linuxoutlaws")),QUrl(QLatin1String("http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws177.mp3")));
+
+    QEventLoop loop;
+    loop.connect(&ep,SIGNAL(finished()),SLOT(quit()));
+    loop.exec();
+    qDebug() << ep.description();
+    qDebug() << ep.title();
+    qDebug() << ep.mygpoUrl();
+    */
+    /*
     PodcastList plist = req.toplist(10);
     QEventLoop loop;
     loop.connect(&plist,SIGNAL(finished()),SLOT(quit()));
@@ -76,26 +167,8 @@ int main(int argc, char **argv) {
     //get the Podcast from the QVariant
     Podcast pcFromVariant = varPodcast.value<mygpo::Podcast>();
     qDebug() << pcFromVariant.title();
-    /*Example ex;
-
-
-    std::cout << "Downloading podcast toplists as text and json:" << std::endl;
-    ex.startDownload(QUrl("http://gpodder.net/toplist/10.txt"));
-
-    ex.startDownload(QUrl("http://gpodder.net/toplist/10.json"));
-
-    std::cout << "Downloading subscription lists for user ase23:" << std::endl;
-
-    ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.txt"));
-
-    ex.startDownload(QUrl("http://gpodder.net/subscriptions/ase23/dev0.json"));
     */
 
-    /* These two lines are no longer needed, RequestHandler waits itself
-     * for messages
-    QTimer::singleShot(5000, &app, SLOT(quit()));
-    return app.exec();
-    */
 
     return 0;
 }

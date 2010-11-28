@@ -20,26 +20,84 @@
 * USA                                                                      *
 ***************************************************************************/
 
+#include <parser.h>
+
 #include "TagList.h"
 
-namespace mygpo {
+using namespace mygpo;
 
-TagList::TagList(QNetworkReply* reply, QObject* parent) : QObject(parent), m_reply(reply) {
-
+TagList::TagList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply )
+{
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-TagList::TagList(const TagList& other): QObject(other.parent()), m_reply(other.m_reply), m_tags(other.m_tags) {
+TagList::TagList ( const TagList& other ) : QObject ( other.parent() ), m_reply ( other.m_reply ), m_tags ( other.m_tags )
+{
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-TagList::~TagList() {
+TagList::~TagList()
+{
 }
 
-QList<Tag> TagList::tags() const {
-	return QList<Tag>();
+QList<Tag> TagList::list() const
+{
+    QList<Tag> list;
+    QVariantList varList = m_tags.toList();
+    foreach ( QVariant var,varList )
+    {
+        list.append ( var.value<mygpo::Tag>() );
+    }
+    return list;
 }
 
-QVariant TagList::tagsVar() const {
-	return m_tags;
+QVariant TagList::tags() const
+{
+    return m_tags;
 }
 
+bool TagList::parse(const QVariant& data)
+{
+    if (!data.canConvert(QVariant::List))
+        return false;
+    QVariantList varList = data.toList();
+    QVariantList tagList;
+    foreach (QVariant var,varList)
+    {
+        QVariant v;
+        v.setValue<mygpo::Tag>(Tag(var));
+        tagList.append(v);
+    }
+    m_tags = QVariant( tagList);
+    return true;
+}
+
+bool TagList::parse(const QByteArray& data)
+{
+    QJson::Parser parser;
+    bool ok;
+    QVariant variant = parser.parse( data, &ok );
+    if( ok ) {
+      ok = (parse( variant ));
+    }
+    return ok;
+}
+
+
+void TagList::parseData()
+{
+    QJson::Parser parser;
+    if (parse( m_reply->readAll() ) ) { 
+      emit finished();
+    } else {
+      emit parseError();
+    }
+}
+
+void TagList::error(QNetworkReply::NetworkError error)
+{
+    this->m_error = error;
+    emit requestError(error);
 }

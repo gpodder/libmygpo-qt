@@ -25,7 +25,7 @@
 
 #define MYGPO_MAJOR_VERSION 0
 #define MYGPO_MINOR_VERSION 2
-#define MYGPO_PATCH_VERSION 5 
+#define MYGPO_PATCH_VERSION 5
 
 #include "RequestHandler.h"
 #include "mygpo_export.h"
@@ -43,115 +43,113 @@
 
 namespace mygpo
 {
-  
-    /**
-     * This Class is the Frontend of libmygpo-qt.
-     * Methods from this Class map the Web API of gpodder.net
-     * and return the Results of the Requests.
-     * Web API Documentation can be found here: http://wiki.gpodder.org/wiki/Web_Services/API_2
-     */
+
+/**
+ * This Class is the Frontend of libmygpo-qt.
+ * Methods from this Class map the Web API of gpodder.net
+ * and return the Results of the Requests.
+ * Web API Documentation can be found here: http://wiki.gpodder.org/wiki/Web_Services/API_2
+ */
 
 class MYGPO_EXPORT ApiRequest
 {
 public:
-    
-  
-    ApiRequest(const QString& username, const QString& password, QNetworkAccessManager* nam = 0);
-    ApiRequest(QNetworkAccessManager* nam = 0);
+
+
+    ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam = 0 );
+    ApiRequest ( QNetworkAccessManager* nam = 0 );
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
-     * @return QByteArray containing the OPML Data
+     * @return
      *
-     * Throws a RequestException if the request fails
      */
-    QByteArray toplistOpml(uint count);
-    
+    QNetworkReply* toplistOpml ( uint count );
+
     /**
      * Returns the OPML Result for the Simple API Call "Searching for Podcasts"
      * @param query The String you want to search for
-     * @return QByteArray containing the OPML Data
+     * @return
      *
-     * Throws a RequestException if the request fails
      */
-    QByteArray searchOpml(const QString& query);
-    
-    
+    QNetworkReply* searchOpml ( const QString& query );
+
+    /**
+     * Returns the Result for the Simple API Call "Downloading podcast suggestions"
+     * Requires Authentication
+     * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return 
+     *
+     */
+    QNetworkReply* suggestionsOpml ( uint count );
+
     /**
      * Returns the Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return List of Podcast Objects containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    PodcastList toplist(uint count);
-    
+    PodcastList toplist ( uint count );
+
     /**
      * Returns the Result for the Simple API Call "Searching for Podcasts"
      * @param query The String you want to search for
      * @return List of Podcast Objects containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    PodcastList search(const QString& query);
-    
+    PodcastList search ( const QString& query );
+
     /**
      * Returns the Result for the Simple API Call "Downloading podcast suggestions"
      * Requires Authentication
      * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return List of Podcast Objects containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    PodcastList suggestions(uint count);
-    
+    PodcastList suggestions ( uint count );
+
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcasts of a Tag"
      * @param query The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @param tag The Tag for which Podcasts should be retrieved
      * @return List of Podcast Objects containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    PodcastList podcastsOfTag(uint count, const QString& tag);
-    
+    PodcastList podcastsOfTag ( uint count, const QString& tag );
+
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcast Data"
      * @param podcasturl Url of the Podcast for which Data should be retrieved
      * @return Podcast Object containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    Podcast podcastData(const QUrl& podcasturl);
-    
+    Podcast podcastData ( const QUrl& podcasturl );
+
     /**
      * Returns the Result for the Advanced API Call "Retrieving Episode Data"
      * @param podcasturl Url of the Podcast that contains the Episode
      * @param episodeurl Url of the Episode Data for which Data should be retrieved
      * @return Podcast Object containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
-     */    
-    Episode episodeData(const QUrl& podcasturl, const QUrl& episodeurl);
-    
+     */
+    Episode episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
+
     /**
      * Returns the Result for the Advanced API Call "Listing Favorite Episodes"
      * @param username The User whose Favorite Episodes should be retrieved
      * @return List of Episode Objects containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    EpisodeList favoriteEpisode(const QString& username);
-    
+    EpisodeList favoriteEpisode ( const QString& username );
+
     /**
      * Returns the Result for the Advanced API Call "Retrieving Top Tags"
      * @param count The number of Tags that should be returned - will be set to to 100 if > 100 or < 1
      * @return List of Tag Objects containing the Data from gPodder
      *
-     * Throws a RequestException if the request fails
      */
-    TagList topTags(uint count);
-    
+    TagList topTags ( uint count );
+
     /**
      * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
      * Requires Authentication
@@ -160,15 +158,14 @@ public:
      * @param add URLs of Podcasts that should be added to the Subscriptions of the User
      * @param remove URLs of Podcasts that should be removed from the Subscriptions of the User
      *
-     * Throws a RequestException if the request fails
      */
-    AddRemoveResult addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove);
-    
+    AddRemoveResult addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+
 private:
     /**
      * Throws the appropriate exception for the given error flag
      */
-    void checkErrorFlag(QNetworkReply::NetworkError errorFlag);
+    void checkErrorFlag ( QNetworkReply::NetworkError errorFlag );
 
     RequestHandler m_requestHandler;
 

@@ -24,30 +24,36 @@
 
 using namespace mygpo;
 
-Tag::Tag(QString tag, uint usage, QObject* parent): QObject(parent), m_tag(tag), m_usage(usage)
-{
-    
-}
-
-Tag::Tag(QNetworkReply* reply,QObject* parent)
+Tag::Tag ( QString tag, uint usage, QObject* parent ) : QObject ( parent ), m_tag ( tag ), m_usage ( usage )
 {
 
 }
 
+Tag::Tag ( const QVariant& variant, QObject* parent ) : QObject ( parent )
+{
+    parse ( variant );
+}
 
-Tag::Tag(const Tag& other): QObject(other.parent()), m_tag(other.tag()), m_usage(other.usage())
+
+Tag::Tag ( const Tag& other ) : QObject ( other.parent() ), m_tag ( other.tag() ), m_usage ( other.usage() )
 {
 
 }
+
+Tag::Tag()
+{
+
+}
+
 
 Tag::~Tag()
 {
 
 }
 
-Tag Tag::operator=(const Tag& other)
+Tag Tag::operator= ( const Tag& other )
 {
-    return Tag(other);
+    return Tag ( other );
 }
 
 const QString Tag::tag() const
@@ -58,4 +64,20 @@ const QString Tag::tag() const
 uint Tag::usage() const
 {
     return m_usage;
+}
+
+bool Tag::parse ( const QVariant& data )
+{
+    if (!data.canConvert(QVariant::Map))
+        return false;
+    QVariantMap tagMap = data.toMap();
+    QVariant v = tagMap.value ( QLatin1String ( "tag" ) );
+    if (!v.canConvert(QVariant::String))
+        return false;
+    m_tag = v.toString();
+    v = tagMap.value ( QLatin1String ( "usage" ) );
+    if (!v.canConvert(QVariant::UInt))
+        return false;
+    m_usage = v.toUInt();
+    return true;
 }

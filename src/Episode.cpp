@@ -38,6 +38,13 @@ Episode::Episode(QNetworkReply* reply,QObject* parent) : m_reply(reply), m_error
 
 }
 
+Episode::Episode(const QVariant& variant, QObject* parent): QObject(parent)
+{
+    qDebug() << "constructing an episode via a variant";
+    parse(variant);
+}
+
+
 Episode::Episode()
 {
   

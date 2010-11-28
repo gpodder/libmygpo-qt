@@ -27,72 +27,81 @@
 #include "RequestExceptions.h"
 #include <QLatin1String>
 
+#include <QDebug>
+
 using namespace mygpo;
 
-ApiRequest::ApiRequest(const QString& username, const QString &password, QNetworkAccessManager* nam) : m_requestHandler(username, password, nam)
+ApiRequest::ApiRequest ( const QString& username, const QString &password, QNetworkAccessManager* nam ) : m_requestHandler ( username, password, nam )
 {
 }
 
-ApiRequest::ApiRequest(QNetworkAccessManager* nam) : m_requestHandler(nam)
+ApiRequest::ApiRequest ( QNetworkAccessManager* nam ) : m_requestHandler ( nam )
 {
 }
 
-QByteArray ApiRequest::toplistOpml(uint count)
+QNetworkReply* ApiRequest::toplistOpml ( uint count )
 {
-	QUrl requestUrl = UrlBuilder::getToplistUrl(count, UrlBuilder::OPML);
+    QUrl requestUrl = UrlBuilder::getToplistUrl ( count, UrlBuilder::OPML );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
 //
 //    return response;
-	return NULL;
+    return m_requestHandler.getRequest ( requestUrl );
 }
 
-QByteArray ApiRequest::searchOpml(const QString& query)
+QNetworkReply* ApiRequest::searchOpml ( const QString& query )
 {
-//    QUrl requestUrl = UrlBuilder::getPodcastSearchUrl(query, UrlBuilder::OPML);
+    QUrl requestUrl = UrlBuilder::getPodcastSearchUrl ( query, UrlBuilder::OPML );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
 //
 //    return response;
-	return NULL;
+    return m_requestHandler.getRequest ( requestUrl );
 }
 
-PodcastList ApiRequest::toplist(uint count)
+
+QNetworkReply* ApiRequest::suggestionsOpml ( uint count )
 {
-    QUrl requestUrl = UrlBuilder::getToplistUrl(count);
+    QUrl requestUrl = UrlBuilder::getSuggestionsUrl ( count , UrlBuilder::OPML );
+    return m_requestHandler.getRequest ( requestUrl );
+}
+
+PodcastList ApiRequest::toplist ( uint count )
+{
+    QUrl requestUrl = UrlBuilder::getToplistUrl ( count );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
 //
 //    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
 //    //return podcastList;
-	QNetworkReply *reply;
-	reply = m_requestHandler.getRequest(requestUrl);
-	PodcastList podcastList(reply);
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest ( requestUrl );
+    PodcastList podcastList ( reply );
     return podcastList;
 }
 
-PodcastList ApiRequest::search(const QString& query)
+PodcastList ApiRequest::search ( const QString& query )
 {
-    QUrl requestUrl = UrlBuilder::getPodcastSearchUrl(query);
+    QUrl requestUrl = UrlBuilder::getPodcastSearchUrl ( query );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
 //
 //    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
 //    // return podcastList;
-	QNetworkReply *reply;
-	reply = m_requestHandler.getRequest(requestUrl);
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest ( requestUrl );
 
-	PodcastList podcastList(reply);
+    PodcastList podcastList ( reply );
     return podcastList;
 }
 
-Episode ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeurl)
+Episode ApiRequest::episodeData ( const QUrl& podcasturl, const QUrl& episodeurl )
 {
-    QUrl requestUrl = UrlBuilder::getEpisodeDataUrl(podcasturl.toString(),episodeurl.toString());
+    QUrl requestUrl = UrlBuilder::getEpisodeDataUrl ( podcasturl.toString(),episodeurl.toString() );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
@@ -100,15 +109,15 @@ Episode ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeurl)
 //    Episode episode = JsonParser::toEpisode(response);
 //    return episode;
     QNetworkReply *reply;
-    reply = m_requestHandler.getRequest(requestUrl);
+    reply = m_requestHandler.getRequest ( requestUrl );
 
-	Episode episode(reply);
+    Episode episode ( reply );
     return episode;
 }
 
-EpisodeList ApiRequest::favoriteEpisode(const QString& username)
+EpisodeList ApiRequest::favoriteEpisode ( const QString& username )
 {
-    QUrl requestUrl = UrlBuilder::getFavEpisodesUrl(username);
+    QUrl requestUrl = UrlBuilder::getFavEpisodesUrl ( username );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
@@ -116,15 +125,14 @@ EpisodeList ApiRequest::favoriteEpisode(const QString& username)
 //    QList<Episode> episodeList = JsonParser::toEpisodeList(response);
 //    // return episodeList;
     QNetworkReply *reply;
-    reply = m_requestHandler.getRequest(requestUrl);
-
-	EpisodeList episodeList(reply);
+    reply = m_requestHandler.getRequest ( requestUrl );
+    EpisodeList episodeList ( reply );
     return episodeList;
 }
 
-Podcast ApiRequest::podcastData(const QUrl& podcasturl)
+Podcast ApiRequest::podcastData ( const QUrl& podcasturl )
 {
-    QUrl requestUrl = UrlBuilder::getPodcastDataUrl(podcasturl.toString());
+    QUrl requestUrl = UrlBuilder::getPodcastDataUrl ( podcasturl.toString() );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
@@ -132,15 +140,15 @@ Podcast ApiRequest::podcastData(const QUrl& podcasturl)
 //    Podcast podcast = JsonParser::toPodcast(response);
 //    return podcast;
     QNetworkReply *reply;
-    reply = m_requestHandler.getRequest(requestUrl);
+    reply = m_requestHandler.getRequest ( requestUrl );
 
-	Podcast podcast(reply);
-	return podcast;
+    Podcast podcast ( reply );
+    return podcast;
 }
 
-PodcastList ApiRequest::podcastsOfTag(uint count, const QString& tag)
+PodcastList ApiRequest::podcastsOfTag ( uint count, const QString& tag )
 {
-    QUrl requestUrl = UrlBuilder::getPodcastsOfTagUrl(tag,count);
+    QUrl requestUrl = UrlBuilder::getPodcastsOfTagUrl ( tag,count );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
@@ -148,15 +156,15 @@ PodcastList ApiRequest::podcastsOfTag(uint count, const QString& tag)
 //    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
 //    //return podcastList;
     QNetworkReply *reply;
-    reply = m_requestHandler.getRequest(requestUrl);
+    reply = m_requestHandler.getRequest ( requestUrl );
 
-	PodcastList podcastList(reply);
+    PodcastList podcastList ( reply );
     return podcastList;
 }
 
-TagList ApiRequest::topTags(uint count)
+TagList ApiRequest::topTags ( uint count )
 {
-    QUrl requestUrl = UrlBuilder::getTopTagsUrl(count);
+    QUrl requestUrl = UrlBuilder::getTopTagsUrl ( count );
 //    QByteArray response;
 //    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
 //    checkErrorFlag(errorFlag);
@@ -164,15 +172,15 @@ TagList ApiRequest::topTags(uint count)
 //    QList<Tag> tagList = JsonParser::toTagList(response);
 //    //return tagList;
     QNetworkReply *reply;
-    reply = m_requestHandler.getRequest(requestUrl);
+    reply = m_requestHandler.getRequest ( requestUrl );
 
-    TagList tagList(reply);
+    TagList tagList ( reply );
     return tagList;
 }
 
-PodcastList ApiRequest::suggestions(uint count)
+PodcastList ApiRequest::suggestions ( uint count )
 {
-    QUrl requestUrl = UrlBuilder::getSuggestionsUrl(count);
+    QUrl requestUrl = UrlBuilder::getSuggestionsUrl ( count );
     /* QByteArray response;
     int errorFlag = m_requestHandler.getRequest(response, requestUrl);
     checkErrorFlag(errorFlag);
@@ -180,38 +188,51 @@ PodcastList ApiRequest::suggestions(uint count)
     QList<Podcast> podcastList = JsonParser::toPodcastList(response);*/
     //return podcastList;
     QNetworkReply *reply;
-    reply = m_requestHandler.getRequest(requestUrl);
+    reply = m_requestHandler.getRequest ( requestUrl );
 
-	PodcastList podcastList(reply);
+    PodcastList podcastList ( reply );
     return podcastList;
 }
 
-AddRemoveResult ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove)
+AddRemoveResult ApiRequest::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
 {
-    QUrl requesturl = UrlBuilder::getAddRemoveSubUrl(username,device);
+    QUrl requesturl = UrlBuilder::getAddRemoveSubUrl ( username,device );
 //
-    QByteArray data = JsonParser::addRemoveSubsToJSON(add,remove);
+    QByteArray data = JsonParser::addRemoveSubsToJSON ( add,remove );
 //    QByteArray response;
 //    int errorFlag = m_requestHandler.postRequest(response,data,requesturl);
 //    checkErrorFlag(errorFlag);
 //
 //    AddRemoveResult result = JsonParser::toAddRemoveResult(response);
 //    return result;
+    //TODO: Check if no URL is contained in both Lists
     QNetworkReply *reply;
-    reply = m_requestHandler.postRequest(data, requesturl);
-	AddRemoveResult addRemoveResult(reply);
-	return addRemoveResult;
+    reply = m_requestHandler.postRequest ( data, requesturl );
+    AddRemoveResult addRemoveResult ( reply );
+    return addRemoveResult;
 }
 
-void ApiRequest::checkErrorFlag(QNetworkReply::NetworkError errorFlag)
+void ApiRequest::checkErrorFlag ( QNetworkReply::NetworkError errorFlag )
 {
-	if (errorFlag != QNetworkReply::NoError) {
-		switch (errorFlag) {
-		case 3: throw ServerNotFoundException(); break;
-		case 201: throw InvalidUserException(); break;
-		case 203: throw InvalidDeviceIdException(); break;
-		case 204: throw InvalidAuthException(); break;
-		default: throw RequestException(QLatin1String("An unknown error occurred while sending the request to the server"), errorFlag); break;
-		}
-	}
+    if ( errorFlag != QNetworkReply::NoError )
+    {
+        switch ( errorFlag )
+        {
+        case 3:
+            throw ServerNotFoundException();
+            break;
+        case 201:
+            throw InvalidUserException();
+            break;
+        case 203:
+            throw InvalidDeviceIdException();
+            break;
+        case 204:
+            throw InvalidAuthException();
+            break;
+        default:
+            throw RequestException ( QLatin1String ( "An unknown error occurred while sending the request to the server" ), errorFlag );
+            break;
+        }
+    }
 }

@@ -20,32 +20,40 @@
 * USA                                                                      *
 ***************************************************************************/
 
+#include <parser.h>
+
 #include "AddRemoveResult.h"
 
-#include "JsonParser.h"
+#include <QDebug>
 
 using namespace mygpo;
 
 
-AddRemoveResult::AddRemoveResult(qulonglong timestamp, const QVariant& updateUrlsVar, QObject* parent): QObject(parent), m_timestamp(timestamp), m_updateUrlsVar(updateUrlsVar) {
-  
-}
-
-AddRemoveResult::AddRemoveResult(QNetworkReply* reply, QObject* parent)
-{
-    QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
-		      this,SLOT(error(QNetworkReply::NetworkError)));
-}
-
-AddRemoveResult::AddRemoveResult(const AddRemoveResult& other): QObject(other.parent()), m_timestamp(other.timestamp()), m_updateUrlsVar(other.updateUrlsVar())
+AddRemoveResult::AddRemoveResult ( qulonglong timestamp, const QVariant& updateUrls, QObject* parent ) : QObject ( parent ), m_timestamp ( timestamp ), m_updateUrls ( updateUrls )
 {
 
 }
 
-AddRemoveResult AddRemoveResult::operator=(const AddRemoveResult& other)
+AddRemoveResult::AddRemoveResult ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply )
 {
-    return AddRemoveResult(other);
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+}
+
+AddRemoveResult::AddRemoveResult ( const AddRemoveResult& other ) : QObject ( other.parent() ), m_timestamp ( other.timestamp() ), m_updateUrls ( other.updateUrls() ), m_reply ( other.m_reply )
+{
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+}
+
+AddRemoveResult::AddRemoveResult()
+{
+
+}
+
+AddRemoveResult AddRemoveResult::operator= ( const AddRemoveResult& other )
+{
+    return AddRemoveResult ( other );
 }
 
 qulonglong AddRemoveResult::timestamp() const
@@ -53,24 +61,67 @@ qulonglong AddRemoveResult::timestamp() const
     return m_timestamp;
 }
 
-QVariant AddRemoveResult::updateUrlsVar() const
+QVariant AddRemoveResult::updateUrls() const
 {
-    return m_updateUrlsVar;
+    return m_updateUrls;
 }
 
-
-const QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrls() const
+QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrlsList() const
 {
-    return JsonParser::toUrlPairList(m_updateUrlsVar);
+    QVariantList updateVarList = updateUrls().toList();
+    QList<QPair<QUrl, QUrl > > updateUrls;
+    foreach ( const QVariant& url, updateVarList )
+    {
+        QVariantList urlList = url.toList();
+        QUrl first = QUrl ( urlList.at ( 0 ).toString() );
+        QUrl second = QUrl ( urlList.at ( 1 ).toString() );
+        updateUrls.append ( qMakePair ( first,second ) );
+    }
+    return updateUrls;
+}
+
+bool AddRemoveResult::parse ( const QVariant& data )
+{
+    QJson::Parser parser;
+    if (!data.canConvert(QVariant::Map))
+        return false;
+    QVariantMap resultMap = data.toMap();
+    QVariant v = resultMap.value ( QLatin1String ( "timestamp" ) );
+    if (!v.canConvert(QVariant::ULongLong))
+        return false;
+    m_timestamp = v.toULongLong();
+    m_updateUrls = resultMap.value ( QLatin1String ( "update_urls" ) );
+    return true;
+}
+
+bool AddRemoveResult::parse ( const QByteArray& data )
+{
+    QJson::Parser parser;
+    bool ok;
+    QVariant variant = parser.parse ( data, &ok );
+    if ( ok )
+    {
+        ok = ( parse ( variant ) );
+    }
+    return ok;
 }
 
 
-void AddRemoveResult::parseData() {
-    //parsen und signal senden
-    
-    emit finished();
+void AddRemoveResult::parseData()
+{
+    QJson::Parser parser;
+    if ( parse ( m_reply->readAll() ) )
+    {
+        emit finished();
+    }
+    else
+    {
+        emit parseError();
+    }
 }
 
-void AddRemoveResult::error(QNetworkReply::NetworkError error) {
+void AddRemoveResult::error ( QNetworkReply::NetworkError error )
+{
     this->m_error = error;
+    emit requestError ( error );
 }

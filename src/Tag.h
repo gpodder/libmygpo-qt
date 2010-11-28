@@ -26,18 +26,21 @@
 #include <QObject>
 #include <QNetworkReply>
 
+#include "mygpo_export.h"
+
 namespace mygpo {
 
-class Tag : public QObject
+class MYGPO_EXPORT Tag : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString tag READ tag CONSTANT)
     Q_PROPERTY(uint usage READ usage CONSTANT)
 
 public:
-    Tag(QNetworkReply* reply,QObject* parent = 0);
     Tag(QString tag, uint usage, QObject* parent = 0);
+    Tag(const QVariant& variant, QObject* parent = 0);
     Tag(const Tag& other);
+    Tag();
     virtual ~Tag();
     Tag operator=(const Tag& other);
     const QString tag() const;
@@ -45,8 +48,12 @@ public:
 private:
     QString m_tag;
     uint m_usage;
+    
+    bool parse(const QVariant& data);
 };
 
 }
+
+Q_DECLARE_METATYPE(mygpo::Tag);
 
 #endif // TAG_H

@@ -28,6 +28,8 @@
 #include <QString>
 #include <QNetworkReply>
 
+#include <QDebug>
+
 #include "mygpo_export.h"
 
 namespace mygpo {
@@ -46,6 +48,7 @@ class MYGPO_EXPORT Episode : public QObject
 public:
     Episode();
     Episode(QNetworkReply* reply, QObject* parent = 0);
+    Episode(const QVariant& variant, QObject* parent = 0);
     Episode(const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
     Episode(const mygpo::Episode& other);

@@ -31,34 +31,46 @@
 
 #include "mygpo_export.h"
 
-namespace mygpo {
+namespace mygpo
+{
 
 class MYGPO_EXPORT AddRemoveResult : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
-    Q_PROPERTY(QVariant updateUrlsVar READ updateUrlsVar CONSTANT)
+    Q_PROPERTY ( qulonglong timestamp READ timestamp CONSTANT )
+    Q_PROPERTY ( QVariant updateUrls READ updateUrls CONSTANT )
 public:
-    AddRemoveResult(QNetworkReply* reply ,QObject* parent = 0);
-    AddRemoveResult(qulonglong timestamp, const QVariant& updateUrlsVar ,QObject* parent = 0);
-    AddRemoveResult(const AddRemoveResult& other);
-    AddRemoveResult operator=(const AddRemoveResult& other);
-    QVariant updateUrlsVar() const;
+    AddRemoveResult ( QNetworkReply* reply ,QObject* parent = 0 );
+    AddRemoveResult ( qulonglong timestamp, const QVariant& updateUrls ,QObject* parent = 0 );
+    AddRemoveResult ( const AddRemoveResult& other );
+    AddRemoveResult ( );
+    AddRemoveResult operator= ( const AddRemoveResult& other );
+    QVariant updateUrls() const;
     qulonglong timestamp() const;
-    const QList<QPair<QUrl, QUrl> > updateUrls() const;
+    QList<QPair<QUrl, QUrl> > updateUrlsList() const;
 private:
     qulonglong m_timestamp;
-    QVariant m_updateUrlsVar;
-    QNetworkReply::NetworkError m_error;
-    
-public slots:
-    void parseData();
-    void error(QNetworkReply::NetworkError error);
+    QVariant m_updateUrls;
 
+    QNetworkReply* m_reply;
+    QNetworkReply::NetworkError m_error;
+
+    bool parse ( const QVariant& data );
+    bool parse ( const QByteArray& data );
+private slots:
+    void parseData();
+    void error ( QNetworkReply::NetworkError error );
 signals:
+    /**Gets emitted when the data is ready to read*/
     void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError ( QNetworkReply::NetworkError error );
 };
 
 }
+
+Q_DECLARE_METATYPE ( mygpo::AddRemoveResult );
 
 #endif // ADDREMOVERESULT_H
