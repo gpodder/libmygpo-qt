@@ -124,7 +124,7 @@ QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList
     QVariant addVar(urlListToQVariantList(add));
     QVariant removeVar(urlListToQVariantList(remove));
     jsonData.insert(QString(QLatin1String("add")),addVar);
-    jsonData.insert(QString(QLatin1String("remove")),addVar);
+    jsonData.insert(QString(QLatin1String("remove")),removeVar);
     QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
     return jsonByteArray;
 }
