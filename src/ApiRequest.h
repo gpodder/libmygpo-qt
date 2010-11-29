@@ -40,9 +40,10 @@
 #include <QByteArray>
 #include <QString>
 
-
 namespace mygpo
 {
+
+class ApiRequestPrivate;
 
 /**
  * This Class is the Frontend of libmygpo-qt.
@@ -58,6 +59,7 @@ public:
 
     ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam = 0 );
     ApiRequest ( QNetworkAccessManager* nam = 0 );
+    ~ApiRequest ( );
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
@@ -78,7 +80,7 @@ public:
      * Returns the Result for the Simple API Call "Downloading podcast suggestions"
      * Requires Authentication
      * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
-     * @return 
+     * @return
      *
      */
     QNetworkReply* suggestionsOpml ( uint count );
@@ -129,7 +131,7 @@ public:
      * Returns the Result for the Advanced API Call "Retrieving Episode Data"
      * @param podcasturl Url of the Podcast that contains the Episode
      * @param episodeurl Url of the Episode Data for which Data should be retrieved
-     * @return Podcast Object containing the Data from gPodder
+     * @return Episode Object containing the Data from gPodder
      *
      */
     Episode episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
@@ -140,7 +142,7 @@ public:
      * @return List of Episode Objects containing the Data from gPodder
      *
      */
-    EpisodeList favoriteEpisode ( const QString& username );
+    EpisodeList favoriteEpisodes ( const QString& username );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Top Tags"
@@ -162,12 +164,9 @@ public:
     AddRemoveResult addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 
 private:
-    /**
-     * Throws the appropriate exception for the given error flag
-     */
-    void checkErrorFlag ( QNetworkReply::NetworkError errorFlag );
+    //RequestHandler m_requestHandler;
 
-    RequestHandler m_requestHandler;
+    ApiRequestPrivate* const d;
 
 };
 
