@@ -27,7 +27,8 @@
 #include "RequestExceptions.h"
 #include <QLatin1String>
 
-using namespace mygpo;
+namespace mygpo
+{
 
 class ApiRequestPrivate
 {
@@ -52,7 +53,9 @@ private:
     RequestHandler m_requestHandler;
 };
 
-//using namespace mygpo;
+}
+
+using namespace mygpo;
 
 ApiRequestPrivate::ApiRequestPrivate(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_requestHandler(username,password,nam)
 {

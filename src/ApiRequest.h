@@ -165,7 +165,6 @@ public:
 
 private:
     //RequestHandler m_requestHandler;
-
     ApiRequestPrivate* const d;
 
 };
