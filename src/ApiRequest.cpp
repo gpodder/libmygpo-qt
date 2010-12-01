@@ -25,6 +25,7 @@
 #include "UrlBuilder.h"
 #include "JsonParser.h"
 #include "RequestExceptions.h"
+#include "RequestHandler.h"
 #include <QLatin1String>
 
 namespace mygpo
