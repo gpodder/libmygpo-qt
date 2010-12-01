@@ -34,7 +34,7 @@ namespace mygpo {
 /**
  * Class for sending HTTP requests and handle the servers response.
  */
-class MYGPO_EXPORT RequestHandler : public QObject {
+class RequestHandler : public QObject {
 
     Q_OBJECT
 

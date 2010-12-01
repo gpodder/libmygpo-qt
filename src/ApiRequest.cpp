@@ -25,73 +25,80 @@
 #include "UrlBuilder.h"
 #include "JsonParser.h"
 #include "RequestExceptions.h"
+#include "RequestHandler.h"
 #include <QLatin1String>
 
-#include <QDebug>
+namespace mygpo
+{
+
+class ApiRequestPrivate
+{
+public:
+    //Constructors
+    ApiRequestPrivate( const QString& username, const QString& password, QNetworkAccessManager* nam );
+    ApiRequestPrivate( QNetworkAccessManager* nam);
+    //Member Functions
+    QNetworkReply* toplistOpml ( uint count );
+    QNetworkReply* searchOpml ( const QString& query );
+    QNetworkReply* suggestionsOpml ( uint count );
+    PodcastList toplist ( uint count );
+    PodcastList search ( const QString& query );
+    PodcastList suggestions ( uint count );
+    PodcastList podcastsOfTag ( uint count, const QString& tag );
+    Podcast podcastData ( const QUrl& podcasturl );
+    Episode episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
+    EpisodeList favoriteEpisodes ( const QString& username );
+    TagList topTags ( uint count );
+    AddRemoveResult addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+private:
+    RequestHandler m_requestHandler;
+};
+
+}
 
 using namespace mygpo;
 
-ApiRequest::ApiRequest ( const QString& username, const QString &password, QNetworkAccessManager* nam ) : m_requestHandler ( username, password, nam )
+ApiRequestPrivate::ApiRequestPrivate(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_requestHandler(username,password,nam)
 {
+
 }
 
-ApiRequest::ApiRequest ( QNetworkAccessManager* nam ) : m_requestHandler ( nam )
+ApiRequestPrivate::ApiRequestPrivate(QNetworkAccessManager* nam) : m_requestHandler(nam)
 {
+
 }
 
-QNetworkReply* ApiRequest::toplistOpml ( uint count )
+QNetworkReply* ApiRequestPrivate::toplistOpml ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getToplistUrl ( count, UrlBuilder::OPML );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    return response;
     return m_requestHandler.getRequest ( requestUrl );
 }
 
-QNetworkReply* ApiRequest::searchOpml ( const QString& query )
+QNetworkReply* ApiRequestPrivate::searchOpml ( const QString& query )
 {
     QUrl requestUrl = UrlBuilder::getPodcastSearchUrl ( query, UrlBuilder::OPML );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    return response;
     return m_requestHandler.getRequest ( requestUrl );
 }
 
 
-QNetworkReply* ApiRequest::suggestionsOpml ( uint count )
+QNetworkReply* ApiRequestPrivate::suggestionsOpml ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getSuggestionsUrl ( count , UrlBuilder::OPML );
     return m_requestHandler.getRequest ( requestUrl );
 }
 
-PodcastList ApiRequest::toplist ( uint count )
+PodcastList ApiRequestPrivate::toplist ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getToplistUrl ( count );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
-//    //return podcastList;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
     PodcastList podcastList ( reply );
     return podcastList;
 }
 
-PodcastList ApiRequest::search ( const QString& query )
+PodcastList ApiRequestPrivate::search ( const QString& query )
 {
     QUrl requestUrl = UrlBuilder::getPodcastSearchUrl ( query );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
-//    // return podcastList;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
@@ -99,15 +106,9 @@ PodcastList ApiRequest::search ( const QString& query )
     return podcastList;
 }
 
-Episode ApiRequest::episodeData ( const QUrl& podcasturl, const QUrl& episodeurl )
+Episode ApiRequestPrivate::episodeData ( const QUrl& podcasturl, const QUrl& episodeurl )
 {
     QUrl requestUrl = UrlBuilder::getEpisodeDataUrl ( podcasturl.toString(),episodeurl.toString() );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    Episode episode = JsonParser::toEpisode(response);
-//    return episode;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
@@ -115,30 +116,18 @@ Episode ApiRequest::episodeData ( const QUrl& podcasturl, const QUrl& episodeurl
     return episode;
 }
 
-EpisodeList ApiRequest::favoriteEpisode ( const QString& username )
+EpisodeList ApiRequestPrivate::favoriteEpisodes ( const QString& username )
 {
     QUrl requestUrl = UrlBuilder::getFavEpisodesUrl ( username );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    QList<Episode> episodeList = JsonParser::toEpisodeList(response);
-//    // return episodeList;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
     EpisodeList episodeList ( reply );
     return episodeList;
 }
 
-Podcast ApiRequest::podcastData ( const QUrl& podcasturl )
+Podcast ApiRequestPrivate::podcastData ( const QUrl& podcasturl )
 {
     QUrl requestUrl = UrlBuilder::getPodcastDataUrl ( podcasturl.toString() );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    Podcast podcast = JsonParser::toPodcast(response);
-//    return podcast;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
@@ -146,15 +135,9 @@ Podcast ApiRequest::podcastData ( const QUrl& podcasturl )
     return podcast;
 }
 
-PodcastList ApiRequest::podcastsOfTag ( uint count, const QString& tag )
+PodcastList ApiRequestPrivate::podcastsOfTag ( uint count, const QString& tag )
 {
     QUrl requestUrl = UrlBuilder::getPodcastsOfTagUrl ( tag,count );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    QList<Podcast> podcastList = JsonParser::toPodcastList(response);
-//    //return podcastList;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
@@ -162,15 +145,9 @@ PodcastList ApiRequest::podcastsOfTag ( uint count, const QString& tag )
     return podcastList;
 }
 
-TagList ApiRequest::topTags ( uint count )
+TagList ApiRequestPrivate::topTags ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getTopTagsUrl ( count );
-//    QByteArray response;
-//    //int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-//    checkErrorFlag(errorFlag);
-//
-//    QList<Tag> tagList = JsonParser::toTagList(response);
-//    //return tagList;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
@@ -178,15 +155,9 @@ TagList ApiRequest::topTags ( uint count )
     return tagList;
 }
 
-PodcastList ApiRequest::suggestions ( uint count )
+PodcastList ApiRequestPrivate::suggestions ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getSuggestionsUrl ( count );
-    /* QByteArray response;
-    int errorFlag = m_requestHandler.getRequest(response, requestUrl);
-    checkErrorFlag(errorFlag);
-
-    QList<Podcast> podcastList = JsonParser::toPodcastList(response);*/
-    //return podcastList;
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
@@ -194,17 +165,10 @@ PodcastList ApiRequest::suggestions ( uint count )
     return podcastList;
 }
 
-AddRemoveResult ApiRequest::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
+AddRemoveResult ApiRequestPrivate::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
 {
     QUrl requesturl = UrlBuilder::getAddRemoveSubUrl ( username,device );
-//
     QByteArray data = JsonParser::addRemoveSubsToJSON ( add,remove );
-//    QByteArray response;
-//    int errorFlag = m_requestHandler.postRequest(response,data,requesturl);
-//    checkErrorFlag(errorFlag);
-//
-//    AddRemoveResult result = JsonParser::toAddRemoveResult(response);
-//    return result;
     //TODO: Check if no URL is contained in both Lists
     QNetworkReply *reply;
     reply = m_requestHandler.postRequest ( data, requesturl );
@@ -212,27 +176,76 @@ AddRemoveResult ApiRequest::addRemoveSubscriptions ( const QString& username, co
     return addRemoveResult;
 }
 
-void ApiRequest::checkErrorFlag ( QNetworkReply::NetworkError errorFlag )
+
+ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
-    if ( errorFlag != QNetworkReply::NoError )
-    {
-        switch ( errorFlag )
-        {
-        case 3:
-            throw ServerNotFoundException();
-            break;
-        case 201:
-            throw InvalidUserException();
-            break;
-        case 203:
-            throw InvalidDeviceIdException();
-            break;
-        case 204:
-            throw InvalidAuthException();
-            break;
-        default:
-            throw RequestException ( QLatin1String ( "An unknown error occurred while sending the request to the server" ), errorFlag );
-            break;
-        }
-    }
+}
+
+ApiRequest::ApiRequest ( QNetworkAccessManager* nam ) : d(new ApiRequestPrivate(nam))
+{
+}
+
+ApiRequest::~ApiRequest()
+{
+    delete d;
+}
+
+QNetworkReply* ApiRequest::toplistOpml(uint count)
+{
+    return d->toplistOpml(count);
+}
+
+QNetworkReply* ApiRequest::searchOpml(const QString& query)
+{
+    return d->searchOpml(query);
+}
+
+QNetworkReply* ApiRequest::suggestionsOpml(uint count)
+{
+    return d->suggestionsOpml(count);
+}
+
+PodcastList ApiRequest::toplist(uint count)
+{
+    return d->toplist(count);
+}
+
+PodcastList ApiRequest::search(const QString& query)
+{
+    return d->search(query);
+}
+
+PodcastList ApiRequest::suggestions(uint count)
+{
+    return d->suggestions(count);
+}
+
+PodcastList ApiRequest::podcastsOfTag(uint count, const QString& tag)
+{
+    return d->podcastsOfTag(count,tag);
+}
+
+Podcast ApiRequest::podcastData(const QUrl& podcasturl)
+{
+    return d->podcastData(podcasturl);
+}
+
+Episode ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeurl)
+{
+    return d->episodeData(podcasturl,episodeurl);
+}
+
+EpisodeList ApiRequest::favoriteEpisodes(const QString& username)
+{
+    return d->favoriteEpisodes(username);
+}
+
+TagList ApiRequest::topTags(uint count)
+{
+    return d->topTags(count);
+}
+
+AddRemoveResult ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove)
+{
+    return d->addRemoveSubscriptions(username,device,add,remove);
 }
