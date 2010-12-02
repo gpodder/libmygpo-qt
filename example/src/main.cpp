@@ -27,10 +27,10 @@
 #include <QEventLoop>
 
 
-#include <PodcastList.h>
 #include <EpisodeList.h>
 #include <TagList.h>
 #include <ApiRequest.h>
+#include <PodcastList.h>
 
 using namespace mygpo;
 //#include "Example.h"
@@ -75,12 +75,12 @@ int main ( int argc, char **argv )
         qDebug() << pair.first;
         qDebug() << pair.second;
     }
-    /*
+    
     TagList taglist = req.topTags(15);
 
-    QEventLoop loop;
-    loop.connect(&taglist,SIGNAL(finished()),SLOT(quit()));
-    loop.exec();
+    QEventLoop loop2;
+    loop2.connect(&taglist,SIGNAL(finished()),SLOT(quit()));
+    loop2.exec();
 
     QList<mygpo::Tag> tags = taglist.list();
 
@@ -97,19 +97,18 @@ int main ( int argc, char **argv )
         qDebug() << variant.value<mygpo::Tag>().usage();
         qDebug() << variant.value<mygpo::Tag>().tag();
     }
-    */
+    
 
-    /*
-    EpisodeList eplist = req.favoriteEpisode(QString(QLatin1String("ase23")));
+    
+    EpisodeList eplist = req.favoriteEpisodes(QString(QLatin1String("ase23")));
 
-    QEventLoop loop;
-    loop.connect(&eplist,SIGNAL(finished()),SLOT(quit()));
-    loop.connect(&eplist,SIGNAL(parseError()),SLOT(quit()));
-    loop.connect(&eplist,SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
-    qDebug() << QLatin1String("signals connected");
-    loop.exec();
+    QEventLoop loop3;
+    loop3.connect(&eplist,SIGNAL(finished()),SLOT(quit()));
+    loop3.connect(&eplist,SIGNAL(parseError()),SLOT(quit()));
+    loop3.connect(&eplist,SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop3.exec();
 
-    qDebug() << QLatin1String("Loop finished");
+    
     QList<mygpo::Episode> episodes = eplist.list();
 
     foreach (Episode episode, episodes)
@@ -128,23 +127,23 @@ int main ( int argc, char **argv )
         qDebug() << QLatin1String("Iteration over Variants");
         qDebug() << variant.type();
         qDebug() << variant.value<mygpo::Episode>().title();
-    }*/
+    }
 
-    /*
+    
     Episode ep = req.episodeData(QUrl(QLatin1String("http://feeds.feedburner.com/linuxoutlaws")),QUrl(QLatin1String("http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws177.mp3")));
 
-    QEventLoop loop;
-    loop.connect(&ep,SIGNAL(finished()),SLOT(quit()));
-    loop.exec();
+    QEventLoop loop4;
+    loop4.connect(&ep,SIGNAL(finished()),SLOT(quit()));
+    loop4.exec();
     qDebug() << ep.description();
     qDebug() << ep.title();
     qDebug() << ep.mygpoUrl();
-    */
-    /*
+    
+    
     PodcastList plist = req.toplist(10);
-    QEventLoop loop;
-    loop.connect(&plist,SIGNAL(finished()),SLOT(quit()));
-    loop.exec();
+    QEventLoop loop5;
+    loop5.connect(&plist,SIGNAL(finished()),SLOT(quit()));
+    loop5.exec();
     QList<Podcast> liste = plist.list();
     qDebug() << liste.size();
     foreach(Podcast pcast,liste)
@@ -167,7 +166,7 @@ int main ( int argc, char **argv )
     //get the Podcast from the QVariant
     Podcast pcFromVariant = varPodcast.value<mygpo::Podcast>();
     qDebug() << pcFromVariant.title();
-    */
+    
 
 
     return 0;

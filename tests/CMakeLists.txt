@@ -29,7 +29,6 @@ set ( APIREQUEST_SRC
 set ( APIREQUEST_H
   ${TESTOBJECTS_SRCDIR}/AddRemoveResult.h
   ${TESTOBJECTS_SRCDIR}/JsonParser.h
-  ${TESTOBJECTS_SRCDIR}/mygpo.h
   ${TESTOBJECTS_SRCDIR}/mygpo_export.h
   ${TESTOBJECTS_SRCDIR}/Podcast.h
   ${TESTOBJECTS_SRCDIR}/Episode.h

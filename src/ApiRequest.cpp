@@ -167,6 +167,11 @@ PodcastList ApiRequestPrivate::suggestions ( uint count )
 
 AddRemoveResult ApiRequestPrivate::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
 {
+    foreach (QUrl url,add)
+    {
+        remove.removeAll(url);
+            
+    }
     QUrl requesturl = UrlBuilder::getAddRemoveSubUrl ( username,device );
     QByteArray data = JsonParser::addRemoveSubsToJSON ( add,remove );
     //TODO: Check if no URL is contained in both Lists

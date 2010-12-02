@@ -18,8 +18,7 @@ set ( LIBMYGPO_QT_SRC
 
 set ( LIBMYGPO_QT_H
         AddRemoveResult.h
-        JsonParser.h
-        mygpo.h
+        JsonParser.h        
         mygpo_export.h
         Podcast.h
         Episode.h

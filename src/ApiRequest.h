@@ -27,7 +27,6 @@
 #define MYGPO_MINOR_VERSION 2
 #define MYGPO_PATCH_VERSION 5
 
-//#include "RequestHandler.h"
 #include "mygpo_export.h"
 #include "Podcast.h"
 #include "Episode.h"
@@ -155,6 +154,7 @@ public:
     /**
      * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
      * Requires Authentication
+     * If an Url is contained in both the add & remove Lists, it will be deleted from the remove List
      * @param username User for which this API Call should be executed
      * @param device gPodder Device for which this API Call should be executed
      * @param add URLs of Podcasts that should be added to the Subscriptions of the User
