@@ -26,40 +26,156 @@
 
 #include <QDebug>
 
+
+namespace mygpo {
+  
+class PodcastPrivate : QObject
+{
+  Q_OBJECT
+public:
+  PodcastPrivate(Podcast* qq, QNetworkReply* reply,QObject* parent = 0);
+  PodcastPrivate(Podcast* qq, const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent = NULL);
+  PodcastPrivate(Podcast* qq, const QVariant& variant, QObject* parent = 0);
+  PodcastPrivate(Podcast* qq );
+  //Getters
+  QUrl url() const;
+  QString title() const;
+  QString description() const;
+  uint subscribers() const;
+  //const uint subscriberstLastWeek();
+  QUrl logoUrl() const;
+  QUrl website() const;
+  QUrl mygpoUrl() const;
+  
+private:
+  Podcast* const q;
+  QUrl m_url;
+  QString m_title;
+  QString m_description;
+  uint m_subscribers;
+  //uint m_SubscribersLastWeek;
+  QUrl m_logoUrl;
+  QUrl m_website;
+  QUrl m_mygpoUrl;
+  QNetworkReply::NetworkError m_error;
+  QNetworkReply* m_reply;
+  
+  bool parse(const QVariant& data);
+  bool parse(const QByteArray& data);
+private slots:
+  void parseData();
+  void error(QNetworkReply::NetworkError error);
+
+  
+};
+  
+};
+
+
 using namespace mygpo;
 
-Podcast::Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent) : m_url(url), m_title(title), m_description(description), m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpolink)
-{
-
-}
-
-Podcast::Podcast()
-{
-
-}
-
-
-Podcast::Podcast(QNetworkReply* reply, QObject* parent) : m_error(QNetworkReply::NoError), m_reply(reply)
+PodcastPrivate::PodcastPrivate(Podcast* qq, QNetworkReply* reply, QObject* parent): QObject( parent), q(qq), m_error(QNetworkReply::NoError), m_reply(reply)
 {
     QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
     QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
 		      this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
-Podcast::Podcast(const QVariant& variant, QObject* parent): QObject(parent), m_error(QNetworkReply::NoError), m_reply(0)
+PodcastPrivate::PodcastPrivate(Podcast* qq, const QUrl& url, const QString& title, const QString& description, 
+			       int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink,
+			       QObject* parent): 
+			       QObject(parent), q(qq), m_url(url), m_title(title), m_description(description), 
+			       m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpolink)
+{
+
+}
+
+
+PodcastPrivate::PodcastPrivate(Podcast* qq, const QVariant& variant, QObject* parent): QObject(parent), q(qq), m_error(QNetworkReply::NoError), m_reply(0)
 {
     parse(variant);
 }
 
-
-Podcast::Podcast(const Podcast& other): QObject(other.parent()), m_url(other.url()), m_title(other.title()), m_description(other.description()), m_subscribers(other.subscribers()), m_logoUrl(other.logoUrl()), m_website(other.website()), m_mygpoUrl(other.mygpoUrl())
+PodcastPrivate::PodcastPrivate(Podcast* qq): q(qq)
 {
 
 }
 
-Podcast::~Podcast()
+
+QUrl PodcastPrivate::url() const
+{
+    return m_url;
+}
+
+QString PodcastPrivate::title() const
+{
+    return m_title;
+}
+
+QString PodcastPrivate::description() const
+{
+    return m_description;
+}
+
+uint PodcastPrivate::subscribers() const
+{
+    return m_subscribers;
+}
+
+QUrl PodcastPrivate::logoUrl() const
+{
+    return m_logoUrl;
+}
+
+QUrl PodcastPrivate::website() const
+{
+    return m_website;
+}
+
+QUrl PodcastPrivate::mygpoUrl() const
+{
+    return m_mygpoUrl;
+}
+
+
+
+
+Podcast::Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers,
+		 const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent) : 
+		 QObject(parent), d(new PodcastPrivate(this, url, title, description, subscribers,
+		 logoUrl, website, mygpolink)), m_copy(false)
+		 
 {
 
+}
+
+Podcast::Podcast() : d(new PodcastPrivate(this)), m_copy(false)
+{
+
+}
+
+
+Podcast::Podcast(QNetworkReply* reply, QObject* parent) : QObject(parent), d(new PodcastPrivate(this,reply)), m_copy(false)
+{
+   
+}
+
+Podcast::Podcast(const QVariant& variant, QObject* parent): QObject(parent), d(new PodcastPrivate(this,variant))
+{
+
+}
+
+
+Podcast::Podcast(const Podcast& other): QObject(other.parent()), d(other.d), m_copy(true)
+{
+  QObject::connect(&other, SIGNAL(finished()), this, SLOT(sendFinished()));
+  QObject::connect(&other, SIGNAL(parseError()), this, SLOT(sendParsError()));
+  QObject::connect(&other, SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(sendRequestError(QNetworkReply::NetworkError)));
+}
+
+Podcast::~Podcast()
+{
+  if( !m_copy ) delete d;
 }
 
 Podcast Podcast::Podcast::operator=(const mygpo::Podcast& other)
@@ -70,40 +186,40 @@ Podcast Podcast::Podcast::operator=(const mygpo::Podcast& other)
 
 QUrl Podcast::url() const
 {
-    return m_url;
+    return d->url();
 }
 
 QString Podcast::title() const
 {
-    return m_title;
+    return d->title();
 }
 
 QString Podcast::description() const
 {
-    return m_description;
+    return d->description();
 }
 
 uint Podcast::subscribers() const
 {
-    return m_subscribers;
+    return d->subscribers();
 }
 
 QUrl Podcast::logoUrl() const
 {
-    return m_logoUrl;
+    return d->logoUrl();
 }
 
 QUrl Podcast::website() const
 {
-    return m_website;
+    return d->website();
 }
 
 QUrl Podcast::mygpoUrl() const
 {
-    return m_mygpoUrl;
+    return d->mygpoUrl();
 }
 
-bool Podcast::parse(const QVariant& data) 
+bool PodcastPrivate::parse(const QVariant& data) 
 {
     if(!data.canConvert(QVariant::Map))
       return false;
@@ -139,7 +255,7 @@ bool Podcast::parse(const QVariant& data)
     return true;
 }
 
-bool Podcast::parse(const QByteArray& data)
+bool PodcastPrivate::parse(const QByteArray& data)
 {	
     QJson::Parser parser;
     bool ok;
@@ -152,17 +268,35 @@ bool Podcast::parse(const QByteArray& data)
     }
 }
 
-void Podcast::parseData() {
+void PodcastPrivate::parseData() {
     //parsen und signal senden
     QJson::Parser parser;
     if (parse( m_reply->readAll() ) ) { 
-      emit finished();
+      emit q->finished();
     } else {
-      emit parseError();
+      emit q->parseError();
     }
 }
 
-void Podcast::error(QNetworkReply::NetworkError error) {
+void PodcastPrivate::error(QNetworkReply::NetworkError error) {
     this->m_error = error;
-    emit requestError(error);
+    emit q->requestError(error);
 }
+
+
+void Podcast::sendFinished()
+{
+  emit finished();
+}
+
+void Podcast::sendParsError()
+{
+  emit parseError();
+}
+
+void Podcast::sendRequestError(QNetworkReply::NetworkError error)
+{
+  emit sendRequestError(error);
+}
+
+#include "../build/src/Podcast.moc"

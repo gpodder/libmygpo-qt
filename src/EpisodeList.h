@@ -31,6 +31,8 @@
 #include "mygpo_export.h"
 
 namespace mygpo {
+  
+  class EpisodeListPrivate;
 
 class MYGPO_EXPORT EpisodeList : public QObject {
 	Q_OBJECT
@@ -43,16 +45,9 @@ public:
 	QList<Episode> list() const;
 	QVariant episodes() const;
 private:
-	QNetworkReply* m_reply;
-	QVariant m_episodes;
-    QNetworkReply::NetworkError m_error;
-    bool parse(const QVariant& data);
-    bool parse(const QByteArray& data);
-
-public slots:
-    void parseData();
-    void error(QNetworkReply::NetworkError error);
-
+  EpisodeListPrivate* const d;
+  friend class EpisodeListPrivate;
+  bool m_copy;		//true if this object was created by the copy-ctor
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
@@ -60,6 +55,12 @@ signals:
     void parseError();
     /**Gets emitted when an request error ocurred*/
     void requestError(QNetworkReply::NetworkError error);
+    
+private slots:
+  void sendFinished();
+  void sendParsError();
+  void sendRequestError(QNetworkReply::NetworkError error);
+  
 };
 
 }

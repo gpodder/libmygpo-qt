@@ -31,7 +31,7 @@
 #include "mygpo_export.h"
 
 namespace mygpo {
-
+class PodcastPrivate;
 class MYGPO_EXPORT Podcast : public QObject
 {
     Q_OBJECT
@@ -62,25 +62,11 @@ public:
     QUrl logoUrl() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
-private:
-    QUrl m_url;
-    QString m_title;
-    QString m_description;
-    uint m_subscribers;
-    //uint m_SubscribersLastWeek;
-    QUrl m_logoUrl;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
-    QNetworkReply::NetworkError m_error;
-    QNetworkReply* m_reply;
-    
-    bool parse(const QVariant& data);
-    bool parse(const QByteArray& data);
-    
-private slots:
-    void parseData();
-    void error(QNetworkReply::NetworkError error);
 
+private:
+    PodcastPrivate* const d;
+    friend class PodcastPrivate;
+    bool m_copy;		//true if this object was created by the copy-ctor
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
@@ -88,6 +74,11 @@ signals:
     void parseError();
     /**Gets emitted when an request error ocurred*/
     void requestError(QNetworkReply::NetworkError error);
+    
+private slots:
+  void sendFinished();
+  void sendParsError();
+  void sendRequestError(QNetworkReply::NetworkError error);  
 };
 
 }

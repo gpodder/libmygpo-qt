@@ -31,6 +31,7 @@
 #include <EpisodeList.h>
 #include <TagList.h>
 #include <ApiRequest.h>
+#include <PodcastList.h>
 
 using namespace mygpo;
 //#include "Example.h"
@@ -42,6 +43,20 @@ int main ( int argc, char **argv )
     //QList<Podcast> list;
 
     ApiRequest req ( "ase23","csf-sepm" );
+    
+    
+    QEventLoop loop;
+    PodcastList ret1 = req.toplist(10);
+    PodcastList ret = ret1;
+    loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
+    loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << "example: "<< ret.list().size();
+    
+    
+    
 //  QByteArray result;
     //result = req.toplistOpml(10);
     //std::cout << result.data() << std::endl;
@@ -53,7 +68,7 @@ int main ( int argc, char **argv )
 //  qDebug() << podcast.subscribers();
 //  }
 
-    QList<QUrl> add;
+/*    QList<QUrl> add;
     QList<QUrl> remove;
 
     add.append ( QUrl ( QLatin1String ( "http://feeds.feedburner.com/coverville" ) ) );
@@ -75,6 +90,7 @@ int main ( int argc, char **argv )
         qDebug() << pair.first;
         qDebug() << pair.second;
     }
+    */
     /*
     TagList taglist = req.topTags(15);
 

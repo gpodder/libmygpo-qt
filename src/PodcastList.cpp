@@ -23,44 +23,78 @@
 #include "PodcastList.h"
 
 #include <parser.h>
+#include <QDebug>
+
+namespace mygpo
+{
+
+class PodcastListPrivate : QObject
+{
+  Q_OBJECT
+public:
+  PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent = 0);
+  PodcastListPrivate(PodcastList* qq, QObject* parent = 0);
+  PodcastListPrivate(PodcastList* qq, PodcastListPrivate* pp ,QObject* parent = 0);
+  QList<Podcast> list() const;
+  QVariant podcasts() const;
+  QNetworkReply* m_reply;
+    
+private:
+  PodcastList* const q;
+  QVariant m_podcasts;
+  QNetworkReply::NetworkError m_error;
+
+  bool parse ( const QVariant& data );
+  bool parse ( const QByteArray& data );
+private slots:
+  void parseData();
+  void error(QNetworkReply::NetworkError error);
+};
+
+};
+
+
 
 using namespace mygpo;
 
 
-PodcastList::PodcastList() : m_podcasts ( QVariant() ), m_reply ( 0 )
+PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent) : QObject ( parent ), m_reply ( reply ), q(qq)
 {
-
+  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-
-PodcastList::PodcastList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply )
-{
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-}
-
-PodcastList::PodcastList ( const PodcastList& other ) : QObject ( other.parent() ), m_podcasts ( other.m_podcasts ), m_reply ( other.m_reply )
-{
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-}
-
-PodcastList::~PodcastList()
+PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QObject* parent) : QObject(parent), m_reply ( 0 ), q(qq), m_podcasts ( QVariant() )
 {
 }
 
-QList<Podcast> PodcastList::list() const
+PodcastListPrivate::PodcastListPrivate(PodcastList* qq, 
+				       PodcastListPrivate* pp, QObject* parent):
+				       QObject(parent), m_reply(pp->m_reply), q(qq), m_podcasts(pp->m_podcasts)
 {
-    QList<Podcast> list;
-    QVariantList varList = m_podcasts.toList();
-    foreach ( QVariant var,varList )
-    {
-        list.append ( var.value<mygpo::Podcast>() );
-    }
-    return list;
+  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-bool PodcastList::parse ( const QVariant& data )
+
+
+QList< Podcast > PodcastListPrivate::list() const
+{
+  QList<Podcast> list;
+  QVariantList varList = m_podcasts.toList();
+  foreach ( QVariant var,varList )
+  {
+    list.append ( var.value<mygpo::Podcast>() );
+  }
+  return list;
+}
+
+QVariant PodcastListPrivate::podcasts() const
+{    
+  return m_podcasts;
+}
+
+bool PodcastListPrivate::parse ( const QVariant& data )
 {
     if ( !data.canConvert ( QVariant::List ) )
         return false;
@@ -76,10 +110,11 @@ bool PodcastList::parse ( const QVariant& data )
     return true;
 }
 
-bool PodcastList::parse ( const QByteArray& data )
+bool PodcastListPrivate::parse ( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
+    qDebug() << m_reply->readAll();
     QVariant variant = parser.parse ( data, &ok );
     if ( ok )
     {
@@ -89,27 +124,57 @@ bool PodcastList::parse ( const QByteArray& data )
 }
 
 
-void PodcastList::parseData()
+void PodcastListPrivate::parseData()
 {
     QJson::Parser parser;
     if ( parse ( m_reply->readAll() ) )
     {
-        emit finished();
+        emit q->finished();
     }
     else
     {
-        emit parseError();
+        emit q->parseError();
     }
 }
 
-void PodcastList::error ( QNetworkReply::NetworkError error )
+void PodcastListPrivate::error ( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit requestError ( error );
+    emit q->requestError ( error );
 }
 
+
+
+
+
+PodcastList::PodcastList() : d(new PodcastListPrivate(this))
+{
+
+}
+
+PodcastList::PodcastList ( QNetworkReply* reply, QObject* parent ) : QObject(parent), d(new PodcastListPrivate(this,reply))
+{
+    
+}
+
+PodcastList::PodcastList ( const PodcastList& other ) : QObject ( other.parent() ) , d(new PodcastListPrivate(this,other.d))
+{
+  
+}
+
+PodcastList::~PodcastList()
+{
+  delete d;
+}
+
+QList<Podcast> PodcastList::list() const
+{
+   return d->list();
+}
 
 QVariant PodcastList::podcasts() const
 {
-    return m_podcasts;
+  return d->podcasts();
 }
+
+#include "../build/src/PodcastList.moc"

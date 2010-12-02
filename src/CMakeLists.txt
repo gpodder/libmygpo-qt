@@ -35,9 +35,14 @@ set ( LIBMYGPO_QT_H
 
 QT4_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${LIBMYGPO_QT_H} )
 
+QT4_GENERATE_MOC(PodcastList.cpp PodcastList.moc)
+QT4_GENERATE_MOC(EpisodeList.cpp EpisodeList.moc)
+QT4_GENERATE_MOC(Episode.cpp Episode.moc)
+QT4_GENERATE_MOC(Podcast.cpp Podcast.moc)
+
 add_definitions( -Werror )
 
-add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC})
+add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc Podcast.moc)
 target_link_libraries( mygpo-qt ${QJSON_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
 set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_LIB_VERSION} SOVERSION ${MYGPO_LIB_VERSION_SONAME} DEFINE_SYMBOL MYGPO_MAKEDLL)
 install( TARGETS mygpo-qt DESTINATION lib${LIB_SUFFIX} )
