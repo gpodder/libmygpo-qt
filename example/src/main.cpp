@@ -53,8 +53,8 @@ int main ( int argc, char **argv )
     loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
     
-    qDebug() << "example: "<< ret.list().size();
-    
+    qDebug() << ret.list().size();
+    qDebug() << ret1.list().size();
     
     
 //  QByteArray result;

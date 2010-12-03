@@ -114,7 +114,6 @@ bool PodcastListPrivate::parse ( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
-    qDebug() << m_reply->readAll();
     QVariant variant = parser.parse ( data, &ok );
     if ( ok )
     {
@@ -127,7 +126,8 @@ bool PodcastListPrivate::parse ( const QByteArray& data )
 void PodcastListPrivate::parseData()
 {
     QJson::Parser parser;
-    if ( parse ( m_reply->readAll() ) )
+    //if ( parse ( m_reply->readAll() ) )
+    if ( parse ( m_reply->peek( m_reply->bytesAvailable() ) ) )
     {
         emit q->finished();
     }
