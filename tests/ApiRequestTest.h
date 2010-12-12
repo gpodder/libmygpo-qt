@@ -46,6 +46,12 @@ private slots:
   void testToplist();
   void testSuggestions();
   void testPodcastsOfTag();
+  void testPodcastData();
+  void testEpisodeData();
+  void testFavoriteEpisodes();
+  void testTopTags();
+  void testAddRemoveSubscriptionsAdd();
+  void testAddRemoveSubscriptionsRemove();
   
 public slots:
   void error();
