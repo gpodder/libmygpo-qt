@@ -29,7 +29,7 @@
 #include "mygpo_export.h"
 
 namespace mygpo {
-
+class TagPrivate;
 class MYGPO_EXPORT Tag : public QObject
 {
     Q_OBJECT
@@ -46,10 +46,8 @@ public:
     const QString tag() const;
     uint usage() const;
 private:
-    QString m_tag;
-    uint m_usage;
-    
-    bool parse(const QVariant& data);
+    TagPrivate* const d;
+    friend class TagPrivate;
 };
 
 }

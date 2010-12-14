@@ -25,48 +25,72 @@
 #include "AddRemoveResult.h"
 
 #include <QDebug>
+#include <QSharedPointer>
 
-using namespace mygpo;
+namespace mygpo {
 
+class AddRemoveResultPrivate : public QObject
+{
+    Q_OBJECT
+public:
+    AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkReply* reply, QObject* parent = 0 );
+    AddRemoveResultPrivate ( AddRemoveResult* qq, qulonglong timestamp, const QVariant& updateUrls ,QObject* parent = 0 );
+    AddRemoveResultPrivate ( AddRemoveResult* qq, QObject* parent = 0 );
+    AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveResultPrivate* pp, QObject* parent = 0);
+    QVariant updateUrls() const;
+    qulonglong timestamp() const;
+    QList<QPair<QUrl, QUrl> > updateUrlsList() const;
+private:
+    AddRemoveResult* const q;
+    qulonglong m_timestamp;
+    QVariant m_updateUrls;
 
-AddRemoveResult::AddRemoveResult ( qulonglong timestamp, const QVariant& updateUrls, QObject* parent ) : QObject ( parent ), m_timestamp ( timestamp ), m_updateUrls ( updateUrls )
+    QSharedPointer<QNetworkReply> m_reply;
+    QNetworkReply::NetworkError m_error;
+
+    bool parse ( const QVariant& data );
+    bool parse ( const QByteArray& data );
+private slots:
+    void parseData();
+    void error ( QNetworkReply::NetworkError error );
+};
+
+AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, qulonglong timestamp, const QVariant& updateUrls, QObject* parent ) : QObject ( parent ), q (qq), m_timestamp ( timestamp ), m_updateUrls ( updateUrls )
 {
 
 }
 
-AddRemoveResult::AddRemoveResult ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply )
+AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkReply* reply, QObject* parent ) : QObject ( parent ), q(qq), m_reply ( reply )
 {
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-AddRemoveResult::AddRemoveResult ( const AddRemoveResult& other ) : QObject ( other.parent() ), m_timestamp ( other.timestamp() ), m_updateUrls ( other.updateUrls() ), m_reply ( other.m_reply )
-{
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-}
 
-AddRemoveResult::AddRemoveResult()
+AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QObject* parent ) : QObject ( parent ), q(qq)
 {
 
 }
 
-AddRemoveResult AddRemoveResult::operator= ( const AddRemoveResult& other )
+AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveResultPrivate* pp, QObject* parent) : QObject (parent), q(qq), m_timestamp(pp->m_timestamp),
+											     m_updateUrls(pp->m_updateUrls), m_reply(pp->m_reply), m_error(pp->m_error)
 {
-    return AddRemoveResult ( other );
+	QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+	QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-qulonglong AddRemoveResult::timestamp() const
+
+qulonglong AddRemoveResultPrivate::timestamp() const
 {
     return m_timestamp;
 }
 
-QVariant AddRemoveResult::updateUrls() const
+QVariant AddRemoveResultPrivate::updateUrls() const
 {
     return m_updateUrls;
 }
 
-QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrlsList() const
+QList< QPair< QUrl, QUrl > > AddRemoveResultPrivate::updateUrlsList() const
 {
     QVariantList updateVarList = updateUrls().toList();
     QList<QPair<QUrl, QUrl > > updateUrls;
@@ -80,7 +104,7 @@ QList< QPair< QUrl, QUrl > > AddRemoveResult::updateUrlsList() const
     return updateUrls;
 }
 
-bool AddRemoveResult::parse ( const QVariant& data )
+bool AddRemoveResultPrivate::parse ( const QVariant& data )
 {
     QJson::Parser parser;
     if (!data.canConvert(QVariant::Map))
@@ -94,7 +118,7 @@ bool AddRemoveResult::parse ( const QVariant& data )
     return true;
 }
 
-bool AddRemoveResult::parse ( const QByteArray& data )
+bool AddRemoveResultPrivate::parse ( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
@@ -107,21 +131,72 @@ bool AddRemoveResult::parse ( const QByteArray& data )
 }
 
 
-void AddRemoveResult::parseData()
+void AddRemoveResultPrivate::parseData()
 {
     QJson::Parser parser;
-    if ( parse ( m_reply->readAll() ) )
+    if ( parse ( m_reply->peek( m_reply->bytesAvailable() ) ) )
     {
-        emit finished();
+        emit q->finished();
     }
     else
     {
-        emit parseError();
+        emit q->parseError();
     }
 }
 
-void AddRemoveResult::error ( QNetworkReply::NetworkError error )
+void AddRemoveResultPrivate::error ( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit requestError ( error );
+    emit q->requestError ( error );
 }
+
+
+
+AddRemoveResult::AddRemoveResult() : d(new AddRemoveResultPrivate(this))
+{
+
+}
+
+AddRemoveResult::AddRemoveResult ( const AddRemoveResult& other ) : QObject(other.parent()), d(new AddRemoveResultPrivate(this,other.d))
+{
+
+}
+
+AddRemoveResult::AddRemoveResult( QNetworkReply* reply ,QObject* parent ) : QObject(parent), d(new AddRemoveResultPrivate(this, reply))
+{
+
+}
+
+AddRemoveResult::AddRemoveResult( qulonglong timestamp, const QVariant& updateUrls ,QObject* parent) : QObject(parent), d(new AddRemoveResultPrivate(this, timestamp, updateUrls))
+{
+
+}
+
+AddRemoveResult AddRemoveResult::operator= ( const AddRemoveResult& other )
+{
+    return AddRemoveResult ( other );
+}
+
+AddRemoveResult::~AddRemoveResult ()
+{
+	delete d;
+}
+
+QVariant AddRemoveResult::updateUrls() const
+{
+	return d->updateUrls();
+}
+
+qulonglong AddRemoveResult::timestamp() const
+{
+	return d->timestamp();
+}
+
+QList<QPair<QUrl, QUrl> > AddRemoveResult::updateUrlsList() const
+{
+	return d->updateUrlsList();
+}
+
+}
+
+#include "../build/src/AddRemoveResult.moc"

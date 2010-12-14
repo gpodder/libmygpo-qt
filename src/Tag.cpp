@@ -22,51 +22,58 @@
 
 #include "Tag.h"
 
-using namespace mygpo;
+namespace mygpo {
 
-Tag::Tag ( QString tag, uint usage, QObject* parent ) : QObject ( parent ), m_tag ( tag ), m_usage ( usage )
+class TagPrivate : public QObject
+{
+    Q_OBJECT
+
+public:
+    TagPrivate(Tag* qq, QString tag, uint usage, QObject* parent = 0);
+    TagPrivate(Tag* qq, const QVariant& variant, QObject* parent = 0);
+    TagPrivate(Tag* qq, QObject* parent = 0 );
+    TagPrivate (Tag* qq, TagPrivate* pp, QObject* parent = 0);
+    const QString tag() const;
+    uint usage() const;
+private:
+    Tag* const q;
+    QString m_tag;
+    uint m_usage;
+
+    bool parse(const QVariant& data);
+};
+
+TagPrivate::TagPrivate(Tag* qq, QObject* parent) : QObject(parent), q(qq)
 {
 
 }
 
-Tag::Tag ( const QVariant& variant, QObject* parent ) : QObject ( parent )
+TagPrivate::TagPrivate(Tag* qq, TagPrivate* pp, QObject* parent) : QObject(parent), q(qq), m_tag(pp->m_tag), m_usage(pp->m_usage)
+{
+
+}
+
+TagPrivate::TagPrivate (Tag* qq, QString tag, uint usage, QObject* parent ) : QObject ( parent ), q(qq), m_tag ( tag ), m_usage ( usage )
+{
+
+}
+
+TagPrivate::TagPrivate (Tag* qq, const QVariant& variant, QObject* parent ) : QObject ( parent ), q(qq)
 {
     parse ( variant );
 }
 
-
-Tag::Tag ( const Tag& other ) : QObject ( other.parent() ), m_tag ( other.tag() ), m_usage ( other.usage() )
-{
-
-}
-
-Tag::Tag()
-{
-
-}
-
-
-Tag::~Tag()
-{
-
-}
-
-Tag Tag::operator= ( const Tag& other )
-{
-    return Tag ( other );
-}
-
-const QString Tag::tag() const
+const QString TagPrivate::tag() const
 {
     return m_tag;
 }
 
-uint Tag::usage() const
+uint TagPrivate::usage() const
 {
     return m_usage;
 }
 
-bool Tag::parse ( const QVariant& data )
+bool TagPrivate::parse ( const QVariant& data )
 {
     if (!data.canConvert(QVariant::Map))
         return false;
@@ -81,3 +88,49 @@ bool Tag::parse ( const QVariant& data )
     m_usage = v.toUInt();
     return true;
 }
+
+
+
+Tag::Tag ( QString tag, uint usage, QObject* parent ) : QObject ( parent ), d(new TagPrivate(this, tag, usage))
+{
+
+}
+
+Tag::Tag ( const QVariant& variant, QObject* parent ) : QObject ( parent ), d(new TagPrivate(this, variant))
+{
+
+}
+
+Tag::Tag ( const Tag& other ) : QObject ( other.parent() ), d(new TagPrivate(this,other.d))
+{
+
+}
+
+Tag::Tag() : d(new TagPrivate(this))
+{
+
+}
+
+Tag::~Tag()
+{
+	delete d;
+}
+
+Tag Tag::operator= ( const Tag& other )
+{
+    return Tag ( other );
+}
+
+const QString Tag::tag() const
+{
+    return d->tag();
+}
+
+uint Tag::usage() const
+{
+    return d->usage();
+}
+
+}
+
+#include "../build/src/Tag.moc"

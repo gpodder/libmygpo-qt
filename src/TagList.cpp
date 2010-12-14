@@ -21,28 +21,49 @@
 ***************************************************************************/
 
 #include <parser.h>
+#include <QSharedPointer>
 
 #include "TagList.h"
 
-using namespace mygpo;
+namespace mygpo {
 
-TagList::TagList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply )
+class TagListPrivate : public QObject
 {
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    Q_OBJECT
+public:
+    TagListPrivate ( TagList* qq, QNetworkReply* reply, QObject* parent = 0 );
+    TagListPrivate ( TagList* qq, TagListPrivate* pp, QObject* parent = 0);
+
+    QList<Tag> list() const;
+    QVariant tags() const;
+private:
+    TagList* const q;
+    QSharedPointer<QNetworkReply> m_reply;
+    QVariant m_tags;
+
+    QNetworkReply::NetworkError m_error;
+
+    bool parse ( const QVariant& data );
+    bool parse ( const QByteArray& data );
+private slots:
+    void parseData();
+    void error(QNetworkReply::NetworkError error);
+};
+
+TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply, QObject* parent ) : QObject ( parent ), q(qq), m_reply ( reply )
+{
+    QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-TagList::TagList ( const TagList& other ) : QObject ( other.parent() ), m_reply ( other.m_reply ), m_tags ( other.m_tags )
+TagListPrivate::TagListPrivate ( TagList* qq, TagListPrivate* pp, QObject* parent) : QObject (parent), q(qq), m_reply(pp->m_reply),
+	     m_tags(pp->m_tags), m_error(pp->m_error)
 {
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-TagList::~TagList()
-{
-}
-
-QList<Tag> TagList::list() const
+QList<Tag> TagListPrivate::list() const
 {
     QList<Tag> list;
     QVariantList varList = m_tags.toList();
@@ -53,12 +74,12 @@ QList<Tag> TagList::list() const
     return list;
 }
 
-QVariant TagList::tags() const
+QVariant TagListPrivate::tags() const
 {
     return m_tags;
 }
 
-bool TagList::parse(const QVariant& data)
+bool TagListPrivate::parse(const QVariant& data)
 {
     if (!data.canConvert(QVariant::List))
         return false;
@@ -74,7 +95,7 @@ bool TagList::parse(const QVariant& data)
     return true;
 }
 
-bool TagList::parse(const QByteArray& data)
+bool TagListPrivate::parse(const QByteArray& data)
 {
     QJson::Parser parser;
     bool ok;
@@ -86,18 +107,48 @@ bool TagList::parse(const QByteArray& data)
 }
 
 
-void TagList::parseData()
+void TagListPrivate::parseData()
 {
     QJson::Parser parser;
-    if (parse( m_reply->readAll() ) ) { 
-      emit finished();
+    if (parse( m_reply->peek( m_reply->bytesAvailable() ) ) ) {
+      emit q->finished();
     } else {
-      emit parseError();
+      emit q->parseError();
     }
 }
 
-void TagList::error(QNetworkReply::NetworkError error)
+void TagListPrivate::error(QNetworkReply::NetworkError error)
 {
     this->m_error = error;
-    emit requestError(error);
+    emit q->requestError(error);
 }
+
+
+
+
+TagList::TagList ( QNetworkReply* reply, QObject* parent) : d(new TagListPrivate(this,reply))
+{
+
+}
+TagList::TagList ( const TagList& other ) : QObject(other.parent()), d(new TagListPrivate(this,other.d))
+{
+
+}
+TagList::~TagList()
+{
+	delete d;
+}
+
+QList<Tag> TagList::list() const
+{
+	return d->list();
+}
+QVariant TagList::tags() const
+{
+	return d->tags();
+}
+
+
+}
+
+#include "../build/src/TagList.moc"

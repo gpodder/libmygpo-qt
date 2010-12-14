@@ -106,7 +106,9 @@ EpisodePrivate::EpisodePrivate(Episode* qq, EpisodePrivate* pp,
 			       m_podcastTitle(pp->m_podcastTitle), m_description(pp->m_description),
 			       m_website(pp->m_website), m_mygpoUrl(pp->m_mygpoUrl), m_error(pp->m_error)
 {
-
+	  QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
+	  QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
+			      this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
 
@@ -162,7 +164,7 @@ bool EpisodePrivate::parse(const QByteArray& data)
 void EpisodePrivate::parseData() {
     //parsen und signal senden
     QJson::Parser parser;
-    if (parse( m_reply->readAll() ) ) { 
+    if (parse( m_reply->peek( m_reply->bytesAvailable() ) ) ) {
       emit q->finished();
     } else {
       emit q->parseError();

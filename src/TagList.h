@@ -32,7 +32,7 @@
 
 namespace mygpo
 {
-
+class TagListPrivate;
 class MYGPO_EXPORT TagList : public QObject
 {
     Q_OBJECT
@@ -45,16 +45,8 @@ public:
     QList<Tag> list() const;
     QVariant tags() const;
 private:
-    QNetworkReply* m_reply;
-    QVariant m_tags;
-    
-    QNetworkReply::NetworkError m_error;
-
-    bool parse ( const QVariant& data );
-    bool parse ( const QByteArray& data );
-private slots:
-    void parseData();
-    void error(QNetworkReply::NetworkError error);
+    TagListPrivate* const d;
+    friend class TagListPrivate;
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();

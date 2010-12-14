@@ -78,8 +78,8 @@ using namespace mygpo;
 
 PodcastPrivate::PodcastPrivate(Podcast* qq, QNetworkReply* reply, QObject* parent): QObject( parent), m_reply(reply), q(qq), m_error(QNetworkReply::NoError)
 {
-    QObject::connect(reply,SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(reply,SIGNAL(error(QNetworkReply::NetworkError)),
+    QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
 		      this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
@@ -104,7 +104,9 @@ PodcastPrivate::PodcastPrivate(Podcast* qq, const mygpo::PodcastPrivate* pp,
 			       m_subscribers(pp->m_subscribers), m_logoUrl(pp->m_logoUrl), m_website(pp->m_website),
 			       m_mygpoUrl(pp->m_mygpoUrl), m_error(pp->m_error)
 {
-
+    QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
+		      this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
 PodcastPrivate::PodcastPrivate(Podcast* qq, QObject* parent): QObject(parent), q(qq)
@@ -280,7 +282,7 @@ bool PodcastPrivate::parse(const QByteArray& data)
 void PodcastPrivate::parseData() {
     //parsen und signal senden
     QJson::Parser parser;
-    if (parse( m_reply->readAll() ) ) { 
+    if (parse( m_reply->peek( m_reply->bytesAvailable() ) ) ) {
       emit q->finished();
     } else {
       emit q->parseError();

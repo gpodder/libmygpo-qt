@@ -33,7 +33,7 @@
 
 namespace mygpo
 {
-
+class AddRemoveResultPrivate;
 class MYGPO_EXPORT AddRemoveResult : public QObject
 {
     Q_OBJECT
@@ -44,22 +44,14 @@ public:
     AddRemoveResult ( qulonglong timestamp, const QVariant& updateUrls ,QObject* parent = 0 );
     AddRemoveResult ( const AddRemoveResult& other );
     AddRemoveResult ( );
+    virtual ~AddRemoveResult();
     AddRemoveResult operator= ( const AddRemoveResult& other );
     QVariant updateUrls() const;
     qulonglong timestamp() const;
     QList<QPair<QUrl, QUrl> > updateUrlsList() const;
 private:
-    qulonglong m_timestamp;
-    QVariant m_updateUrls;
-
-    QNetworkReply* m_reply;
-    QNetworkReply::NetworkError m_error;
-
-    bool parse ( const QVariant& data );
-    bool parse ( const QByteArray& data );
-private slots:
-    void parseData();
-    void error ( QNetworkReply::NetworkError error );
+    AddRemoveResultPrivate* const d;
+    friend class AddRemoveResultPrivate;
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
