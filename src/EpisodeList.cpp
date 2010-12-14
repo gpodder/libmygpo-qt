@@ -24,7 +24,7 @@
 #include <parser.h>
 
 #include <QDebug>
-
+#include <QSharedPointer>
 
 namespace mygpo {
   
@@ -33,13 +33,14 @@ class EpisodeListPrivate : QObject
   Q_OBJECT
   
 public:
-  EpisodeListPrivate(EpisodeList* q, QNetworkReply* reply, QObject* parent = 0);;
+  EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QObject* parent = 0);
+  EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, QObject* parent = 0);
   QList<Episode> list() const;
   QVariant episodes() const;
   
 private:
+  QSharedPointer<QNetworkReply> m_reply;
   EpisodeList* const q;
-  QNetworkReply* m_reply;
   QVariant m_episodes;
   QNetworkReply::NetworkError m_error;
   bool parse(const QVariant& data);
@@ -56,12 +57,19 @@ private slots:
 using namespace mygpo;
 
 
-EpisodeListPrivate::EpisodeListPrivate(EpisodeList* q, QNetworkReply* reply, QObject* parent): QObject( parent ), q(q), m_reply( reply )
+EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QObject* parent): QObject( parent ), m_reply( reply ), q(qq)
 {
-  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
+EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, 
+				       QObject* parent): QObject(parent), m_reply( pp->m_reply ), 
+				       q(qq), m_episodes(pp->m_episodes)
+{
+  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+}
 
 QList<Episode> EpisodeListPrivate::list() const
 {
@@ -112,7 +120,8 @@ void EpisodeListPrivate::parseData()
 {
     qDebug() << "parsing episode list data";
     QJson::Parser parser;
-    if ( parse ( m_reply->readAll() ) )
+    //if ( parse ( m_reply->readAll() ) )
+    if ( parse ( m_reply->peek(m_reply->bytesAvailable()) ) )
     {
         emit q->finished();
     }
@@ -131,16 +140,14 @@ void EpisodeListPrivate::error ( QNetworkReply::NetworkError error )
 
 
 
-EpisodeList::EpisodeList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), d(new EpisodeListPrivate(this, reply)), m_copy(false)
+EpisodeList::EpisodeList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), d(new EpisodeListPrivate(this, reply))
 {
    
 }
 
-EpisodeList::EpisodeList ( const EpisodeList& other ) : QObject ( other.parent() ), d(other.d),m_copy(true)
+EpisodeList::EpisodeList ( const EpisodeList& other ) : QObject ( other.parent() ), d(new EpisodeListPrivate(this, other.d))
 {
-  QObject::connect(&other, SIGNAL(finished()), this, SLOT(sendFinished()));
-  QObject::connect(&other, SIGNAL(parseError()), this, SLOT(sendParsError()));
-  QObject::connect(&other, SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(sendRequestError(QNetworkReply::NetworkError)));
+
 }
 
 
@@ -157,26 +164,7 @@ QList< Episode > EpisodeList::list() const
 
 EpisodeList::~EpisodeList()
 {
-  if( !m_copy ) delete d;
+  delete d;
 }
-
-
-
-void EpisodeList::sendFinished()
-{
-  emit finished();
-}
-
-void EpisodeList::sendParsError()
-{
-  emit parseError();
-}
-
-void EpisodeList::sendRequestError(QNetworkReply::NetworkError error)
-{
-  emit sendRequestError(error);
-}
-
-
 
 #include "../build/src/EpisodeList.moc"

@@ -63,7 +63,6 @@ public:
 private:
     EpisodePrivate* const d;
     friend class EpisodePrivate;
-    bool m_copy;		//true if this object was created by the copy-ctor
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
@@ -72,10 +71,6 @@ signals:
     /**Gets emitted when an request error ocurred*/
     void requestError(QNetworkReply::NetworkError error);
     
-private slots:
-  void sendFinished();
-  void sendParsError();
-  void sendRequestError(QNetworkReply::NetworkError error);
 };
 
 }

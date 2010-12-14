@@ -74,11 +74,6 @@ signals:
     void parseError();
     /**Gets emitted when an request error ocurred*/
     void requestError(QNetworkReply::NetworkError error);
-    
-private slots:
-  void sendFinished();
-  void sendParsError();
-  void sendRequestError(QNetworkReply::NetworkError error);  
 };
 
 }

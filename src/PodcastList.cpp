@@ -24,6 +24,7 @@
 
 #include <parser.h>
 #include <QDebug>
+#include <QSharedPointer>
 
 namespace mygpo
 {
@@ -37,9 +38,9 @@ public:
   PodcastListPrivate(PodcastList* qq, PodcastListPrivate* pp ,QObject* parent = 0);
   QList<Podcast> list() const;
   QVariant podcasts() const;
-  QNetworkReply* m_reply;
     
 private:
+  QSharedPointer<QNetworkReply> m_reply;
   PodcastList* const q;
   QVariant m_podcasts;
   QNetworkReply::NetworkError m_error;
@@ -60,8 +61,8 @@ using namespace mygpo;
 
 PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent) : QObject ( parent ), m_reply ( reply ), q(qq)
 {
-  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
 PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QObject* parent) : QObject(parent), m_reply ( 0 ), q(qq), m_podcasts ( QVariant() )
@@ -70,10 +71,10 @@ PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QObject* parent) : QObje
 
 PodcastListPrivate::PodcastListPrivate(PodcastList* qq, 
 				       PodcastListPrivate* pp, QObject* parent):
-				       QObject(parent), m_reply(pp->m_reply), q(qq), m_podcasts(pp->m_podcasts)
+				       QObject(parent), m_reply( pp->m_reply ), q(qq), m_podcasts(pp->m_podcasts), m_error(pp->m_error)
 {
-  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
 
