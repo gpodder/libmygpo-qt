@@ -44,11 +44,10 @@ set ( APIREQUEST_H
 )
 
 QT4_WRAP_CPP(APIREQUEST_MOC_SRC ${APIREQUEST_H} )
-
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/PodcastList.cpp PodcastList.moc)
 
 # ApiRequest library
-# QT4_WRAP_CPP(APIREQUEST_MOC_SRC ${TESTOBJECTS_SRCDIR}/ApiRequest.h )
-add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC})
+add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC} PodcastList.moc)
 
 # RequestHandler library
 QT4_WRAP_CPP(REQUESTHANDLER_MOC_SRC ${TESTOBJECTS_SRCDIR}/RequestHandler.h)
@@ -62,7 +61,7 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 macro(add_libmygpo_test _source)
     get_filename_component(_name ${_source} NAME_WE)
-    QT4_WRAP_CPP(${_name}_MOC_SRC ${_name}.h )
+    QT4_WRAP_CPP(${_name}_MOC_SRC ${_name}.h)
     add_executable(${_name} ${_source} ${${_name}_MOC_SRC})
     target_link_libraries(${_name} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QTCORE_QTNETWORK_LIBRARY})
     add_test(${_name}-test ${EXECUTABLE_OUTPUT_PATH}/${_name})

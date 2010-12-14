@@ -33,7 +33,7 @@
 #include "mygpo_export.h"
 
 namespace mygpo {
-
+  class EpisodePrivate;
 class MYGPO_EXPORT Episode : public QObject
 {
     Q_OBJECT
@@ -61,22 +61,8 @@ public:
     QUrl website() const;
     QUrl mygpoUrl() const;
 private:
-    QUrl m_url;
-    QString m_title;
-    QUrl m_podcastUrl;
-    QString m_podcastTitle;
-    QString m_description;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
-    QNetworkReply* m_reply;
-    QNetworkReply::NetworkError m_error;
-    bool parse(const QVariant& data);
-    bool parse(const QByteArray& data);
-	
-public slots:
-    void parseData();
-    void error(QNetworkReply::NetworkError error);
-
+    EpisodePrivate* const d;
+    friend class EpisodePrivate;
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
@@ -84,6 +70,7 @@ signals:
     void parseError();
     /**Gets emitted when an request error ocurred*/
     void requestError(QNetworkReply::NetworkError error);
+    
 };
 
 }
