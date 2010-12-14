@@ -106,9 +106,11 @@ EpisodePrivate::EpisodePrivate(Episode* qq, EpisodePrivate* pp,
 			       m_podcastTitle(pp->m_podcastTitle), m_description(pp->m_description),
 			       m_website(pp->m_website), m_mygpoUrl(pp->m_mygpoUrl), m_error(pp->m_error)
 {
-	  QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
-	  QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
-			      this,SLOT(error(QNetworkReply::NetworkError)));
+	if (m_reply != 0) {
+		QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
+		QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
+				this,SLOT(error(QNetworkReply::NetworkError)));
+	}
 }
 
 

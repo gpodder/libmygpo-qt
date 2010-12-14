@@ -104,9 +104,11 @@ PodcastPrivate::PodcastPrivate(Podcast* qq, const mygpo::PodcastPrivate* pp,
 			       m_subscribers(pp->m_subscribers), m_logoUrl(pp->m_logoUrl), m_website(pp->m_website),
 			       m_mygpoUrl(pp->m_mygpoUrl), m_error(pp->m_error)
 {
-    QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
-		      this,SLOT(error(QNetworkReply::NetworkError)));
+	if (m_reply != 0) {
+		QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
+		QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
+				this,SLOT(error(QNetworkReply::NetworkError)));
+	}
 }
 
 PodcastPrivate::PodcastPrivate(Podcast* qq, QObject* parent): QObject(parent), q(qq)

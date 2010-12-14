@@ -73,10 +73,12 @@ AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QObject* p
 }
 
 AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveResultPrivate* pp, QObject* parent) : QObject (parent), q(qq), m_timestamp(pp->m_timestamp),
-											     m_updateUrls(pp->m_updateUrls), m_reply(pp->m_reply), m_error(pp->m_error)
+		m_updateUrls(pp->m_updateUrls), m_reply(pp->m_reply), m_error(pp->m_error)
 {
-	QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-	QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+	if (m_reply != 0) {
+		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+	}
 }
 
 

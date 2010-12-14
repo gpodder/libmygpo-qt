@@ -67,8 +67,10 @@ EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp,
 				       QObject* parent): QObject(parent), m_reply( pp->m_reply ), 
 				       q(qq), m_episodes(pp->m_episodes)
 {
-  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+	if (m_reply != 0) {
+		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+	}
 }
 
 QList<Episode> EpisodeListPrivate::list() const

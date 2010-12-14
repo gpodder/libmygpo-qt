@@ -70,11 +70,13 @@ PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QObject* parent) : QObje
 }
 
 PodcastListPrivate::PodcastListPrivate(PodcastList* qq, 
-				       PodcastListPrivate* pp, QObject* parent):
-				       QObject(parent), m_reply( pp->m_reply ), q(qq), m_podcasts(pp->m_podcasts), m_error(pp->m_error)
+		PodcastListPrivate* pp, QObject* parent):
+		QObject(parent), m_reply( pp->m_reply ), q(qq), m_podcasts(pp->m_podcasts), m_error(pp->m_error)
 {
-  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+	if (m_reply != 0) {
+		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+	}
 }
 
 
