@@ -1,7 +1,7 @@
 ==========  README ==========
 libmygpo-qt will be a Qt Library that wraps the gpodder.net Web API (http://wiki.gpodder.org/wiki/Web_Services/API_2)
 
-v0.2 can retrieve OPMLs for the API Requests "Download Podcast Toplists", "Searching for Podcasts" & "Downloading Podcast Suggesstions"
+v0.2.5 can retrieve OPMLs for the API Requests "Download Podcast Toplists", "Searching for Podcasts" & "Downloading Podcast Suggesstions"
 Also this Version can parse the JSON Results of the above Requests & additionally of the Requests "Retrieving Episode Data", "Retrieving Podcast Data","Retrieving Podcasts of a Tag",Retrieving Top Tags", "Listing Favorite Episodes" and is able to upload the Data & parse the Result of the "Add/Remove Subscriptions"
 
 Created 2010 by Stefan Derkits, Christian Wagner & Felix Winter
@@ -11,7 +11,7 @@ Requirements:
 -) Cmake 2.6 or higher
 -) QJson
 
-Git Repo: http://www.gitorious.org/libmygpo-qt/libmygpo-qt
+Git Repo: https://github.com/ase23/libmygpo-qt
 Doxygen Documentation: http://stefan.derkits.at/libmygpo-doc/ 
 Bugreports: http://bugs.gpodder.org
 Contact: gpodder-devel@lists.berlios.de
