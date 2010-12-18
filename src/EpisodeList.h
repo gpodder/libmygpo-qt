@@ -39,7 +39,7 @@ class MYGPO_EXPORT EpisodeList : public QObject {
 	Q_PROPERTY(QVariant episodes READ episodes CONSTANT)
 public:
 	EpisodeList(QNetworkReply* reply, QObject* parent = 0);
-	EpisodeList(const EpisodeList& other);
+	//EpisodeList(const EpisodeList& other);
 	virtual ~EpisodeList();
 
 	QList<EpisodePtr> list() const;
@@ -56,6 +56,8 @@ signals:
     void requestError(QNetworkReply::NetworkError error);
   
 };
+
+typedef QSharedPointer<EpisodeList> EpisodeListPtr;
 
 }
 

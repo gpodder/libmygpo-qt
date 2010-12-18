@@ -34,7 +34,7 @@ class EpisodeListPrivate : QObject
   
 public:
   EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QObject* parent = 0);
-  EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, QObject* parent = 0);
+  //EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, QObject* parent = 0);
   QList<EpisodePtr> list() const;
   QVariant episodes() const;
   
@@ -63,7 +63,7 @@ EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QO
   QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, 
+/*EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, 
 				       QObject* parent): QObject(parent), m_reply( pp->m_reply ), 
 				       q(qq), m_episodes(pp->m_episodes)
 {
@@ -71,7 +71,7 @@ EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp,
 		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
 		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 	}
-}
+}*/
 
 QList<EpisodePtr> EpisodeListPrivate::list() const
 {
@@ -122,8 +122,7 @@ void EpisodeListPrivate::parseData()
 {
     qDebug() << "parsing episode list data";
     QJson::Parser parser;
-    //if ( parse ( m_reply->readAll() ) )
-    if ( parse ( m_reply->peek(m_reply->bytesAvailable()) ) )
+    if ( parse ( m_reply->readAll() ) )
     {
         emit q->finished();
     }
@@ -147,11 +146,12 @@ EpisodeList::EpisodeList ( QNetworkReply* reply, QObject* parent ) : QObject ( p
    
 }
 
+/*
 EpisodeList::EpisodeList ( const EpisodeList& other ) : QObject ( other.parent() ), d(new EpisodeListPrivate(this, other.d))
 {
 
 }
-
+*/
 
 QVariant EpisodeList::episodes() const
 {

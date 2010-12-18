@@ -326,7 +326,7 @@ int main(int argc, char **argv)
         qDebug() << "TagList1 size: " << tagList1.list().size();
         qDebug() << "TagList2 size: " << tagList2.list().size();
     qDebug() << "";
-
+  
     qDebug() << "AddRemoveResult";*/
     /*QList<QUrl> add2;
     QList<QUrl> remove2;
@@ -361,12 +361,23 @@ int main(int argc, char **argv)
     qDebug() << result->timestamp();
     */
     
-    EpisodePtr ret = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
+    /*EpisodePtr ret = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
     loop.connect( &(*ret), SIGNAL(finished()), SLOT(quit()));
     loop.connect( &(*ret), SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect( &(*ret), SIGNAL(parseError()), SLOT(quit()));
     loop.exec();
-    qDebug() << ret->title();
+    qDebug() << ret->title();*/
+    
+    EpisodeListPtr ret =  req.favoriteEpisodes(QLatin1String("ase23"));
+    loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << ret->list().size();
+    if(ret->list().size()) {
+      qDebug() << ret->list().at(0)->title();
+    }
     
     return 0;
 }

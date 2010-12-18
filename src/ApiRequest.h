@@ -142,7 +142,7 @@ public:
      * @return List of Episode Objects containing the Data from gPodder
      *
      */
-    EpisodeList favoriteEpisodes ( const QString& username );
+    EpisodeListPtr favoriteEpisodes ( const QString& username );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Top Tags"

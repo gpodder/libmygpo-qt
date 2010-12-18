@@ -47,7 +47,7 @@ public:
     PodcastList podcastsOfTag ( uint count, const QString& tag );
     Podcast podcastData ( const QUrl& podcasturl );
     EpisodePtr episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
-    EpisodeList favoriteEpisodes ( const QString& username );
+    EpisodeListPtr favoriteEpisodes ( const QString& username );
     TagList topTags ( uint count );
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 private:
@@ -116,12 +116,12 @@ EpisodePtr ApiRequestPrivate::episodeData ( const QUrl& podcasturl, const QUrl& 
     return episode;
 }
 
-EpisodeList ApiRequestPrivate::favoriteEpisodes ( const QString& username )
+EpisodeListPtr ApiRequestPrivate::favoriteEpisodes ( const QString& username )
 {
     QUrl requestUrl = UrlBuilder::getFavEpisodesUrl ( username );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
-    EpisodeList episodeList ( reply );
+    EpisodeListPtr episodeList ( new EpisodeList (reply) );
     return episodeList;
 }
 
@@ -235,7 +235,7 @@ EpisodePtr ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeur
     return d->episodeData(podcasturl,episodeurl);
 }
 
-EpisodeList ApiRequest::favoriteEpisodes(const QString& username)
+EpisodeListPtr ApiRequest::favoriteEpisodes(const QString& username)
 {
     return d->favoriteEpisodes(username);
 }

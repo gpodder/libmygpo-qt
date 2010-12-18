@@ -25,7 +25,6 @@
 
 #include <parser.h>
 #include <QSharedPointer>
-#include <QDebug>
 
 namespace mygpo {
   
@@ -86,7 +85,6 @@ EpisodePrivate::EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* paren
 
 EpisodePrivate::EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent): QObject(parent), q(qq)
 {
-    qDebug() << "constructing an episode via a variant";
     parse(variant);
 }
 
@@ -166,7 +164,7 @@ bool EpisodePrivate::parse(const QByteArray& data)
 void EpisodePrivate::parseData() {
     //parsen und signal senden
     QJson::Parser parser;
-    if (parse( m_reply->peek( m_reply->bytesAvailable() ) ) ) {
+    if (parse( m_reply->readAll() ) ) {
       emit q->finished();
     } else {
       emit q->parseError();
