@@ -5,7 +5,7 @@ remove_definitions(-fvisibility=hidden)
 
 set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
-include_directories(  ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR})
+include_directories(  ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR}  )
 
 add_definitions( -Werror )
 
@@ -45,9 +45,15 @@ set ( APIREQUEST_H
 
 QT4_WRAP_CPP(APIREQUEST_MOC_SRC ${APIREQUEST_H} )
 QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/PodcastList.cpp PodcastList.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/EpisodeList.cpp EpisodeList.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Episode.cpp Episode.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Podcast.cpp Podcast.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/AddRemoveResult.cpp AddRemoveResult.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/TagList.cpp TagList.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Tag.cpp Tag.moc)
 
 # ApiRequest library
-add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC} PodcastList.moc)
+add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc Podcast.moc AddRemoveResult.moc TagList.moc Tag.moc)
 
 # RequestHandler library
 QT4_WRAP_CPP(REQUESTHANDLER_MOC_SRC ${TESTOBJECTS_SRCDIR}/RequestHandler.h)
