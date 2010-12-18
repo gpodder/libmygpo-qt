@@ -161,7 +161,7 @@ public:
      * @param remove URLs of Podcasts that should be removed from the Subscriptions of the User
      *
      */
-    AddRemoveResult addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+    AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 
 private:
     //RequestHandler m_requestHandler;

@@ -34,13 +34,14 @@ class AddRemoveResultPrivate : public QObject
     Q_OBJECT
 public:
     AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkReply* reply, QObject* parent = 0 );
-    AddRemoveResultPrivate ( AddRemoveResult* qq, qulonglong timestamp, const QVariant& updateUrls ,QObject* parent = 0 );
+    AddRemoveResultPrivate ( AddRemoveResult* qq, qulonglong timestamp, const QVariant& updateUrls, QObject* parent = 0 );
     AddRemoveResultPrivate ( AddRemoveResult* qq, QObject* parent = 0 );
-    AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveResultPrivate* pp, QObject* parent = 0);
+    //AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveResultPrivate* pp, QObject* parent = 0);
     QVariant updateUrls() const;
     qulonglong timestamp() const;
     QList<QPair<QUrl, QUrl> > updateUrlsList() const;
 private:
+    Q_DISABLE_COPY(AddRemoveResultPrivate)
     AddRemoveResult* const q;
     qulonglong m_timestamp;
     QVariant m_updateUrls;
@@ -72,6 +73,7 @@ AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QObject* p
 
 }
 
+/*
 AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveResultPrivate* pp, QObject* parent) : QObject (parent), q(qq), m_timestamp(pp->m_timestamp),
 		m_updateUrls(pp->m_updateUrls), m_reply(pp->m_reply), m_error(pp->m_error)
 {
@@ -79,7 +81,7 @@ AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, AddRemoveR
 		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
 		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 	}
-}
+}*/
 
 
 qulonglong AddRemoveResultPrivate::timestamp() const
@@ -159,10 +161,10 @@ AddRemoveResult::AddRemoveResult() : d(new AddRemoveResultPrivate(this))
 
 }
 
-AddRemoveResult::AddRemoveResult ( const AddRemoveResult& other ) : QObject(other.parent()), d(new AddRemoveResultPrivate(this,other.d))
+/*AddRemoveResult::AddRemoveResult ( const AddRemoveResult& other ) : QObject(other.parent()), d(new AddRemoveResultPrivate(this,other.d))
 {
 
-}
+}*/
 
 AddRemoveResult::AddRemoveResult( QNetworkReply* reply ,QObject* parent ) : QObject(parent), d(new AddRemoveResultPrivate(this, reply))
 {
@@ -174,10 +176,10 @@ AddRemoveResult::AddRemoveResult( qulonglong timestamp, const QVariant& updateUr
 
 }
 
-AddRemoveResult AddRemoveResult::operator= ( const AddRemoveResult& other )
+/*AddRemoveResult AddRemoveResult::operator= ( const AddRemoveResult& other )
 {
     return AddRemoveResult ( other );
-}
+}*/
 
 AddRemoveResult::~AddRemoveResult ()
 {

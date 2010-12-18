@@ -23,12 +23,11 @@
 #ifndef JSONPARSER_H
 #define JSONPARSER_H
 
-#include "Podcast.h"
-#include "Episode.h"
-#include "Tag.h"
-#include "AddRemoveResult.h"
-
+#include <QByteArray>
+#include <QVariant>
 #include <QList>
+
+class QUrl;
 
 namespace mygpo {
 
@@ -36,19 +35,8 @@ class JsonParser
 {
 
 public:
-    static QList<Podcast> toPodcastList(const QByteArray& jsonData);
-    static Podcast toPodcast(const QByteArray& jsonData);
-    static QList<Episode> toEpisodeList(const QByteArray& jsonData);
-    static Episode toEpisode(const QByteArray& jsonData);
-    static QList<Tag> toTagList(const QByteArray& jsonData);
-    static AddRemoveResult toAddRemoveResult(const QByteArray& jsonData);
-    static QList<QPair<QUrl,QUrl> > toUrlPairList(const QVariant& variantData);
     static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
 private:
-    static Podcast qvariantToPodcast(const QVariant& variantData);
-    static Episode qvariantToEpisode(const QVariant& variantData);
-    static Tag qvariantToTag(const QVariant& variantData);
-    static QPair<QUrl, QUrl> toUpdatePair(const QVariant& variantData);
     static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
 };
 

@@ -116,8 +116,8 @@ int main(int argc, char **argv)
 	QApplication app(argc, argv, true);
 	ApiRequest req("ase23", "csf-sepm");
     QEventLoop loop;
-    QNetworkReply *reply;
-
+    //QNetworkReply* reply;
+    /*
     //
     // QNetworkReply* toplistOpml(uint count);
     //
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
 
     printTitle(QLatin1String("Add/remove subscriptions [addRemoveSubscriptions(\"ase23\", \"dev0\", {\"http://feeds.rucast.net/radio-t\"}, {http://hackermedley.org/feed/podcast/}]"));
     printAddRemoveResult(addRemoveResult);
-
+    
     AddRemoveResult addRemoveResult2(req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add));
 
     loop.connect(&addRemoveResult2, SIGNAL(finished()), SLOT(quit()));
@@ -266,7 +266,7 @@ int main(int argc, char **argv)
     printTitle(QLatin1String("Add/remove subscriptions2 [addRemoveSubscriptions(\"ase23\", \"dev0\", {http://hackermedley.org/feed/podcast/}, {\"http://feeds.rucast.net/radio-t\"}]"));
     printAddRemoveResult(addRemoveResult2);
 
-
+    
     //
     // Copy objects and reicieve signals
     //
@@ -327,11 +327,12 @@ int main(int argc, char **argv)
         qDebug() << "TagList2 size: " << tagList2.list().size();
     qDebug() << "";
 
-    qDebug() << "AddRemoveResult";
+    qDebug() << "AddRemoveResult";*/
     /*QList<QUrl> add2;
     QList<QUrl> remove2;
     ad << QUrl(QLatin1String(""));
     rem << QUrl(QLatin1String(""));*/
+    /*
     AddRemoveResult addRemove1 = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add);
     AddRemoveResult addRemove2 = addRemove1;
         loop.connect(&addRemove2,SIGNAL(finished()),SLOT(quit()));
@@ -341,6 +342,23 @@ int main(int argc, char **argv)
         qDebug() << "AddRemoveResult1: " << addRemove1.timestamp();
         qDebug() << "AddRemoveResult2: " << addRemove2.timestamp();
     qDebug() << "";
-
+    */
+    
+    QList<QUrl> add;
+    QList<QUrl> remove;
+    add << QUrl(QLatin1String("http://feeds.rucast.net/radio-t"));
+    remove << QUrl(QLatin1String("http://hackermedley.org/feed/podcast/"));
+    AddRemoveResultPtr result = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"),add,remove);
+        
+    loop.connect(result.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(result.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(result.data(),SIGNAL(parseError()),SLOT(quit()));
+    
+    loop.exec();
+    
+    qDebug() << result->timestamp();
+    
+    
+    
     return 0;
 }

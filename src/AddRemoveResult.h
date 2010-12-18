@@ -28,12 +28,15 @@
 #include <QUrl>
 #include <QVariant>
 #include <QNetworkReply>
+#include <QSharedPointer>
 
 #include "mygpo_export.h"
 
 namespace mygpo
 {
+    
 class AddRemoveResultPrivate;
+
 class MYGPO_EXPORT AddRemoveResult : public QObject
 {
     Q_OBJECT
@@ -42,14 +45,15 @@ class MYGPO_EXPORT AddRemoveResult : public QObject
 public:
     AddRemoveResult ( QNetworkReply* reply ,QObject* parent = 0 );
     AddRemoveResult ( qulonglong timestamp, const QVariant& updateUrls ,QObject* parent = 0 );
-    AddRemoveResult ( const AddRemoveResult& other );
+    //AddRemoveResult ( const AddRemoveResult& other );
     AddRemoveResult ( );
     virtual ~AddRemoveResult();
-    AddRemoveResult operator= ( const AddRemoveResult& other );
+    //AddRemoveResult operator= ( const AddRemoveResult& other );
     QVariant updateUrls() const;
     qulonglong timestamp() const;
     QList<QPair<QUrl, QUrl> > updateUrlsList() const;
 private:
+    Q_DISABLE_COPY(AddRemoveResult)
     AddRemoveResultPrivate* const d;
     friend class AddRemoveResultPrivate;
 signals:
@@ -61,8 +65,10 @@ signals:
     void requestError ( QNetworkReply::NetworkError error );
 };
 
+typedef QSharedPointer<AddRemoveResult> AddRemoveResultPtr;
+
 }
 
-Q_DECLARE_METATYPE ( mygpo::AddRemoveResult );
+//Q_DECLARE_METATYPE ( mygpo::AddRemoveResult );
 
 #endif // ADDREMOVERESULT_H

@@ -49,7 +49,7 @@ public:
     Episode episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
     EpisodeList favoriteEpisodes ( const QString& username );
     TagList topTags ( uint count );
-    AddRemoveResult addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+    AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 private:
     RequestHandler m_requestHandler;
 };
@@ -165,15 +165,15 @@ PodcastList ApiRequestPrivate::suggestions ( uint count )
     return podcastList;
 }
 
-AddRemoveResult ApiRequestPrivate::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
+AddRemoveResultPtr ApiRequestPrivate::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
 {
     QUrl requesturl = UrlBuilder::getAddRemoveSubUrl ( username,device );
     QByteArray data = JsonParser::addRemoveSubsToJSON ( add,remove );
     //TODO: Check if no URL is contained in both Lists
     QNetworkReply *reply;
     reply = m_requestHandler.postRequest ( data, requesturl );
-    AddRemoveResult addRemoveResult ( reply );
-    return addRemoveResult;
+    AddRemoveResultPtr ptr(new AddRemoveResult ( reply ));
+    return ptr;
 }
 
 
@@ -245,7 +245,7 @@ TagList ApiRequest::topTags(uint count)
     return d->topTags(count);
 }
 
-AddRemoveResult ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove)
+AddRemoveResultPtr ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove)
 {
     return d->addRemoveSubscriptions(username,device,add,remove);
 }

@@ -170,6 +170,7 @@ void ApiRequestTest::testTopTags()
   QVERIFY(ret.list().size() == 13);
 }
 
+/*
 void ApiRequestTest::testAddRemoveSubscriptionsAdd()
 {
   QEventLoop loop;
@@ -201,7 +202,7 @@ void ApiRequestTest::testAddRemoveSubscriptionsRemove()
   loop.exec();
   QVERIFY(m_ok);
 }
-
+*/
 
 void ApiRequestTest::error()
 {
