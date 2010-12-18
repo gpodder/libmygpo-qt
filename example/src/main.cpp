@@ -67,7 +67,7 @@ void printEpisode(const Episode& episode) {
 	qDebug() << "url:\t" << episode.url();
 	qDebug() << "";
 }
-
+/*
 void printEpisodeList(const EpisodeList& episodeList) {
 	QList<Episode> list;
     QList<Episode>::const_iterator iterator;
@@ -80,7 +80,7 @@ void printEpisodeList(const EpisodeList& episodeList) {
     }
     qDebug() << "";
 }
-
+*/
 void printTagList(const TagList& tagList) {
 	QList<Tag> list;
     QList<Tag>::const_iterator iterator;
@@ -113,8 +113,8 @@ void printAddRemoveResult(const AddRemoveResult& addRemoveResult) {
  */
 int main(int argc, char **argv)
 {
-	QApplication app(argc, argv, true);
-	ApiRequest req("ase23", "csf-sepm");
+    QApplication app(argc, argv, true);
+    ApiRequest req("ase23", "csf-sepm");
     QEventLoop loop;
     //QNetworkReply* reply;
     /*
@@ -344,6 +344,8 @@ int main(int argc, char **argv)
     qDebug() << "";
     */
     
+    
+    /*
     QList<QUrl> add;
     QList<QUrl> remove;
     add << QUrl(QLatin1String("http://feeds.rucast.net/radio-t"));
@@ -357,8 +359,14 @@ int main(int argc, char **argv)
     loop.exec();
     
     qDebug() << result->timestamp();
+    */
     
-    
+    EpisodePtr ret = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
+    loop.connect( &(*ret), SIGNAL(finished()), SLOT(quit()));
+    loop.connect( &(*ret), SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect( &(*ret), SIGNAL(parseError()), SLOT(quit()));
+    loop.exec();
+    qDebug() << ret->title();
     
     return 0;
 }

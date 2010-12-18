@@ -46,7 +46,7 @@ public:
     PodcastList suggestions ( uint count );
     PodcastList podcastsOfTag ( uint count, const QString& tag );
     Podcast podcastData ( const QUrl& podcasturl );
-    Episode episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
+    EpisodePtr episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
     EpisodeList favoriteEpisodes ( const QString& username );
     TagList topTags ( uint count );
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
@@ -106,13 +106,13 @@ PodcastList ApiRequestPrivate::search ( const QString& query )
     return podcastList;
 }
 
-Episode ApiRequestPrivate::episodeData ( const QUrl& podcasturl, const QUrl& episodeurl )
+EpisodePtr ApiRequestPrivate::episodeData ( const QUrl& podcasturl, const QUrl& episodeurl )
 {
     QUrl requestUrl = UrlBuilder::getEpisodeDataUrl ( podcasturl.toString(),episodeurl.toString() );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
-    Episode episode ( reply );
+    EpisodePtr episode ( new Episode( reply ) );
     return episode;
 }
 
@@ -230,7 +230,7 @@ Podcast ApiRequest::podcastData(const QUrl& podcasturl)
     return d->podcastData(podcasturl);
 }
 
-Episode ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeurl)
+EpisodePtr ApiRequest::episodeData(const QUrl& podcasturl, const QUrl& episodeurl)
 {
     return d->episodeData(podcasturl,episodeurl);
 }

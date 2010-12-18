@@ -35,7 +35,7 @@ class EpisodeListPrivate : QObject
 public:
   EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QObject* parent = 0);
   EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, QObject* parent = 0);
-  QList<Episode> list() const;
+  QList<EpisodePtr> list() const;
   QVariant episodes() const;
   
 private:
@@ -73,13 +73,13 @@ EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp,
 	}
 }
 
-QList<Episode> EpisodeListPrivate::list() const
+QList<EpisodePtr> EpisodeListPrivate::list() const
 {
-    QList<Episode> list;
+    QList<EpisodePtr> list;
     QVariantList varList = m_episodes.toList();
     foreach ( QVariant var,varList )
     {
-        list.append ( var.value<mygpo::Episode>() );
+        list.append ( var.value<mygpo::EpisodePtr>() );
     }
     return list;
 }
@@ -98,7 +98,7 @@ bool EpisodeListPrivate::parse ( const QVariant& data )
     foreach ( QVariant var,varList )
     {
         QVariant v;
-        v.setValue<mygpo::Episode> ( Episode ( var ) );
+        v.setValue<mygpo::EpisodePtr> ( EpisodePtr (new Episode ( var ) ) );
         episodeList.append ( v );
     }
     m_episodes = QVariant ( episodeList );
@@ -159,7 +159,7 @@ QVariant EpisodeList::episodes() const
 }
 
 
-QList< Episode > EpisodeList::list() const
+QList< EpisodePtr > EpisodeList::list() const
 {
   return d->list();
 }

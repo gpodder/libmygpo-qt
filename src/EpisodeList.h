@@ -42,7 +42,7 @@ public:
 	EpisodeList(const EpisodeList& other);
 	virtual ~EpisodeList();
 
-	QList<Episode> list() const;
+	QList<EpisodePtr> list() const;
 	QVariant episodes() const;
 private:
   EpisodeListPrivate* const d;

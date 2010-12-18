@@ -25,7 +25,7 @@
 
 #include <parser.h>
 #include <QSharedPointer>
-
+#include <QDebug>
 
 namespace mygpo {
   
@@ -38,7 +38,7 @@ public:
   EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* parent = 0);
   EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent = 0);
   EpisodePrivate(Episode* qq, const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent = 0);
-  EpisodePrivate(Episode* qq, EpisodePrivate* pp, QObject* parent = 0);
+  //EpisodePrivate(Episode* qq, EpisodePrivate* pp, QObject* parent = 0);
   QUrl url() const;
   QString title() const;
   QUrl podcastUrl() const;
@@ -100,7 +100,7 @@ EpisodePrivate::EpisodePrivate(Episode* qq, const QUrl& url, const QString& titl
 
 }
 
-EpisodePrivate::EpisodePrivate(Episode* qq, EpisodePrivate* pp, 
+/*EpisodePrivate::EpisodePrivate(Episode* qq, EpisodePrivate* pp, 
 			       QObject* parent): QObject(parent), m_reply(pp->m_reply), q(qq), m_url(pp->m_url),
 			       m_title(pp->m_title), m_podcastUrl(pp->m_podcastUrl),
 			       m_podcastTitle(pp->m_podcastTitle), m_description(pp->m_description),
@@ -111,7 +111,7 @@ EpisodePrivate::EpisodePrivate(Episode* qq, EpisodePrivate* pp,
 		QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
 				this,SLOT(error(QNetworkReply::NetworkError)));
 	}
-}
+}*/
 
 
 bool EpisodePrivate::parse(const QVariant& data) 
@@ -243,16 +243,19 @@ Episode::~Episode()
   delete d;
 }
 
+/*
 Episode::Episode(const mygpo::Episode& other): QObject(other.parent()), d(new EpisodePrivate(this,other.d))
 {
   
 }
+*/
 
+/*
 Episode Episode::operator=(const mygpo::Episode& other)
 {
     return Episode(other);
 }
-
+*/
 
 QUrl Episode::url() const
 {

@@ -117,6 +117,7 @@ void ApiRequestTest::testPodcastData()
   QCOMPARE(ret.mygpoUrl(), QUrl(QLatin1String("http://gpodder.net/podcast/11194")));
 }
 
+/*
 void ApiRequestTest::testEpisodeData()
 {
   QEventLoop loop;
@@ -133,7 +134,9 @@ void ApiRequestTest::testEpisodeData()
   QCOMPARE(ret.podcastTitle(), QLatin1String("this WEEK in TECH - MP3 Edition"));
   QCOMPARE(ret.podcastUrl(), QUrl(QLatin1String("http://leo.am/podcasts/twit")));
 }
+*/
 
+/*
 void ApiRequestTest::testFavoriteEpisodes()
 {
   QEventLoop loop;
@@ -155,6 +158,7 @@ void ApiRequestTest::testFavoriteEpisodes()
   QCOMPARE(ret.list().at(0).podcastUrl(),QUrl(QLatin1String("http://hackermedley.org/feed/podcast/")));
   QCOMPARE(ret.list().at(1).podcastUrl(),QUrl(QLatin1String("http://feeds.thisamericanlife.org/talpodcast")));
 }
+*/
 
 void ApiRequestTest::testTopTags()
 {

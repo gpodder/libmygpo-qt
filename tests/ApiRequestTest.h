@@ -47,8 +47,8 @@ private slots:
   void testSuggestions();
   void testPodcastsOfTag();
   void testPodcastData();
-  void testEpisodeData();
-  void testFavoriteEpisodes();
+  //void testEpisodeData();
+  //void testFavoriteEpisodes();
   void testTopTags();
   //void testAddRemoveSubscriptionsAdd();
   //void testAddRemoveSubscriptionsRemove();

@@ -134,7 +134,7 @@ public:
      * @return Episode Object containing the Data from gPodder
      *
      */
-    Episode episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
+    EpisodePtr episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
 
     /**
      * Returns the Result for the Advanced API Call "Listing Favorite Episodes"

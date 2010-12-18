@@ -27,8 +27,7 @@
 #include <QUrl>
 #include <QString>
 #include <QNetworkReply>
-
-#include <QDebug>
+#include <QSharedPointer>
 
 #include "mygpo_export.h"
 
@@ -51,8 +50,8 @@ public:
     Episode(const QVariant& variant, QObject* parent = 0);
     Episode(const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
-    Episode(const mygpo::Episode& other);
-    Episode operator=(const mygpo::Episode& other);
+    //Episode(const mygpo::Episode& other);
+    //Episode operator=(const mygpo::Episode& other);
     QUrl url() const;
     QString title() const;
     QUrl podcastUrl() const;
@@ -73,8 +72,10 @@ signals:
     
 };
 
+typedef QSharedPointer<Episode> EpisodePtr;
+
 }
 
-Q_DECLARE_METATYPE(mygpo::Episode);
+Q_DECLARE_METATYPE(mygpo::EpisodePtr);
 
 #endif // EPISODE_H
