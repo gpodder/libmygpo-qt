@@ -24,7 +24,7 @@
 #define TAGLIST_H_
 
 #include <QNetworkReply>
-#include <QObject>
+#include <QSharedPointer>
 #include <QList>
 
 #include "Tag.h"
@@ -39,12 +39,11 @@ class MYGPO_EXPORT TagList : public QObject
     Q_PROPERTY ( QVariant tags READ tags CONSTANT )
 public:
     TagList ( QNetworkReply* reply, QObject* parent = 0 );
-    TagList ( const TagList& other );
     virtual ~TagList();
-
-    QList<Tag> list() const;
+    QList<TagPtr> list() const;
     QVariant tags() const;
 private:
+    Q_DISABLE_COPY(TagList)
     TagListPrivate* const d;
     friend class TagListPrivate;
 signals:
@@ -56,6 +55,10 @@ signals:
     void requestError(QNetworkReply::NetworkError error);
 };
 
+typedef QSharedPointer<TagList> TagListPtr;
+
 }
+
+Q_DECLARE_METATYPE(mygpo::TagListPtr);
 
 #endif /* TAGLIST_H_ */

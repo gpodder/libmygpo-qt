@@ -33,7 +33,7 @@
 #include <ApiRequest.h>
 
 using namespace mygpo;
-
+/*
 void printTitle(const QString& title) {
     QString fillLine(80, QLatin1Char('#'));
 
@@ -81,6 +81,7 @@ void printEpisodeList(const EpisodeList& episodeList) {
     qDebug() << "";
 }
 */
+/*
 void printTagList(const TagList& tagList) {
 	QList<Tag> list;
     QList<Tag>::const_iterator iterator;
@@ -106,7 +107,7 @@ void printAddRemoveResult(const AddRemoveResult& addRemoveResult) {
 
     qDebug() << "";
 }
-
+*/
 
 /**
  * A simple example application which calls all methods provided by the ApiRequest class
@@ -368,16 +369,17 @@ int main(int argc, char **argv)
     loop.exec();
     qDebug() << ret->title();*/
     
-    EpisodeListPtr ret =  req.favoriteEpisodes(QLatin1String("ase23"));
+    TagListPtr ret =  req.topTags(10);
     loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
     
     qDebug() << ret->list().size();
-    if(ret->list().size()) {
-      qDebug() << ret->list().at(0)->title();
+    foreach (TagPtr tag, ret->list()) {
+        qDebug() << tag->tag();
     }
+      
     
     return 0;
 }

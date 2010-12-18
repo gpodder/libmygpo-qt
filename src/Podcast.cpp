@@ -25,7 +25,6 @@
 
 #include <parser.h>
 #include <QDebug>
-#include <QSharedPointer>
 
 namespace mygpo {
   
@@ -33,11 +32,9 @@ class PodcastPrivate : QObject
 {
   Q_OBJECT
 public:
-  PodcastPrivate(Podcast* qq, QNetworkReply* reply,QObject* parent = 0);
-  PodcastPrivate(Podcast* qq, const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent = NULL);
-  PodcastPrivate(Podcast* qq, const QVariant& variant, QObject* parent = 0);
-  PodcastPrivate(Podcast* qq, const PodcastPrivate* pp, QObject* partent = 0);
-  PodcastPrivate(Podcast* qq , QObject* parent = 0);
+  PodcastPrivate(Podcast* qq, QNetworkReply* reply );
+  PodcastPrivate(Podcast* qq, const QVariant& variant );
+  ~PodcastPrivate();
   //Getters
   QUrl url() const;
   QString title() const;
@@ -49,7 +46,7 @@ public:
   QUrl mygpoUrl() const;
   
 private:
-  QSharedPointer<QNetworkReply> m_reply;
+  QNetworkReply* m_reply;
   Podcast* const q;
   QUrl m_url;
   QString m_title;
@@ -76,44 +73,21 @@ private slots:
 
 using namespace mygpo;
 
-PodcastPrivate::PodcastPrivate(Podcast* qq, QNetworkReply* reply, QObject* parent): QObject( parent), m_reply(reply), q(qq), m_error(QNetworkReply::NoError)
+PodcastPrivate::PodcastPrivate(Podcast* qq, QNetworkReply* reply ): m_reply(reply), q(qq), m_error(QNetworkReply::NoError)
 {
-    QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
-		      this,SLOT(error(QNetworkReply::NetworkError)));
+    QObject::connect(m_reply,SIGNAL(finished()), this, SLOT(parseData()));
+    QObject::connect(m_reply,SIGNAL(error(QNetworkReply::NetworkError)), this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
-PodcastPrivate::PodcastPrivate(Podcast* qq, const QUrl& url, const QString& title, const QString& description, 
-			       int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink,
-			       QObject* parent): 
-			       QObject(parent), q(qq), m_url(url), m_title(title), m_description(description), 
-			       m_subscribers(subscribers), m_logoUrl(logoUrl), m_website(website), m_mygpoUrl(mygpolink)
-{
-
-}
-
-
-PodcastPrivate::PodcastPrivate(Podcast* qq, const QVariant& variant, QObject* parent): QObject(parent),  m_reply(0), q(qq), m_error(QNetworkReply::NoError)
+PodcastPrivate::PodcastPrivate(Podcast* qq, const QVariant& variant ): m_reply(0), q(qq), m_error(QNetworkReply::NoError)
 {
     parse(variant);
 }
 
-PodcastPrivate::PodcastPrivate(Podcast* qq, const mygpo::PodcastPrivate* pp, 
-			       QObject* partent): QObject(partent), m_reply(pp->m_reply), q(qq),
-			       m_url(pp->m_url), m_title(pp->m_title), m_description(pp->m_description),
-			       m_subscribers(pp->m_subscribers), m_logoUrl(pp->m_logoUrl), m_website(pp->m_website),
-			       m_mygpoUrl(pp->m_mygpoUrl), m_error(pp->m_error)
+PodcastPrivate::~PodcastPrivate()
 {
-	if (m_reply != 0) {
-		QObject::connect(&(*m_reply),SIGNAL(finished()), this, SLOT(parseData()));
-		QObject::connect(&(*m_reply),SIGNAL(error(QNetworkReply::NetworkError)),
-				this,SLOT(error(QNetworkReply::NetworkError)));
-	}
-}
-
-PodcastPrivate::PodcastPrivate(Podcast* qq, QObject* parent): QObject(parent), q(qq)
-{
-
+    if (m_reply)
+        delete m_reply;
 }
 
 
@@ -152,24 +126,6 @@ QUrl PodcastPrivate::mygpoUrl() const
     return m_mygpoUrl;
 }
 
-
-
-
-Podcast::Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers,
-		 const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent) : 
-		 QObject(parent), d(new PodcastPrivate(this, url, title, description, subscribers,
-		 logoUrl, website, mygpolink))
-		 
-{
-
-}
-
-Podcast::Podcast() : d(new PodcastPrivate(this))
-{
-
-}
-
-
 Podcast::Podcast(QNetworkReply* reply, QObject* parent) : QObject(parent), d(new PodcastPrivate(this,reply))
 {
    
@@ -180,22 +136,10 @@ Podcast::Podcast(const QVariant& variant, QObject* parent): QObject(parent), d(n
 
 }
 
-
-Podcast::Podcast(const Podcast& other): QObject(other.parent()), d(new PodcastPrivate (this, other.d))
-{
-  
-}
-
 Podcast::~Podcast()
 {
   delete d;
 }
-
-Podcast Podcast::Podcast::operator=(const mygpo::Podcast& other)
-{
-    return Podcast(other);
-}
-
 
 QUrl Podcast::url() const
 {
@@ -297,4 +241,4 @@ void PodcastPrivate::error(QNetworkReply::NetworkError error) {
 }
 
 
-#include "../build/src/Podcast.moc"
+#include "Podcast.moc"

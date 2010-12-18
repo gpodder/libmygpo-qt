@@ -33,13 +33,13 @@ class EpisodeListPrivate : QObject
   Q_OBJECT
   
 public:
-  EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QObject* parent = 0);
-  //EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, QObject* parent = 0);
+  EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply);
+  ~EpisodeListPrivate();
   QList<EpisodePtr> list() const;
   QVariant episodes() const;
   
 private:
-  QSharedPointer<QNetworkReply> m_reply;
+  QNetworkReply* m_reply;
   EpisodeList* const q;
   QVariant m_episodes;
   QNetworkReply::NetworkError m_error;
@@ -57,21 +57,17 @@ private slots:
 using namespace mygpo;
 
 
-EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply, QObject* parent): QObject( parent ), m_reply( reply ), q(qq)
+EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply): m_reply( reply ), q(qq)
 {
-  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-/*EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, EpisodeListPrivate* pp, 
-				       QObject* parent): QObject(parent), m_reply( pp->m_reply ), 
-				       q(qq), m_episodes(pp->m_episodes)
+EpisodeListPrivate::~EpisodeListPrivate()
 {
-	if (m_reply != 0) {
-		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-	}
-}*/
+    if (m_reply)
+        delete m_reply;
+}
 
 QList<EpisodePtr> EpisodeListPrivate::list() const
 {
@@ -146,13 +142,6 @@ EpisodeList::EpisodeList ( QNetworkReply* reply, QObject* parent ) : QObject ( p
    
 }
 
-/*
-EpisodeList::EpisodeList ( const EpisodeList& other ) : QObject ( other.parent() ), d(new EpisodeListPrivate(this, other.d))
-{
-
-}
-*/
-
 QVariant EpisodeList::episodes() const
 {
   return d->episodes();
@@ -169,4 +158,4 @@ EpisodeList::~EpisodeList()
   delete d;
 }
 
-#include "../build/src/EpisodeList.moc"
+#include "EpisodeList.moc"

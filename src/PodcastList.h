@@ -24,7 +24,7 @@
 #define PODCASTLIST_H_
 
 #include <QNetworkReply>
-#include <QObject>
+#include <QSharedPointer>
 #include <QList>
 
 #include "Podcast.h"
@@ -39,16 +39,14 @@ class MYGPO_EXPORT PodcastList : public QObject {
     Q_PROPERTY(QVariant podcasts READ podcasts CONSTANT)
 public:
     PodcastList(QNetworkReply* reply, QObject* parent = 0);
-    PodcastList(const PodcastList& other);
-    PodcastList();
     virtual ~PodcastList();
-
-    QList<Podcast> list() const;
+    QList<PodcastPtr> list() const;
     QVariant podcasts() const;
 
 private:
-  PodcastListPrivate* const d;
-  friend class PodcastListPrivate;
+    Q_DISABLE_COPY(PodcastList)
+    PodcastListPrivate* const d;
+    friend class PodcastListPrivate;
 
 signals:
   /**Gets emitted when the data is ready to read*/
@@ -59,6 +57,8 @@ signals:
   void requestError(QNetworkReply::NetworkError error);
   
 };
+
+typedef QSharedPointer<PodcastList> PodcastListPtr;
 
 }
 

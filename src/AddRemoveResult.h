@@ -44,11 +44,7 @@ class MYGPO_EXPORT AddRemoveResult : public QObject
     Q_PROPERTY ( QVariant updateUrls READ updateUrls CONSTANT )
 public:
     AddRemoveResult ( QNetworkReply* reply ,QObject* parent = 0 );
-    AddRemoveResult ( qulonglong timestamp, const QVariant& updateUrls ,QObject* parent = 0 );
-    //AddRemoveResult ( const AddRemoveResult& other );
-    AddRemoveResult ( );
     virtual ~AddRemoveResult();
-    //AddRemoveResult operator= ( const AddRemoveResult& other );
     QVariant updateUrls() const;
     qulonglong timestamp() const;
     QList<QPair<QUrl, QUrl> > updateUrlsList() const;
@@ -69,6 +65,6 @@ typedef QSharedPointer<AddRemoveResult> AddRemoveResultPtr;
 
 }
 
-//Q_DECLARE_METATYPE ( mygpo::AddRemoveResult );
+Q_DECLARE_METATYPE ( mygpo::AddRemoveResultPtr );
 
 #endif // ADDREMOVERESULT_H

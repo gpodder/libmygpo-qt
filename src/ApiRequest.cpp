@@ -41,14 +41,14 @@ public:
     QNetworkReply* toplistOpml ( uint count );
     QNetworkReply* searchOpml ( const QString& query );
     QNetworkReply* suggestionsOpml ( uint count );
-    PodcastList toplist ( uint count );
-    PodcastList search ( const QString& query );
-    PodcastList suggestions ( uint count );
-    PodcastList podcastsOfTag ( uint count, const QString& tag );
-    Podcast podcastData ( const QUrl& podcasturl );
+    PodcastListPtr toplist ( uint count );
+    PodcastListPtr search ( const QString& query );
+    PodcastListPtr suggestions ( uint count );
+    PodcastListPtr podcastsOfTag ( uint count, const QString& tag );
+    PodcastPtr podcastData ( const QUrl& podcasturl );
     EpisodePtr episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
     EpisodeListPtr favoriteEpisodes ( const QString& username );
-    TagList topTags ( uint count );
+    TagListPtr topTags ( uint count );
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 private:
     RequestHandler m_requestHandler;
@@ -87,22 +87,22 @@ QNetworkReply* ApiRequestPrivate::suggestionsOpml ( uint count )
     return m_requestHandler.getRequest ( requestUrl );
 }
 
-PodcastList ApiRequestPrivate::toplist ( uint count )
+PodcastListPtr ApiRequestPrivate::toplist ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getToplistUrl ( count );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
-    PodcastList podcastList ( reply );
+    PodcastListPtr podcastList ( new PodcastList( reply ) );
     return podcastList;
 }
 
-PodcastList ApiRequestPrivate::search ( const QString& query )
+PodcastListPtr ApiRequestPrivate::search ( const QString& query )
 {
     QUrl requestUrl = UrlBuilder::getPodcastSearchUrl ( query );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
-    PodcastList podcastList ( reply );
+    PodcastListPtr podcastList (new PodcastList( reply ) );
     return podcastList;
 }
 
@@ -125,43 +125,43 @@ EpisodeListPtr ApiRequestPrivate::favoriteEpisodes ( const QString& username )
     return episodeList;
 }
 
-Podcast ApiRequestPrivate::podcastData ( const QUrl& podcasturl )
+PodcastPtr ApiRequestPrivate::podcastData ( const QUrl& podcasturl )
 {
     QUrl requestUrl = UrlBuilder::getPodcastDataUrl ( podcasturl.toString() );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
-    Podcast podcast ( reply );
+    PodcastPtr podcast ( new Podcast( reply ) );
     return podcast;
 }
 
-PodcastList ApiRequestPrivate::podcastsOfTag ( uint count, const QString& tag )
+PodcastListPtr ApiRequestPrivate::podcastsOfTag ( uint count, const QString& tag )
 {
     QUrl requestUrl = UrlBuilder::getPodcastsOfTagUrl ( tag,count );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
-    PodcastList podcastList ( reply );
+    PodcastListPtr podcastList ( new PodcastList( reply ) );
     return podcastList;
 }
 
-TagList ApiRequestPrivate::topTags ( uint count )
+TagListPtr ApiRequestPrivate::topTags ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getTopTagsUrl ( count );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
-    TagList tagList ( reply );
+    TagListPtr tagList ( new TagList( reply ) );
     return tagList;
 }
 
-PodcastList ApiRequestPrivate::suggestions ( uint count )
+PodcastListPtr ApiRequestPrivate::suggestions ( uint count )
 {
     QUrl requestUrl = UrlBuilder::getSuggestionsUrl ( count );
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest ( requestUrl );
 
-    PodcastList podcastList ( reply );
+    PodcastListPtr podcastList ( new PodcastList( reply ) );
     return podcastList;
 }
 
@@ -172,10 +172,9 @@ AddRemoveResultPtr ApiRequestPrivate::addRemoveSubscriptions ( const QString& us
     //TODO: Check if no URL is contained in both Lists
     QNetworkReply *reply;
     reply = m_requestHandler.postRequest ( data, requesturl );
-    AddRemoveResultPtr ptr(new AddRemoveResult ( reply ));
-    return ptr;
+    AddRemoveResultPtr addRemoveResult(new AddRemoveResult ( reply ));
+    return addRemoveResult;
 }
-
 
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
@@ -205,27 +204,27 @@ QNetworkReply* ApiRequest::suggestionsOpml(uint count)
     return d->suggestionsOpml(count);
 }
 
-PodcastList ApiRequest::toplist(uint count)
+PodcastListPtr ApiRequest::toplist(uint count)
 {
     return d->toplist(count);
 }
 
-PodcastList ApiRequest::search(const QString& query)
+PodcastListPtr ApiRequest::search(const QString& query)
 {
     return d->search(query);
 }
 
-PodcastList ApiRequest::suggestions(uint count)
+PodcastListPtr ApiRequest::suggestions(uint count)
 {
     return d->suggestions(count);
 }
 
-PodcastList ApiRequest::podcastsOfTag(uint count, const QString& tag)
+PodcastListPtr ApiRequest::podcastsOfTag(uint count, const QString& tag)
 {
     return d->podcastsOfTag(count,tag);
 }
 
-Podcast ApiRequest::podcastData(const QUrl& podcasturl)
+PodcastPtr ApiRequest::podcastData(const QUrl& podcasturl)
 {
     return d->podcastData(podcasturl);
 }
@@ -240,7 +239,7 @@ EpisodeListPtr ApiRequest::favoriteEpisodes(const QString& username)
     return d->favoriteEpisodes(username);
 }
 
-TagList ApiRequest::topTags(uint count)
+TagListPtr ApiRequest::topTags(uint count)
 {
     return d->topTags(count);
 }

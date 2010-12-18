@@ -34,13 +34,12 @@ class PodcastListPrivate : QObject
   Q_OBJECT
 public:
   PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent = 0);
-  PodcastListPrivate(PodcastList* qq, QObject* parent = 0);
-  PodcastListPrivate(PodcastList* qq, PodcastListPrivate* pp ,QObject* parent = 0);
-  QList<Podcast> list() const;
+  ~PodcastListPrivate();
+  QList<PodcastPtr> list() const;
   QVariant podcasts() const;
     
 private:
-  QSharedPointer<QNetworkReply> m_reply;
+  QNetworkReply* m_reply;
   PodcastList* const q;
   QVariant m_podcasts;
   QNetworkReply::NetworkError m_error;
@@ -54,40 +53,30 @@ private slots:
 
 };
 
-
-
 using namespace mygpo;
 
 
 PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent) : QObject ( parent ), m_reply ( reply ), q(qq)
 {
-  QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-}
-
-PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QObject* parent) : QObject(parent), m_reply ( 0 ), q(qq), m_podcasts ( QVariant() )
-{
-}
-
-PodcastListPrivate::PodcastListPrivate(PodcastList* qq, 
-		PodcastListPrivate* pp, QObject* parent):
-		QObject(parent), m_reply( pp->m_reply ), q(qq), m_podcasts(pp->m_podcasts), m_error(pp->m_error)
-{
-	if (m_reply != 0) {
-		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-	}
+  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
 
-
-QList< Podcast > PodcastListPrivate::list() const
+PodcastListPrivate::~PodcastListPrivate()
 {
-  QList<Podcast> list;
+    if (m_reply)
+        delete m_reply;
+}
+
+
+QList< PodcastPtr > PodcastListPrivate::list() const
+{
+  QList<PodcastPtr> list;
   QVariantList varList = m_podcasts.toList();
   foreach ( QVariant var,varList )
   {
-    list.append ( var.value<mygpo::Podcast>() );
+    list.append ( var.value<mygpo::PodcastPtr>() );
   }
   return list;
 }
@@ -106,7 +95,7 @@ bool PodcastListPrivate::parse ( const QVariant& data )
     foreach ( QVariant var,varList )
     {
         QVariant v;
-        v.setValue<mygpo::Podcast> ( Podcast ( var ) );
+        v.setValue<mygpo::PodcastPtr> ( PodcastPtr ( new Podcast( var ) ) );
         podcastList.append ( v );
     }
     m_podcasts = QVariant ( podcastList );
@@ -129,8 +118,7 @@ bool PodcastListPrivate::parse ( const QByteArray& data )
 void PodcastListPrivate::parseData()
 {
     QJson::Parser parser;
-    //if ( parse ( m_reply->readAll() ) )
-    if ( parse ( m_reply->peek( m_reply->bytesAvailable() ) ) )
+    if ( parse ( m_reply->readAll() ) )
     {
         emit q->finished();
     }
@@ -146,23 +134,9 @@ void PodcastListPrivate::error ( QNetworkReply::NetworkError error )
     emit q->requestError ( error );
 }
 
-
-
-
-
-PodcastList::PodcastList() : d(new PodcastListPrivate(this))
-{
-
-}
-
 PodcastList::PodcastList ( QNetworkReply* reply, QObject* parent ) : QObject(parent), d(new PodcastListPrivate(this,reply))
 {
     
-}
-
-PodcastList::PodcastList ( const PodcastList& other ) : QObject ( other.parent() ) , d(new PodcastListPrivate(this,other.d))
-{
-  
 }
 
 PodcastList::~PodcastList()
@@ -170,7 +144,7 @@ PodcastList::~PodcastList()
   delete d;
 }
 
-QList<Podcast> PodcastList::list() const
+QList<PodcastPtr> PodcastList::list() const
 {
    return d->list();
 }
@@ -180,4 +154,4 @@ QVariant PodcastList::podcasts() const
   return d->podcasts();
 }
 
-#include "../build/src/PodcastList.moc"
+#include "PodcastList.moc"

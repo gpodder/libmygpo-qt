@@ -23,7 +23,7 @@
 #ifndef TAG_H
 #define TAG_H
 
-#include <QObject>
+#include <QSharedPointer>
 #include <QNetworkReply>
 
 #include "mygpo_export.h"
@@ -37,21 +37,20 @@ class MYGPO_EXPORT Tag : public QObject
     Q_PROPERTY(uint usage READ usage CONSTANT)
 
 public:
-    Tag(QString tag, uint usage, QObject* parent = 0);
     Tag(const QVariant& variant, QObject* parent = 0);
-    Tag(const Tag& other);
-    Tag();
     virtual ~Tag();
-    Tag operator=(const Tag& other);
     const QString tag() const;
     uint usage() const;
 private:
+    Q_DISABLE_COPY(Tag)
     TagPrivate* const d;
     friend class TagPrivate;
 };
 
+typedef QSharedPointer<Tag> TagPtr;
+
 }
 
-Q_DECLARE_METATYPE(mygpo::Tag);
+Q_DECLARE_METATYPE(mygpo::TagPtr);
 
 #endif // TAG_H

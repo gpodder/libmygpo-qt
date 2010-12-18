@@ -29,10 +29,9 @@ class TagPrivate : public QObject
     Q_OBJECT
 
 public:
-    TagPrivate(Tag* qq, QString tag, uint usage, QObject* parent = 0);
-    TagPrivate(Tag* qq, const QVariant& variant, QObject* parent = 0);
-    TagPrivate(Tag* qq, QObject* parent = 0 );
-    TagPrivate (Tag* qq, TagPrivate* pp, QObject* parent = 0);
+    TagPrivate(Tag* qq, const QVariant& variant);
+    //TagPrivate(Tag* qq, QObject* parent = 0 );
+    //TagPrivate (Tag* qq, TagPrivate* pp, QObject* parent = 0);
     const QString tag() const;
     uint usage() const;
 private:
@@ -43,22 +42,7 @@ private:
     bool parse(const QVariant& data);
 };
 
-TagPrivate::TagPrivate(Tag* qq, QObject* parent) : QObject(parent), q(qq)
-{
-
-}
-
-TagPrivate::TagPrivate(Tag* qq, TagPrivate* pp, QObject* parent) : QObject(parent), q(qq), m_tag(pp->m_tag), m_usage(pp->m_usage)
-{
-
-}
-
-TagPrivate::TagPrivate (Tag* qq, QString tag, uint usage, QObject* parent ) : QObject ( parent ), q(qq), m_tag ( tag ), m_usage ( usage )
-{
-
-}
-
-TagPrivate::TagPrivate (Tag* qq, const QVariant& variant, QObject* parent ) : QObject ( parent ), q(qq)
+TagPrivate::TagPrivate (Tag* qq, const QVariant& variant) : q(qq)
 {
     parse ( variant );
 }
@@ -89,24 +73,7 @@ bool TagPrivate::parse ( const QVariant& data )
     return true;
 }
 
-
-
-Tag::Tag ( QString tag, uint usage, QObject* parent ) : QObject ( parent ), d(new TagPrivate(this, tag, usage))
-{
-
-}
-
 Tag::Tag ( const QVariant& variant, QObject* parent ) : QObject ( parent ), d(new TagPrivate(this, variant))
-{
-
-}
-
-Tag::Tag ( const Tag& other ) : QObject ( other.parent() ), d(new TagPrivate(this,other.d))
-{
-
-}
-
-Tag::Tag() : d(new TagPrivate(this))
 {
 
 }
@@ -114,11 +81,6 @@ Tag::Tag() : d(new TagPrivate(this))
 Tag::~Tag()
 {
 	delete d;
-}
-
-Tag Tag::operator= ( const Tag& other )
-{
-    return Tag ( other );
 }
 
 const QString Tag::tag() const
@@ -133,4 +95,4 @@ uint Tag::usage() const
 
 }
 
-#include "../build/src/Tag.moc"
+#include "Tag.moc"

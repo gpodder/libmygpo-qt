@@ -31,14 +31,13 @@ class TagListPrivate : public QObject
 {
     Q_OBJECT
 public:
-    TagListPrivate ( TagList* qq, QNetworkReply* reply, QObject* parent = 0 );
-    TagListPrivate ( TagList* qq, TagListPrivate* pp, QObject* parent = 0);
-
-    QList<Tag> list() const;
+    TagListPrivate ( TagList* qq, QNetworkReply* reply );
+    ~TagListPrivate();
+    QList<TagPtr> list() const;
     QVariant tags() const;
 private:
     TagList* const q;
-    QSharedPointer<QNetworkReply> m_reply;
+    QNetworkReply* m_reply;
     QVariant m_tags;
 
     QNetworkReply::NetworkError m_error;
@@ -50,28 +49,25 @@ private slots:
     void error(QNetworkReply::NetworkError error);
 };
 
-TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply, QObject* parent ) : QObject ( parent ), q(qq), m_reply ( reply )
+TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply ) : q(qq), m_reply ( reply )
 {
-	QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-	QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-TagListPrivate::TagListPrivate ( TagList* qq, TagListPrivate* pp, QObject* parent) : QObject (parent), q(qq), m_reply(pp->m_reply),
-		m_tags(pp->m_tags), m_error(pp->m_error)
+TagListPrivate::~TagListPrivate()
 {
-	if (m_reply != 0) {
-		QObject::connect ( &(*m_reply),SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-		QObject::connect ( &(*m_reply),SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
-	}
+    if (m_reply)
+        delete m_reply;
 }
 
-QList<Tag> TagListPrivate::list() const
+QList<TagPtr> TagListPrivate::list() const
 {
-    QList<Tag> list;
+    QList<TagPtr> list;
     QVariantList varList = m_tags.toList();
     foreach ( QVariant var,varList )
     {
-        list.append ( var.value<mygpo::Tag>() );
+        list.append ( var.value<mygpo::TagPtr>() );
     }
     return list;
 }
@@ -90,7 +86,7 @@ bool TagListPrivate::parse(const QVariant& data)
     foreach (QVariant var,varList)
     {
         QVariant v;
-        v.setValue<mygpo::Tag>(Tag(var));
+        v.setValue<mygpo::TagPtr>(TagPtr(new Tag(var)));
         tagList.append(v);
     }
     m_tags = QVariant( tagList);
@@ -125,32 +121,26 @@ void TagListPrivate::error(QNetworkReply::NetworkError error)
     emit q->requestError(error);
 }
 
-
-
-
 TagList::TagList ( QNetworkReply* reply, QObject* parent) : d(new TagListPrivate(this,reply))
 {
 
 }
-TagList::TagList ( const TagList& other ) : QObject(other.parent()), d(new TagListPrivate(this,other.d))
-{
 
-}
 TagList::~TagList()
 {
 	delete d;
 }
 
-QList<Tag> TagList::list() const
+QList<TagPtr> TagList::list() const
 {
 	return d->list();
 }
+
 QVariant TagList::tags() const
 {
 	return d->tags();
 }
 
-
 }
 
-#include "../build/src/TagList.moc"
+#include "TagList.moc"

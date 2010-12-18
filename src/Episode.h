@@ -32,7 +32,9 @@
 #include "mygpo_export.h"
 
 namespace mygpo {
-  class EpisodePrivate;
+    
+class EpisodePrivate;
+
 class MYGPO_EXPORT Episode : public QObject
 {
     Q_OBJECT
@@ -45,13 +47,9 @@ class MYGPO_EXPORT Episode : public QObject
     Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
     
 public:
-    Episode();
     Episode(QNetworkReply* reply, QObject* parent = 0);
     Episode(const QVariant& variant, QObject* parent = 0);
-    Episode(const QUrl& url, const QString& title, const QUrl& podcastUrl, const QString& podcastTitle, const QString& description, const QUrl& website, const QUrl& mygpoUrl, QObject* parent = 0);
     virtual ~Episode();
-    //Episode(const mygpo::Episode& other);
-    //Episode operator=(const mygpo::Episode& other);
     QUrl url() const;
     QString title() const;
     QUrl podcastUrl() const;
@@ -60,6 +58,7 @@ public:
     QUrl website() const;
     QUrl mygpoUrl() const;
 private:
+    Q_DISABLE_COPY(Episode)
     EpisodePrivate* const d;
     friend class EpisodePrivate;
 signals:

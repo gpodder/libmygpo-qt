@@ -91,7 +91,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastList toplist ( uint count );
+    PodcastListPtr toplist ( uint count );
 
     /**
      * Returns the Result for the Simple API Call "Searching for Podcasts"
@@ -99,7 +99,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastList search ( const QString& query );
+    PodcastListPtr search ( const QString& query );
 
     /**
      * Returns the Result for the Simple API Call "Downloading podcast suggestions"
@@ -108,7 +108,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastList suggestions ( uint count );
+    PodcastListPtr suggestions ( uint count );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcasts of a Tag"
@@ -117,7 +117,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastList podcastsOfTag ( uint count, const QString& tag );
+    PodcastListPtr podcastsOfTag ( uint count, const QString& tag );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcast Data"
@@ -125,7 +125,7 @@ public:
      * @return Podcast Object containing the Data from gPodder
      *
      */
-    Podcast podcastData ( const QUrl& podcasturl );
+    PodcastPtr podcastData ( const QUrl& podcasturl );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Episode Data"
@@ -150,7 +150,7 @@ public:
      * @return List of Tag Objects containing the Data from gPodder
      *
      */
-    TagList topTags ( uint count );
+    TagListPtr topTags ( uint count );
 
     /**
      * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
@@ -164,7 +164,6 @@ public:
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 
 private:
-    //RequestHandler m_requestHandler;
     ApiRequestPrivate* const d;
 
 };

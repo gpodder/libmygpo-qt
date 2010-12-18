@@ -23,15 +23,17 @@
 #ifndef PODCAST_H
 #define PODCAST_H
 
-#include <QObject>
 #include <QUrl>
 #include <QString>
 #include <QNetworkReply>
+#include <QSharedPointer>
 
 #include "mygpo_export.h"
 
 namespace mygpo {
+    
 class PodcastPrivate;
+
 class MYGPO_EXPORT Podcast : public QObject
 {
     Q_OBJECT
@@ -47,12 +49,8 @@ class MYGPO_EXPORT Podcast : public QObject
     
 public:
     Podcast(QNetworkReply* reply,QObject* parent = 0);
-    Podcast(const QUrl& url, const QString& title, const QString& description, int subscribers, const QUrl& logoUrl, const QUrl& website, const QUrl& mygpolink, QObject* parent = NULL);
     Podcast(const QVariant& variant, QObject* parent = 0);
-    Podcast(const mygpo::Podcast& other);
-    Podcast();
     virtual ~Podcast();
-    Podcast operator=(const mygpo::Podcast& other);
     //Getters
     QUrl url() const;
     QString title() const;
@@ -64,6 +62,7 @@ public:
     QUrl mygpoUrl() const;
 
 private:
+    Q_DISABLE_COPY(Podcast)
     PodcastPrivate* const d;
     friend class PodcastPrivate;
     bool m_copy;		//true if this object was created by the copy-ctor
@@ -76,8 +75,10 @@ signals:
     void requestError(QNetworkReply::NetworkError error);
 };
 
+typedef QSharedPointer<Podcast> PodcastPtr;
+
 }
 
-Q_DECLARE_METATYPE(mygpo::Podcast);
+Q_DECLARE_METATYPE(mygpo::PodcastPtr);
 
 #endif // PODCAST_H
