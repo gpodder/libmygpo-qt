@@ -23,6 +23,7 @@
 #include <QVariant>
 #include <QList>
 #include <QUrl>
+#include <QString>
 
 #include <serializer.h>
 #include <parser.h>
@@ -43,6 +44,17 @@ QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList
     return jsonByteArray;
 }
 
+QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QString >& set, QList< QString >& remove)
+{
+    QJson::Serializer serializer;
+    QVariantMap jsonData;
+    QVariant setVar(stringMapToQVariantMap(set));
+    QVariant removeVar(stringListToQVariantList(remove));
+    jsonData.insert(QString(QLatin1String("set")),setVar);
+    jsonData.insert(QString(QLatin1String("remove")),removeVar);
+    QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
+    return jsonByteArray;
+}
 
 QVariantList JsonParser::urlListToQVariantList(const QList< QUrl >& urls)
 {
@@ -52,4 +64,23 @@ QVariantList JsonParser::urlListToQVariantList(const QList< QUrl >& urls)
         list.append(var);
     }
     return list;
+}
+
+QVariantList JsonParser::stringListToQVariantList(const QList< QString >& strings)
+{
+    QVariantList list;
+    foreach (const QString& str,strings) {
+        QVariant var(str);
+        list.append(var);
+    }
+    return list;
+}
+
+QVariantMap mygpo::JsonParser::stringMapToQVariantMap(const QMap< QString, QString >& stringmap)
+{
+    QVariantMap map;
+    foreach(const QString& str,stringmap.keys() ) {
+        map.insert(str,QVariant(stringmap.value(str)));
+    }
+    return map;
 }

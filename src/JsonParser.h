@@ -26,8 +26,10 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QList>
+#include <QMap>
 
 class QUrl;
+class QString;
 
 namespace mygpo {
 
@@ -36,8 +38,11 @@ class JsonParser
 
 public:
     static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
+    static QByteArray saveSettingsToJSON(const QMap<QString, QString >& set, QList<QString>& remove);
 private:
     static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
+    static QVariantList stringListToQVariantList(const QList<QString>& strings);
+    static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
 };
 
 }
