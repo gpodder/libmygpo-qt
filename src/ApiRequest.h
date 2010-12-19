@@ -165,19 +165,26 @@ public:
      */
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
     
-    SettingsPtr accountSettings( const QString& username );
+    SettingsPtr accountSettings ( const QString& username );
     
     SettingsPtr deviceSettings ( const QString& username, const QString& device );
     
     SettingsPtr podcastSettings ( const QString& username, const QString& podcastUrl );
     
     SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
+    
+    SettingsPtr setAccountSettings ( const QString& username, QMap<QString, QString >& set, const QList<QString>& remove);
+    
+    SettingsPtr setDeviceSettings ( const QString& username, const QString& device, QMap<QString, QString >& set, const QList<QString>& remove);
+    
+    SettingsPtr setPodcastSettings ( const QString& username, const QString& podcastUrl, QMap<QString, QString >& set, const QList<QString>& remove);
+    
+    SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QString >& set, const QList<QString>& remove);
 
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
     
 private:
     ApiRequestPrivate* const d;
-
 };
 
 }

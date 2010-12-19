@@ -44,7 +44,7 @@ QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList
     return jsonByteArray;
 }
 
-QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QString >& set, QList< QString >& remove)
+QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QString >& set, const QList< QString >& remove)
 {
     QJson::Serializer serializer;
     QVariantMap jsonData;

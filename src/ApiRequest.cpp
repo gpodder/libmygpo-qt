@@ -57,6 +57,10 @@ public:
     SettingsPtr deviceSettings ( const QString& username, const QString& device );
     SettingsPtr podcastSettings ( const QString& username, const QString& podcastUrl );
     SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
+    SettingsPtr setAccountSettings ( const QString& username, QMap<QString, QString >& set, const QList<QString>& remove);
+    SettingsPtr setDeviceSettings ( const QString& username, const QString& device, QMap<QString, QString >& set, const QList<QString>& remove);
+    SettingsPtr setPodcastSettings ( const QString& username, const QString& podcastUrl, QMap<QString, QString >& set, const QList<QString>& remove);
+    SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
 private:
     RequestHandler m_requestHandler;
@@ -221,6 +225,46 @@ SettingsPtr ApiRequestPrivate::episodeSettings(const QString& username, const QS
     return settings;
 }
 
+SettingsPtr ApiRequestPrivate::setAccountSettings(const QString& username, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    QUrl requesturl = UrlBuilder::getAccountSettingsUrl( username );
+    QNetworkReply *reply;
+    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    reply = m_requestHandler.postRequest(postData,requesturl);
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
+SettingsPtr ApiRequestPrivate::setDeviceSettings(const QString& username, const QString& device, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    QUrl requesturl = UrlBuilder::getDeviceSettingsUrl( username, device );
+    QNetworkReply *reply;
+    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    reply = m_requestHandler.postRequest(postData,requesturl);
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
+SettingsPtr ApiRequestPrivate::setPodcastSettings(const QString& username, const QString& podcastUrl, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    QUrl requesturl = UrlBuilder::getPodcastSettingsUrl( username, podcastUrl );
+    QNetworkReply *reply;
+    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    reply = m_requestHandler.postRequest(postData,requesturl);
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
+SettingsPtr ApiRequestPrivate::setEpisodeSettings(const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    QUrl requesturl = UrlBuilder::getEpisodeSettingsUrl( username, podcastUrl, episodeUrl );
+    QNetworkReply *reply;
+    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    reply = m_requestHandler.postRequest(postData,requesturl);
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
 DeviceUpdatesPtr ApiRequestPrivate::deviceUpdates(const QString& username, const QString& deviceId, qlonglong timestamp)
 {
     QUrl requesturl = UrlBuilder::getDeviceUpdatesUrl(username, deviceId, timestamp);
@@ -322,6 +366,26 @@ SettingsPtr ApiRequest::podcastSettings(const QString& username, const QString& 
 SettingsPtr ApiRequest::episodeSettings(const QString& username, const QString& podcastUrl, const QString& episodeUrl)
 {
     return d->episodeSettings( username, podcastUrl, episodeUrl );
+}
+
+SettingsPtr ApiRequest::setAccountSettings(const QString& username, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    return d->setAccountSettings(username,set,remove);
+}
+
+SettingsPtr ApiRequest::setDeviceSettings(const QString& username, const QString& device, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    return d->setDeviceSettings(username,device,set,remove);
+}
+
+SettingsPtr ApiRequest::setPodcastSettings(const QString& username, const QString& podcastUrl, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    return d->setPodcastSettings(username,podcastUrl,set,remove);
+}
+
+SettingsPtr ApiRequest::setEpisodeSettings(const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap< QString, QString >& set, const QList< QString >& remove)
+{
+    return d->setEpisodeSettings(username,podcastUrl,episodeUrl,set,remove);
 }
 
 DeviceUpdatesPtr ApiRequest::deviceUpdates(const QString& username, const QString& deviceId, qlonglong timestamp)

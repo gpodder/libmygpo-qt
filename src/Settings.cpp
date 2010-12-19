@@ -105,15 +105,19 @@ bool SettingsPrivate::parse(const QByteArray& data)
 
 void SettingsPrivate::parseData()
 {
-    QJson::Parser parser;
-    qDebug() << m_reply->peek(m_reply->bytesAvailable());
-    if ( parse ( m_reply->readAll()  ) )
-    {
-        emit q->finished();
-    }
-    else
-    {
-        emit q->parseError();
+    if (!m_reply->error()==QNetworkReply::NoError) {
+        error(m_reply->error());
+    } else {
+        QJson::Parser parser;
+        qDebug() << m_reply->peek(m_reply->bytesAvailable());
+        if ( parse ( m_reply->readAll()  ) )
+        {
+            emit q->finished();
+        }
+        else
+        {
+            emit q->parseError();
+        }
     }
 }
 
