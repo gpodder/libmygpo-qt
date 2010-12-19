@@ -24,7 +24,8 @@
 #define URLBUILDER_H
 
 #include <qurl.h>
-#include <qstring.h>
+
+class QString;
 
 namespace mygpo {
   /**
@@ -101,12 +102,20 @@ class UrlBuilder
      */
     static QUrl getAddRemoveSubUrl( const QString& username, const QString& deviceId );
     
+    static QUrl getAccountSettingsUrl( const QString& username );
+    
+    static QUrl getDeviceSettingsUrl( const QString& username, const QString& deviceId );
+    
+    static QUrl getPodcastSettingsUrl( const QString& username, const QString& podcastUrl );
+    
+    static QUrl getEpisodeSettingsUrl( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
+    
   private:
     UrlBuilder() {};
     UrlBuilder( const UrlBuilder& ) {};
-    static const QString _server;
-    static const QString _api2;
-    static const QString _api1;
+    static const QString s_server;
+    static const QString s_api2;
+    static const QString s_api1;
     static QString getFormatExtension( Format f ) ;
     
 };
