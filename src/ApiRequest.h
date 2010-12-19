@@ -36,6 +36,7 @@
 #include "EpisodeList.h"
 #include "PodcastList.h"
 #include "TagList.h"
+#include "Settings.h"
 
 #include <QByteArray>
 #include <QString>
@@ -162,6 +163,14 @@ public:
      *
      */
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+    
+    SettingsPtr accountSettings( const QString& username );
+    
+    SettingsPtr deviceSettings ( const QString& username, const QString& device );
+    
+    SettingsPtr podcastSettings ( const QString& username, const QString& podcastUrl );
+    
+    SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
 
 private:
     ApiRequestPrivate* const d;

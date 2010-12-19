@@ -20,92 +20,78 @@
 * USA                                                                      *
 ***************************************************************************/
 
+#include <QNetworkReply>
 #include <parser.h>
 
-#include "AddRemoveResult.h"
-
 #include <QDebug>
-#include <QSharedPointer>
+
+#include "Settings.h"
 
 namespace mygpo {
 
-class AddRemoveResultPrivate : public QObject
+class SettingsPrivate : public QObject
 {
     Q_OBJECT
+
 public:
-    AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkReply* reply );
-    ~AddRemoveResultPrivate ( );
-    QVariant updateUrls() const;
-    qulonglong timestamp() const;
-    QList<QPair<QUrl, QUrl> > updateUrlsList() const;
+    SettingsPrivate(Settings* qq,QNetworkReply* reply);
+    ~SettingsPrivate();
+    QVariant settings() const;
+    //QMap<QString,QString> settingsMap() const;
+
 private:
-    AddRemoveResult* const q;
-    qulonglong m_timestamp;
-    QVariant m_updateUrls;
+    Settings* const q;
+    QVariant m_settings;
 
     QNetworkReply* m_reply;
     QNetworkReply::NetworkError m_error;
 
     bool parse ( const QVariant& data );
     bool parse ( const QByteArray& data );
+
 private slots:
     void parseData();
     void error ( QNetworkReply::NetworkError error );
+
 };
 
-
-AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkReply* reply ) : q(qq), m_reply ( reply )
+SettingsPrivate::SettingsPrivate(Settings* qq, QNetworkReply* reply): q(qq), m_reply(reply)
 {
     QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
     QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-AddRemoveResultPrivate::~AddRemoveResultPrivate()
+SettingsPrivate::~SettingsPrivate()
 {
     if (m_reply)
         delete m_reply;
 }
 
-
-qulonglong AddRemoveResultPrivate::timestamp() const
+QVariant SettingsPrivate::settings() const
 {
-    return m_timestamp;
+    return m_settings;
 }
 
-QVariant AddRemoveResultPrivate::updateUrls() const
+// The Values of the Settings can be anything ... so it doesn't make sense to parse them ...
+/*
+QMap< QString, QString > SettingsPrivate::settingsMap() const
 {
-    return m_updateUrls;
-}
-
-QList< QPair< QUrl, QUrl > > AddRemoveResultPrivate::updateUrlsList() const
-{
-    QVariantList updateVarList = updateUrls().toList();
-    QList<QPair<QUrl, QUrl > > updateUrls;
-    foreach ( const QVariant& url, updateVarList )
-    {
-        QVariantList urlList = url.toList();
-        QUrl first = QUrl ( urlList.at ( 0 ).toString() );
-        QUrl second = QUrl ( urlList.at ( 1 ).toString() );
-        updateUrls.append ( qMakePair ( first,second ) );
+    QMap< QString, QString > map;
+    QVariantMap varMap = m_settings.toMap();
+    foreach (QString str, varMap.keys()) {
+        qDebug() << str;
+        qDebug() << varMap.value(str).type();
     }
-    return updateUrls;
-}
+    return map;
+}*/
 
-bool AddRemoveResultPrivate::parse ( const QVariant& data )
+bool SettingsPrivate::parse(const QVariant& data)
 {
-    QJson::Parser parser;
-    if (!data.canConvert(QVariant::Map))
-        return false;
-    QVariantMap resultMap = data.toMap();
-    QVariant v = resultMap.value ( QLatin1String ( "timestamp" ) );
-    if (!v.canConvert(QVariant::ULongLong))
-        return false;
-    m_timestamp = v.toULongLong();
-    m_updateUrls = resultMap.value ( QLatin1String ( "update_urls" ) );
+    m_settings = data;
     return true;
 }
 
-bool AddRemoveResultPrivate::parse ( const QByteArray& data )
+bool SettingsPrivate::parse(const QByteArray& data)
 {
     QJson::Parser parser;
     bool ok;
@@ -117,11 +103,11 @@ bool AddRemoveResultPrivate::parse ( const QByteArray& data )
     return ok;
 }
 
-
-void AddRemoveResultPrivate::parseData()
+void SettingsPrivate::parseData()
 {
     QJson::Parser parser;
-    if ( parse ( m_reply->readAll( ) ) )
+    qDebug() << m_reply->peek(m_reply->bytesAvailable());
+    if ( parse ( m_reply->readAll()  ) )
     {
         emit q->finished();
     }
@@ -131,37 +117,38 @@ void AddRemoveResultPrivate::parseData()
     }
 }
 
-void AddRemoveResultPrivate::error ( QNetworkReply::NetworkError error )
+
+void SettingsPrivate::error(QNetworkReply::NetworkError error)
 {
     this->m_error = error;
     emit q->requestError ( error );
 }
 
-AddRemoveResult::AddRemoveResult( QNetworkReply* reply ,QObject* parent ) : QObject(parent), d(new AddRemoveResultPrivate(this, reply))
+}
+
+
+using namespace mygpo;
+
+Settings::Settings(QNetworkReply* reply, QObject* parent): QObject(parent), d(new SettingsPrivate(this,reply))
 {
 
 }
 
-AddRemoveResult::~AddRemoveResult ()
+Settings::~Settings()
 {
-	delete d;
+    delete d;
 }
 
-QVariant AddRemoveResult::updateUrls() const
+QVariant Settings::settings() const
 {
-	return d->updateUrls();
+    return d->settings();
 }
 
-qulonglong AddRemoveResult::timestamp() const
+/*
+QMap< QString, QString > Settings::settingsMap() const
 {
-	return d->timestamp();
-}
+    return d->settingsMap();
+}*/
 
-QList<QPair<QUrl, QUrl> > AddRemoveResult::updateUrlsList() const
-{
-	return d->updateUrlsList();
-}
+#include "Settings.moc"
 
-}
-
-#include "AddRemoveResult.moc"

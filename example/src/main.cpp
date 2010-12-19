@@ -31,6 +31,7 @@
 #include <EpisodeList.h>
 #include <TagList.h>
 #include <ApiRequest.h>
+#include <Settings.h>
 
 using namespace mygpo;
 /*
@@ -368,7 +369,7 @@ int main(int argc, char **argv)
     loop.connect( &(*ret), SIGNAL(parseError()), SLOT(quit()));
     loop.exec();
     qDebug() << ret->title();*/
-    
+    /*
     TagListPtr ret =  req.topTags(10);
     loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
@@ -379,7 +380,16 @@ int main(int argc, char **argv)
     foreach (TagPtr tag, ret->list()) {
         qDebug() << tag->tag();
     }
-      
+    */
+    
+    SettingsPtr ptr = req.deviceSettings( "ase23", "dev0" );
+    
+    loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
+    
+    loop.exec();
+    
+    
+    qDebug() << ptr->settings().toMap();
     
     return 0;
 }

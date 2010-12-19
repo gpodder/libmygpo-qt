@@ -24,8 +24,11 @@
 #include "ApiRequest.h"
 #include "UrlBuilder.h"
 #include "JsonParser.h"
-#include "RequestExceptions.h"
+//#include "RequestExceptions.h"
 #include "RequestHandler.h"
+
+#include <QDebug>
+
 #include <QLatin1String>
 
 namespace mygpo
@@ -50,6 +53,10 @@ public:
     EpisodeListPtr favoriteEpisodes ( const QString& username );
     TagListPtr topTags ( uint count );
     AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+    SettingsPtr accountSettings( const QString& username );
+    SettingsPtr deviceSettings ( const QString& username, const QString& device );
+    SettingsPtr podcastSettings ( const QString& username, const QString& podcastUrl );
+    SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
 private:
     RequestHandler m_requestHandler;
 };
@@ -176,6 +183,43 @@ AddRemoveResultPtr ApiRequestPrivate::addRemoveSubscriptions ( const QString& us
     return addRemoveResult;
 }
 
+SettingsPtr ApiRequestPrivate::accountSettings(const QString& username)
+{
+    QUrl requesturl = UrlBuilder::getAccountSettingsUrl( username );
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest( requesturl );
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
+SettingsPtr ApiRequestPrivate::deviceSettings(const QString& username, const QString& device)
+{
+    QUrl requesturl = UrlBuilder::getDeviceSettingsUrl( username, device );
+    qDebug() << requesturl;
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest( requesturl );
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
+SettingsPtr ApiRequestPrivate::podcastSettings(const QString& username, const QString& podcastUrl)
+{
+    QUrl requesturl = UrlBuilder::getPodcastSettingsUrl( username, podcastUrl );
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest( requesturl );
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
+SettingsPtr ApiRequestPrivate::episodeSettings(const QString& username, const QString& podcastUrl, const QString& episodeUrl)
+{
+    QUrl requesturl = UrlBuilder::getEpisodeSettingsUrl( username, podcastUrl, episodeUrl );
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest( requesturl );
+    SettingsPtr settings(new Settings ( reply ));
+    return settings;
+}
+
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
 }
@@ -247,4 +291,24 @@ TagListPtr ApiRequest::topTags(uint count)
 AddRemoveResultPtr ApiRequest::addRemoveSubscriptions(const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove)
 {
     return d->addRemoveSubscriptions(username,device,add,remove);
+}
+
+SettingsPtr ApiRequest::accountSettings(const QString& username)
+{
+    return d->accountSettings( username );
+}
+
+SettingsPtr ApiRequest::deviceSettings(const QString& username, const QString& device)
+{
+    return d->deviceSettings( username, device );
+}
+
+SettingsPtr ApiRequest::podcastSettings(const QString& username, const QString& podcastUrl)
+{
+    return d->podcastSettings( username, podcastUrl );
+}
+
+SettingsPtr ApiRequest::episodeSettings(const QString& username, const QString& podcastUrl, const QString& episodeUrl)
+{
+    return d->episodeSettings( username, podcastUrl, episodeUrl );
 }
