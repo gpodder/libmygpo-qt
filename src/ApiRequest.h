@@ -37,6 +37,7 @@
 #include "PodcastList.h"
 #include "TagList.h"
 #include "Settings.h"
+#include "DeviceUpdates.h"
 
 #include <QByteArray>
 #include <QString>
@@ -172,6 +173,8 @@ public:
     
     SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
 
+    DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
+    
 private:
     ApiRequestPrivate* const d;
 

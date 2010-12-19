@@ -57,6 +57,7 @@ public:
     SettingsPtr deviceSettings ( const QString& username, const QString& device );
     SettingsPtr podcastSettings ( const QString& username, const QString& podcastUrl );
     SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
+    DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
 private:
     RequestHandler m_requestHandler;
 };
@@ -220,6 +221,16 @@ SettingsPtr ApiRequestPrivate::episodeSettings(const QString& username, const QS
     return settings;
 }
 
+DeviceUpdatesPtr ApiRequestPrivate::deviceUpdates(const QString& username, const QString& deviceId, qlonglong timestamp)
+{
+    QUrl requesturl = UrlBuilder::getDeviceUpdatesUrl(username, deviceId, timestamp);
+    QNetworkReply* reply;
+    reply = m_requestHandler.getRequest( requesturl );
+    DeviceUpdatesPtr updates(new DeviceUpdates(reply));
+    return updates;
+}
+
+
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
 }
@@ -312,3 +323,9 @@ SettingsPtr ApiRequest::episodeSettings(const QString& username, const QString& 
 {
     return d->episodeSettings( username, podcastUrl, episodeUrl );
 }
+
+DeviceUpdatesPtr ApiRequest::deviceUpdates(const QString& username, const QString& deviceId, qlonglong timestamp)
+{
+    return d->deviceUpdates(username, deviceId, timestamp);
+}
+

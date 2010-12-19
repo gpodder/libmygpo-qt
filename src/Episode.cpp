@@ -81,7 +81,7 @@ EpisodePrivate::EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* paren
   QObject::connect(m_reply,SIGNAL(error(QNetworkReply::NetworkError)), this,SLOT(error(QNetworkReply::NetworkError)));
 }
 
-EpisodePrivate::EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent): QObject(parent), q(qq)
+EpisodePrivate::EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent): QObject(parent), m_reply(0), q(qq)
 {
     parse(variant);
 }

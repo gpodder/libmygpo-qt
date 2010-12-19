@@ -32,7 +32,9 @@
 #include <TagList.h>
 #include <ApiRequest.h>
 #include <Settings.h>
-
+#include <DeviceUpdates.h>
+#include <QDateTime>
+ 
 using namespace mygpo;
 /*
 void printTitle(const QString& title) {
@@ -68,6 +70,7 @@ void printEpisode(const Episode& episode) {
 	qDebug() << "url:\t" << episode.url();
 	qDebug() << "";
 }
+*/
 /*
 void printEpisodeList(const EpisodeList& episodeList) {
 	QList<Episode> list;
@@ -381,7 +384,7 @@ int main(int argc, char **argv)
         qDebug() << tag->tag();
     }
     */
-    
+    /*
     SettingsPtr ptr = req.deviceSettings( "ase23", "dev0" );
     
     loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
@@ -390,6 +393,30 @@ int main(int argc, char **argv)
     
     
     qDebug() << ptr->settings().toMap();
+    */
     
+        
+    DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
+    loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    qDebug() << "AddList:";
+    foreach(const PodcastPtr& p, ptr->addList()) {
+        qDebug() << p->url();
+    }
+    qDebug() << "RemoveList:";
+    foreach(const QUrl& url, ptr->removeList()) {
+        qDebug() << url;
+    }
+    qDebug() << "UpdateList:";
+    foreach(const EpisodePtr& e, ptr->updateList()) {
+        qDebug() << e->podcastUrl();
+    }
+    
+    qDebug() << "Timestamp:";
+    qDebug() << ptr->timestamp();
+    qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();
     return 0;
 }
+
