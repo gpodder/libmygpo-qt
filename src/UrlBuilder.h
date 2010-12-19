@@ -110,6 +110,13 @@ class UrlBuilder
     
     static QUrl getEpisodeSettingsUrl( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
     
+    static QUrl getDeviceListUrl( const QString& username );
+    
+    static QUrl getRenameDeviceUrl( const QString& username, const QString& deviceId );
+    
+    static QUrl getDeviceUpdatesUrl( const QString& username, const QString& deviceId, qlonglong timestamp );
+    
+    
   private:
     UrlBuilder() {};
     UrlBuilder( const UrlBuilder& ) {};

@@ -106,6 +106,22 @@ QUrl UrlBuilder::getEpisodeSettingsUrl( const QString& username, const QString& 
     return QUrl(s_server+s_api2+QLatin1String( "/settings/" )+username+QLatin1String("/episode")+QLatin1String( ".json" )+QLatin1String("?podcast=")+podcastUrl+QLatin1String("&episode=")+episodeUrl);
 }
 
+QUrl UrlBuilder::getDeviceListUrl ( const QString& username )
+{
+    return QUrl(s_server+s_api2+QLatin1String( "/devices/" )+username+QLatin1String( ".json" ) );
+}
+
+QUrl UrlBuilder::getDeviceUpdatesUrl ( const QString& username, const QString& deviceId, qlonglong timestamp )
+{
+    QString tmp = QString::number(timestamp < 0 ? 0 : timestamp);
+    return QUrl(s_server+s_api2+QLatin1String( "/updates/" )+username+QLatin1String("/")+deviceId+QLatin1String( ".json?since=" )+tmp);
+}
+
+QUrl UrlBuilder::getRenameDeviceUrl ( const QString& username, const QString& deviceId )
+{
+    return QUrl(s_server+s_api2+QLatin1String( "/devices/" )+username+QLatin1String("/")+deviceId+QLatin1String(".json"));
+}
+
 QString UrlBuilder::getFormatExtension(Format f)
 {
     QString ret;
