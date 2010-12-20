@@ -396,7 +396,7 @@ int main(int argc, char **argv)
     */
     
         
-    DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
+    /*DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
     loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
@@ -416,7 +416,13 @@ int main(int argc, char **argv)
     
     qDebug() << "Timestamp:";
     qDebug() << ptr->timestamp();
-    qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();
+    qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();*/
+    
+    QNetworkReply* r = req.renameDevice("ase23","dev0","1337","other");
+    loop.connect(r, SIGNAL(finished()), SLOT(quit()));
+    loop.exec();
+    qDebug() << r->readAll();
+    
     return 0;
 }
 

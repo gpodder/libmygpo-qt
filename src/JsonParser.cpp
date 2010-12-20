@@ -84,3 +84,15 @@ QVariantMap mygpo::JsonParser::stringMapToQVariantMap(const QMap< QString, QStri
     }
     return map;
 }
+
+QByteArray mygpo::JsonParser::renameDeviceStringToJSON(const QString& caption, const QString& type ) 
+{
+  QJson::Serializer serializer;
+  QVariantMap jsonData;
+  QVariant captionVar(caption);
+  QVariant typeVar(type);
+  jsonData.insert(QString(QLatin1String("caption")),captionVar);
+  jsonData.insert(QString(QLatin1String("type")),typeVar);
+  QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
+  return jsonByteArray;   
+}

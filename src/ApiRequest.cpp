@@ -62,6 +62,7 @@ public:
     SettingsPtr setPodcastSettings ( const QString& username, const QString& podcastUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
 private:
     RequestHandler m_requestHandler;
 };
@@ -274,6 +275,14 @@ DeviceUpdatesPtr ApiRequestPrivate::deviceUpdates(const QString& username, const
     return updates;
 }
 
+QNetworkReply* ApiRequestPrivate::renameDevice(const QString& username , const QString& deviceId ,const QString& caption, const QString& type)
+{
+   QUrl requestUrl = UrlBuilder::getRenameDeviceUrl(username, deviceId);
+   QNetworkReply* reply;
+   QByteArray data = JsonParser::renameDeviceStringToJSON(caption,type);
+   reply = m_requestHandler.postRequest(data, requestUrl);
+   return reply;
+}
 
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
@@ -393,3 +402,7 @@ DeviceUpdatesPtr ApiRequest::deviceUpdates(const QString& username, const QStrin
     return d->deviceUpdates(username, deviceId, timestamp);
 }
 
+QNetworkReply* ApiRequest::renameDevice(const QString& username , const QString& deviceId, const QString& caption, const QString& type)
+{
+   return d->renameDevice(username, deviceId, caption, type);
+}

@@ -183,6 +183,8 @@ public:
 
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
     
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
+    
 private:
     ApiRequestPrivate* const d;
 };
