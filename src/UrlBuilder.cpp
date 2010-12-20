@@ -111,7 +111,7 @@ QUrl UrlBuilder::getDeviceListUrl ( const QString& username )
     return QUrl(s_server+s_api2+QLatin1String( "/devices/" )+username+QLatin1String( ".json" ) );
 }
 
-QUrl UrlBuilder::getDeviceUpdatesUrl ( const QString& username, const QString& deviceId, qlonglong timestamp )
+QUrl UrlBuilder::getDeviceUpdatesUrl ( const QString& username, const QString& deviceId, qulonglong timestamp )
 {
     QString tmp = QString::number(timestamp < 0 ? 0 : timestamp);
     return QUrl(s_server+s_api2+QLatin1String( "/updates/" )+username+QLatin1String("/")+deviceId+QLatin1String( ".json?since=" )+tmp);
@@ -120,6 +120,50 @@ QUrl UrlBuilder::getDeviceUpdatesUrl ( const QString& username, const QString& d
 QUrl UrlBuilder::getRenameDeviceUrl ( const QString& username, const QString& deviceId )
 {
     return QUrl(s_server+s_api2+QLatin1String( "/devices/" )+username+QLatin1String("/")+deviceId+QLatin1String(".json"));
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrl(const QString& username)
+{
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json"));
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrlByPodcast(const QString& username, const QString& podcastUrl)
+{
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?podcast=")+podcastUrl);
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrlByDevice(const QString& username, const QString& deviceId)
+{
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?device=")+deviceId);
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrlByTimestamp(const QString& username, const qulonglong since)
+{
+	QString tmp = QString::number(since);
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?since=")+tmp);
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrlByPodcastAndTimestamp(const QString& username, const QString& podcastUrl, const qulonglong since)
+{
+	QString tmp = QString::number(since);
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?podcast=")+podcastUrl+QLatin1String("&since=")+tmp);
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrlByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since)
+{
+	QString tmp = QString::number(since);
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?device=")+deviceId+QLatin1String("&since=")+tmp);
+}
+
+QUrl UrlBuilder::getEpisodeActionsUrlByPodcastAndAggregate(const QString& username, const QString& deviceId, const bool aggregated)
+{
+	QString agg;
+	if (aggregated)
+		agg = QLatin1String("true");
+	else
+		agg = QLatin1String("false");
+
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?podcast=")+deviceId+QLatin1String("&aggregated=")+agg);
 }
 
 QString UrlBuilder::getFormatExtension(Format f)

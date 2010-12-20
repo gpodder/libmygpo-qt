@@ -29,6 +29,7 @@
 
 #include <PodcastList.h>
 #include <EpisodeList.h>
+#include <EpisodeActionList.h>
 #include <TagList.h>
 #include <ApiRequest.h>
 #include <Settings.h>
@@ -395,6 +396,17 @@ int main(int argc, char **argv)
     qDebug() << ptr->settings().toMap();
     */
     
+    EpisodeActionListPtr episodeActions = req.episodeActions("ase23");
+    loop.connect(episodeActions.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(episodeActions.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(episodeActions.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    qDebug() << "EpisodeActions";
+    qDebug() << "timestamp: " << episodeActions->timestamp();
+   /* foreach(EpisodeActionPtr episodeAction, episodeActions->list()) {
+            qDebug() << episodeAction->podcastUrl();
+    }*/
+
         
     DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
     loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));

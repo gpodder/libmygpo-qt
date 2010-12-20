@@ -114,8 +114,21 @@ class UrlBuilder
     
     static QUrl getRenameDeviceUrl( const QString& username, const QString& deviceId );
     
-    static QUrl getDeviceUpdatesUrl( const QString& username, const QString& deviceId, qlonglong timestamp );
+    static QUrl getDeviceUpdatesUrl( const QString& username, const QString& deviceId, qulonglong timestamp );
     
+    static QUrl getEpisodeActionsUrl(const QString& username);
+
+    static QUrl getEpisodeActionsUrlByPodcast(const QString& username, const QString& podcastUrl);
+
+    static QUrl getEpisodeActionsUrlByDevice(const QString& username, const QString& deviceId);
+
+    static QUrl getEpisodeActionsUrlByTimestamp(const QString& username, const qulonglong since);
+
+    static QUrl getEpisodeActionsUrlByPodcastAndTimestamp(const QString& username, const QString& podcastUrl, const qulonglong since);
+
+    static QUrl getEpisodeActionsUrlByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
+
+    static QUrl getEpisodeActionsUrlByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
     
   private:
     UrlBuilder() {};

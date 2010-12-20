@@ -34,6 +34,7 @@
 #include "Tag.h"
 #include "AddRemoveResult.h"
 #include "EpisodeList.h"
+#include "EpisodeActionList.h"
 #include "PodcastList.h"
 #include "TagList.h"
 #include "Settings.h"
@@ -183,6 +184,20 @@ public:
 
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
     
+    EpisodeActionListPtr episodeActions(const QString& username);
+
+    EpisodeActionListPtr episodeActionsByPodcast(const QString& username, const QString& podcastUrl);
+
+    EpisodeActionListPtr episodeActionsByDevice(const QString& username, const QString& deviceId);
+
+    EpisodeActionListPtr episodeActionsByTimestamp(const QString& username, const qulonglong since);
+
+    EpisodeActionListPtr episodeActionsByPodcastAndTimestamp(const QString& username, const QString& podcastUrl, const qulonglong since);
+
+    EpisodeActionListPtr episodeActionsByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
+
+    EpisodeActionListPtr episodeActionsByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
+
 private:
     ApiRequestPrivate* const d;
 };
