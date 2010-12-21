@@ -62,6 +62,7 @@ public:
     SettingsPtr setPodcastSettings ( const QString& username, const QString& podcastUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
+
     EpisodeActionListPtr episodeActions(const QString& username);
     EpisodeActionListPtr episodeActionsByPodcast(const QString& username, const QString& podcastUrl);
     EpisodeActionListPtr episodeActionsByDevice(const QString& username, const QString& deviceId);
@@ -70,6 +71,7 @@ public:
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
     EpisodeActionListPtr episodeActionsByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
     AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
 
 private:
     RequestHandler m_requestHandler;
@@ -354,6 +356,15 @@ AddRemoveResultPtr ApiRequestPrivate::uploadEpisodeActions(const QString& userna
     return addRemoveResult;
 }
 
+QNetworkReply* ApiRequestPrivate::renameDevice(const QString& username , const QString& deviceId ,const QString& caption, const QString& type)
+{
+   QUrl requestUrl = UrlBuilder::getRenameDeviceUrl(username, deviceId);
+   QNetworkReply* reply;
+   QByteArray data = JsonParser::renameDeviceStringToJSON(caption,type);
+   reply = m_requestHandler.postRequest(data, requestUrl);
+   return reply;
+}
+
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
 }
@@ -509,4 +520,9 @@ EpisodeActionListPtr ApiRequest::episodeActionsByPodcastAndAggregate(const QStri
 
 AddRemoveResultPtr ApiRequest::uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions) {
 	return d->uploadEpisodeActions(username, episodeActions);
+}
+
+QNetworkReply* ApiRequest::renameDevice(const QString& username , const QString& deviceId, const QString& caption, const QString& type)
+{
+   return d->renameDevice(username, deviceId, caption, type);
 }

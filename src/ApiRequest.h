@@ -201,6 +201,8 @@ public:
 
     AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
 
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
+    
 private:
     ApiRequestPrivate* const d;
 };
