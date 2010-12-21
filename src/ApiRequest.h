@@ -38,6 +38,7 @@
 #include "TagList.h"
 #include "Settings.h"
 #include "DeviceUpdates.h"
+#include "DeviceList.h"
 
 #include <QByteArray>
 #include <QString>
@@ -58,7 +59,14 @@ class MYGPO_EXPORT ApiRequest
 {
 public:
 
-
+    enum Type {
+        DESKTOP,
+        LAPTOP,
+        MOBILE,
+        SERVER,
+        OTHER
+    };
+    
     ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam = 0 );
     ApiRequest ( QNetworkAccessManager* nam = 0 );
     ~ApiRequest ( );
@@ -183,7 +191,9 @@ public:
 
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
     
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type);
+    
+    DeviceListPtr listDevices( const QString& username );
     
 private:
     ApiRequestPrivate* const d;

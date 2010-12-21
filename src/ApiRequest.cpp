@@ -27,6 +27,7 @@
 //#include "RequestExceptions.h"
 #include "RequestHandler.h"
 
+
 #include <QDebug>
 
 #include <QLatin1String>
@@ -62,7 +63,9 @@ public:
     SettingsPtr setPodcastSettings ( const QString& username, const QString& podcastUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QString >& set, const QList<QString>& remove);
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type);
+    DeviceListPtr listDevices( const QString& username );
+    
 private:
     RequestHandler m_requestHandler;
 };
@@ -275,14 +278,41 @@ DeviceUpdatesPtr ApiRequestPrivate::deviceUpdates(const QString& username, const
     return updates;
 }
 
-QNetworkReply* ApiRequestPrivate::renameDevice(const QString& username , const QString& deviceId ,const QString& caption, const QString& type)
+QNetworkReply* ApiRequestPrivate::renameDevice(const QString& username , const QString& deviceId ,const QString& caption, ApiRequest::Type type)
 {
    QUrl requestUrl = UrlBuilder::getRenameDeviceUrl(username, deviceId);
    QNetworkReply* reply;
-   QByteArray data = JsonParser::renameDeviceStringToJSON(caption,type);
+   QByteArray data;
+   switch (type) {
+       case ApiRequest::DESKTOP:
+           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("desktop"));
+           break;
+       case ApiRequest::LAPTOP:
+           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("laptop"));
+           break;
+       case ApiRequest::MOBILE:
+           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("mobile"));
+           break;
+       case ApiRequest::SERVER:
+           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("server"));
+           break;
+       case ApiRequest::OTHER:
+           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("other"));
+           break;
+   }
    reply = m_requestHandler.postRequest(data, requestUrl);
    return reply;
 }
+
+DeviceListPtr ApiRequestPrivate::listDevices(const QString& username)
+{
+    QUrl requestUrl = UrlBuilder::getDeviceListUrl(username);
+    QNetworkReply *reply;
+    reply = m_requestHandler.getRequest( requestUrl );
+    DeviceListPtr list(new DeviceList(reply));
+    return list;
+}
+
 
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
@@ -402,7 +432,12 @@ DeviceUpdatesPtr ApiRequest::deviceUpdates(const QString& username, const QStrin
     return d->deviceUpdates(username, deviceId, timestamp);
 }
 
-QNetworkReply* ApiRequest::renameDevice(const QString& username , const QString& deviceId, const QString& caption, const QString& type)
+QNetworkReply* ApiRequest::renameDevice(const QString& username , const QString& deviceId, const QString& caption, ApiRequest::Type type)
 {
    return d->renameDevice(username, deviceId, caption, type);
+}
+
+DeviceListPtr ApiRequest::listDevices(const QString& username)
+{
+    return d->listDevices(username);
 }

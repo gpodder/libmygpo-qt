@@ -34,6 +34,7 @@
 #include <Settings.h>
 #include <DeviceUpdates.h>
 #include <QDateTime>
+#include <DeviceList.h>
  
 using namespace mygpo;
 /*
@@ -418,10 +419,17 @@ int main(int argc, char **argv)
     qDebug() << ptr->timestamp();
     qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();*/
     
-    QNetworkReply* r = req.renameDevice("ase23","dev0","1337","other");
+    /*QNetworkReply* r = req.renameDevice("ase23","dev0","1337",ApiRequest::OTHER);
     loop.connect(r, SIGNAL(finished()), SLOT(quit()));
     loop.exec();
-    qDebug() << r->readAll();
+    qDebug() << r->readAll();*/
+    
+    DeviceListPtr ptr = req.listDevices("ase23");
+    loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    qDebug() << ptr->devicesList();
     
     return 0;
 }
