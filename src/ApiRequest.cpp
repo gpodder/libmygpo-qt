@@ -69,6 +69,7 @@ public:
     EpisodeActionListPtr episodeActionsByPodcastAndTimestamp(const QString& username, const QString& podcastUrl, const qulonglong since);
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
     EpisodeActionListPtr episodeActionsByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
+    AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
 
 private:
     RequestHandler m_requestHandler;
@@ -344,6 +345,15 @@ EpisodeActionListPtr ApiRequestPrivate::episodeActionsByPodcastAndAggregate(cons
     return episodeActions;
 }
 
+AddRemoveResultPtr ApiRequestPrivate::uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions) {
+    QUrl requesturl = UrlBuilder::getEpisodeActionsUrl(username);
+    QNetworkReply *reply;
+    QByteArray postData = JsonParser::episodeActionListToJSON(episodeActions);
+    reply = m_requestHandler.postRequest(postData,requesturl);
+    AddRemoveResultPtr addRemoveResult(new AddRemoveResult ( reply ));
+    return addRemoveResult;
+}
+
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
 {
 }
@@ -497,3 +507,6 @@ EpisodeActionListPtr ApiRequest::episodeActionsByPodcastAndAggregate(const QStri
 	return d->episodeActionsByPodcastAndAggregate(username, podcastUrl, aggregated);
 }
 
+AddRemoveResultPtr ApiRequest::uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions) {
+	return d->uploadEpisodeActions(username, episodeActions);
+}

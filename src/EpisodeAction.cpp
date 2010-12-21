@@ -31,6 +31,7 @@ class EpisodeActionPrivate : QObject {
 
 public:
 	EpisodeActionPrivate(EpisodeAction* qq, const QVariant& variant, QObject* parent = 0);
+	EpisodeActionPrivate(EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
 	virtual ~EpisodeActionPrivate();
 
     QUrl podcastUrl() const;
@@ -60,6 +61,12 @@ private:
 
 EpisodeActionPrivate::EpisodeActionPrivate(EpisodeAction* qq, const QVariant& variant, QObject* parent) : QObject(parent), q(qq) {
 	parse(variant);
+}
+
+EpisodeActionPrivate::EpisodeActionPrivate(EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent)
+	: QObject(parent), q(qq), m_podcastUrl(podcastUrl), m_episodeUrl(episodeUrl), m_deviceName(deviceName), m_action(action), m_timestamp(timestamp), m_started(started), m_position(position), m_total(total)
+{
+
 }
 
 EpisodeActionPrivate::~EpisodeActionPrivate() {
@@ -218,6 +225,12 @@ qulonglong EpisodeActionPrivate::total() const
 // ### End of EpisodeActionPrivate
 
 EpisodeAction::EpisodeAction(const QVariant& variant, QObject* parent): QObject(parent), d(new EpisodeActionPrivate(this,variant))
+{
+
+}
+
+EpisodeAction::EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent)
+	: QObject(parent), d(new EpisodeActionPrivate(this, podcastUrl, episodeUrl, deviceName, action, timestamp, started, position, total))
 {
 
 }

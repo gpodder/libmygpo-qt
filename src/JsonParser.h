@@ -27,6 +27,7 @@
 #include <QVariant>
 #include <QList>
 #include <QMap>
+#include "EpisodeAction.h"
 
 class QUrl;
 class QString;
@@ -39,10 +40,12 @@ class JsonParser
 public:
     static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
     static QByteArray saveSettingsToJSON(const QMap<QString, QString >& set, const QList<QString>& remove);
+    static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
 private:
     static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
     static QVariantList stringListToQVariantList(const QList<QString>& strings);
     static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
+    static QVariantMap episodeActionToQVariantMap(const EpisodeActionPtr episodeAction);
 };
 
 }

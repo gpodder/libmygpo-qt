@@ -166,6 +166,11 @@ QUrl UrlBuilder::getEpisodeActionsUrlByPodcastAndAggregate(const QString& userna
 	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json?podcast=")+deviceId+QLatin1String("&aggregated=")+agg);
 }
 
+QUrl UrlBuilder::getUploadEpisodeActionsUrl(const QString& username)
+{
+	return QUrl(s_server+s_api2+QLatin1String( "/episodes/" )+username+QLatin1String(".json"));
+}
+
 QString UrlBuilder::getFormatExtension(Format f)
 {
     QString ret;

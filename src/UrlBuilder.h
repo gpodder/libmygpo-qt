@@ -130,6 +130,7 @@ class UrlBuilder
 
     static QUrl getEpisodeActionsUrlByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
     
+    static QUrl getUploadEpisodeActionsUrl(const QString& username);
   private:
     UrlBuilder() {};
     UrlBuilder( const UrlBuilder& ) {};

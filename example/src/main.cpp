@@ -30,6 +30,7 @@
 #include <PodcastList.h>
 #include <EpisodeList.h>
 #include <EpisodeActionList.h>
+#include <EpisodeAction.h>
 #include <TagList.h>
 #include <ApiRequest.h>
 #include <Settings.h>
@@ -396,16 +397,30 @@ int main(int argc, char **argv)
     qDebug() << ptr->settings().toMap();
     */
     
-    EpisodeActionListPtr episodeActions = req.episodeActions("ase23");
-    loop.connect(episodeActions.data(),SIGNAL(finished()),SLOT(quit()));
-    loop.connect(episodeActions.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-    loop.connect(episodeActions.data(),SIGNAL(parseError()),SLOT(quit()));
+    QList<EpisodeActionPtr> episodeActions1;
+    EpisodeActionPtr episodeAction1 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am/podcasts/twit")), QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")), QLatin1String(""), EpisodeAction::New, 0, 0, 0, 0));
+    episodeActions1.append(episodeAction1);
+
+    AddRemoveResultPtr addRemoveResult1 = req.uploadEpisodeActions("ase23", episodeActions1);
+    loop.connect(addRemoveResult1.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(addRemoveResult1.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(addRemoveResult1.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+
+    qDebug() << "UploadEpisodeActions";
+    qDebug() << "timestamp: " << addRemoveResult1->timestamp();
+    qDebug() << "";
+
+    EpisodeActionListPtr episodeActions2 = req.episodeActions("ase23");
+    loop.connect(episodeActions2.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(episodeActions2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(episodeActions2.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
     qDebug() << "EpisodeActions";
-    qDebug() << "timestamp: " << episodeActions->timestamp();
-   /* foreach(EpisodeActionPtr episodeAction, episodeActions->list()) {
+    qDebug() << "timestamp: " << episodeActions2->timestamp();
+    foreach(const EpisodeActionPtr& episodeAction, episodeActions2->list()) {
             qDebug() << episodeAction->podcastUrl();
-    }*/
+    }
 
         
     DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
