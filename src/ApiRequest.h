@@ -34,6 +34,8 @@
 #include "Tag.h"
 #include "AddRemoveResult.h"
 #include "EpisodeList.h"
+#include "EpisodeAction.h"
+#include "EpisodeActionList.h"
 #include "PodcastList.h"
 #include "TagList.h"
 #include "Settings.h"
@@ -194,6 +196,24 @@ public:
     QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type);
     
     DeviceListPtr listDevices( const QString& username );
+    
+    EpisodeActionListPtr episodeActions(const QString& username);
+
+    EpisodeActionListPtr episodeActionsByPodcast(const QString& username, const QString& podcastUrl);
+
+    EpisodeActionListPtr episodeActionsByDevice(const QString& username, const QString& deviceId);
+
+    EpisodeActionListPtr episodeActionsByTimestamp(const QString& username, const qulonglong since);
+
+    EpisodeActionListPtr episodeActionsByPodcastAndTimestamp(const QString& username, const QString& podcastUrl, const qulonglong since);
+
+    EpisodeActionListPtr episodeActionsByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
+
+    EpisodeActionListPtr episodeActionsByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
+
+    AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
+
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
     
 private:
     ApiRequestPrivate* const d;

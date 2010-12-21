@@ -20,36 +20,58 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
+#ifndef EPISODEACTION_H_
+#define EPISODEACTION_H_
 
-#include <QByteArray>
-#include <QVariant>
-#include <QList>
-#include <QMap>
-#include "EpisodeAction.h"
+#include <QObject>
+#include <QUrl>
+#include <QString>
+#include <QNetworkReply>
+#include <QSharedPointer>
 
-class QUrl;
-class QString;
+#include "mygpo_export.h"
 
 namespace mygpo {
 
-class JsonParser
-{
+class EpisodeActionPrivate;
+
+class MYGPO_EXPORT EpisodeAction : public QObject {
+	Q_OBJECT
+	Q_ENUMS(ActionType)
+    Q_PROPERTY(QUrl podcastUrl READ podcastUrl CONSTANT)
+    Q_PROPERTY(QUrl episodeUrl READ episodeUrl CONSTANT)
+    Q_PROPERTY(QString deviceName READ deviceName CONSTANT)
+    Q_PROPERTY(ActionType action READ action CONSTANT)
+    Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
+    Q_PROPERTY(qulonglong started READ started CONSTANT)
+    Q_PROPERTY(qulonglong position READ position CONSTANT)
+    Q_PROPERTY(qulonglong total READ total CONSTANT)
 
 public:
-    static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
-    static QByteArray saveSettingsToJSON(const QMap<QString, QString >& set, const QList<QString>& remove);
-    static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
-    static QByteArray renameDeviceStringToJSON(const QString& caption, const QString& type );
+    enum ActionType { Download, Play, Delete, New };
+	EpisodeAction(const QVariant& variant, QObject* parent = 0);
+	EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
+	virtual ~EpisodeAction();
+
+    QUrl podcastUrl() const;
+    QUrl episodeUrl() const;
+    QString deviceName() const;
+    EpisodeAction::ActionType action() const;
+    qulonglong timestamp() const;
+    qulonglong started() const;
+    qulonglong position() const;
+    qulonglong total() const;
 
 private:
-    static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
-    static QVariantList stringListToQVariantList(const QList<QString>& strings);
-    static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
-    static QVariantMap episodeActionToQVariantMap(const EpisodeActionPtr episodeAction);
+	Q_DISABLE_COPY(EpisodeAction)
+    EpisodeActionPrivate* const d;
+    friend class EpisodeActionPrivate;
 };
+
+typedef QSharedPointer<EpisodeAction> EpisodeActionPtr;
 
 }
 
-#endif // JSONPARSER_H
+Q_DECLARE_METATYPE(mygpo::EpisodeActionPtr);
+
+#endif /* EPISODEACTION_H_ */

@@ -20,36 +20,50 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
+#ifndef EPISODEACTIONLIST_H_
+#define EPISODEACTIONLIST_H_
 
-#include <QByteArray>
-#include <QVariant>
+#include <QNetworkReply>
 #include <QList>
-#include <QMap>
+#include <QObject>
+#include <QVariant>
 #include "EpisodeAction.h"
-
-class QUrl;
-class QString;
+#include "mygpo_export.h"
 
 namespace mygpo {
 
-class JsonParser
-{
+class EpisodeActionListPrivate;
 
+class MYGPO_EXPORT EpisodeActionList : public QObject {
+	Q_OBJECT
+	Q_PROPERTY(QVariant episodeActions READ episodeActions CONSTANT)
+	Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
 public:
-    static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
-    static QByteArray saveSettingsToJSON(const QMap<QString, QString >& set, const QList<QString>& remove);
-    static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
-    static QByteArray renameDeviceStringToJSON(const QString& caption, const QString& type );
+	EpisodeActionList(QNetworkReply* reply, QObject* parent = 0);
+	virtual ~EpisodeActionList();
+
+	QList<EpisodeActionPtr> list() const;
+	QVariant episodeActions() const;
+
+	qulonglong timestamp() const;
 
 private:
-    static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
-    static QVariantList stringListToQVariantList(const QList<QString>& strings);
-    static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
-    static QVariantMap episodeActionToQVariantMap(const EpisodeActionPtr episodeAction);
+  EpisodeActionListPrivate* const d;
+  friend class EpisodeActionListPrivate;
+signals:
+    /**Gets emitted when the data is ready to read*/
+    void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError(QNetworkReply::NetworkError error);
+
 };
+
+typedef QSharedPointer<EpisodeActionList> EpisodeActionListPtr;
 
 }
 
-#endif // JSONPARSER_H
+Q_DECLARE_METATYPE(mygpo::EpisodeActionListPtr);
+
+#endif /* EPISODEACTIONLIST_H_ */

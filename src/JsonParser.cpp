@@ -56,6 +56,19 @@ QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QString >& set, c
     return jsonByteArray;
 }
 
+QByteArray JsonParser::episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions)
+{
+    QJson::Serializer serializer;
+    QVariantList jsonData;
+
+    foreach (const EpisodeActionPtr episodeAction, episodeActions) {
+    	jsonData.append(episodeActionToQVariantMap(episodeAction));
+    }
+
+    QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
+    return jsonByteArray;
+}
+
 QVariantList JsonParser::urlListToQVariantList(const QList< QUrl >& urls)
 {
     QVariantList list;
@@ -85,6 +98,36 @@ QVariantMap mygpo::JsonParser::stringMapToQVariantMap(const QMap< QString, QStri
     return map;
 }
 
+QVariantMap JsonParser::episodeActionToQVariantMap(const EpisodeActionPtr episodeAction)
+{
+    QVariantMap map;
+    map.insert(QLatin1String("podcast"), episodeAction->podcastUrl());
+    map.insert(QLatin1String("episode"), episodeAction->episodeUrl());
+    if (episodeAction->deviceName().compare(QLatin1String("")) != 0)
+    	map.insert(QLatin1String("device"), episodeAction->deviceName());
+
+    EpisodeAction::ActionType actionType = episodeAction->action();
+    if (actionType == EpisodeAction::New)
+    	map.insert(QLatin1String("action"), QLatin1String("new"));
+    else if (actionType == EpisodeAction::Delete)
+    	map.insert(QLatin1String("action"), QLatin1String("delete"));
+    else if (actionType == EpisodeAction::Play)
+    	map.insert(QLatin1String("action"), QLatin1String("play"));
+    else if (actionType == EpisodeAction::Download)
+    	map.insert(QLatin1String("action"), QLatin1String("download"));
+
+    if (episodeAction->timestamp() != 0)
+    	map.insert(QLatin1String("timestamp"), episodeAction->timestamp());
+    if (episodeAction->started() != 0)
+    	map.insert(QLatin1String("started"), episodeAction->started());
+    if (episodeAction->position() != 0)
+    	map.insert(QLatin1String("position"), episodeAction->position());
+    if (episodeAction->total() != 0)
+    	map.insert(QLatin1String("total"), episodeAction->total());
+
+    return map;
+}
+
 QByteArray mygpo::JsonParser::renameDeviceStringToJSON(const QString& caption, const QString& type ) 
 {
   QJson::Serializer serializer;
@@ -95,4 +138,5 @@ QByteArray mygpo::JsonParser::renameDeviceStringToJSON(const QString& caption, c
   jsonData.insert(QString(QLatin1String("type")),typeVar);
   QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
   return jsonByteArray;   
+
 }
