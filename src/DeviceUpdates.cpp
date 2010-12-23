@@ -32,7 +32,7 @@ class DeviceUpdatesPrivate : public QObject
     Q_OBJECT
 public:
     DeviceUpdatesPrivate(DeviceUpdates* qq, QNetworkReply* reply);
-    ~DeviceUpdatesPrivate();
+    virtual ~DeviceUpdatesPrivate();
     QList<PodcastPtr> addList() const;
     QList<EpisodePtr> updateList() const;
     QList<QUrl> removeList() const;
@@ -74,8 +74,7 @@ DeviceUpdatesPrivate::DeviceUpdatesPrivate(DeviceUpdates* qq, QNetworkReply* rep
 
 DeviceUpdatesPrivate::~DeviceUpdatesPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+	delete m_reply;
 }
 
 

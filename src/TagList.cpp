@@ -33,7 +33,7 @@ class TagListPrivate : public QObject
 
 public:
     TagListPrivate ( TagList* qq, QNetworkReply* reply );
-    ~TagListPrivate();
+    virtual ~TagListPrivate();
     QList<TagPtr> list() const;
     QVariant tags() const;
 private:
@@ -62,8 +62,7 @@ TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply ) : q(qq), m_
 
 TagListPrivate::~TagListPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+	delete m_reply;
 }
 
 QList<TagPtr> TagListPrivate::list() const
@@ -112,12 +111,7 @@ bool TagListPrivate::parse(const QByteArray& data)
 
 void TagListPrivate::parseData()
 {
-    QJson::Parser parser;
-    if (!m_reply->error()==QNetworkReply::NoError) {
-        error(m_reply->error());
-    }
-    else
-    {
+	if (m_reply->error() == QNetworkReply::NoError) {
         if (parse( m_reply->readAll() ) )  {
             emit q->finished();
         } else {

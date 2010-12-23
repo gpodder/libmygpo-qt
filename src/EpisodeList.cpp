@@ -34,7 +34,7 @@ class EpisodeListPrivate : QObject
   
 public:
   EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply);
-  ~EpisodeListPrivate();
+  virtual ~EpisodeListPrivate();
   QList<EpisodePtr> list() const;
   QVariant episodes() const;
   
@@ -65,8 +65,7 @@ EpisodeListPrivate::EpisodeListPrivate(EpisodeList* qq, QNetworkReply* reply): m
 
 EpisodeListPrivate::~EpisodeListPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+	delete m_reply;
 }
 
 QList<EpisodePtr> EpisodeListPrivate::list() const
@@ -116,16 +115,16 @@ bool EpisodeListPrivate::parse ( const QByteArray& data )
 
 void EpisodeListPrivate::parseData()
 {
-    qDebug() << "parsing episode list data";
-    QJson::Parser parser;
-    if ( parse ( m_reply->readAll() ) )
-    {
-        emit q->finished();
-    }
-    else
-    {
-        emit q->parseError();
-    }
+	if (m_reply->error() == QNetworkReply::NoError) {
+		if ( parse ( m_reply->readAll() ) )
+		{
+			emit q->finished();
+		}
+		else
+		{
+			emit q->parseError();
+		}
+	}
 }
 
 void EpisodeListPrivate::error ( QNetworkReply::NetworkError error )

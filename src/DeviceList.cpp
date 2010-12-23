@@ -9,7 +9,7 @@ class DeviceListPrivate : public QObject
     Q_OBJECT
 public:
     DeviceListPrivate(DeviceList* qq, QNetworkReply* reply);
-    ~DeviceListPrivate();
+    virtual ~DeviceListPrivate();
     QVariant devices() const;
     QList< QMap<QString,QString> > devicesList() const;
     
@@ -102,11 +102,13 @@ bool DeviceListPrivate::parse(const QByteArray& data)
 
 void DeviceListPrivate::parseData()
 {
-    if ( parse( m_reply->readAll() ) ) {
-      emit q->finished();
-    } else {
-      emit q->parseError();
-    }
+	if (m_reply->error()==QNetworkReply::NoError) {
+		if ( parse( m_reply->readAll() ) ) {
+			emit q->finished();
+		} else {
+			emit q->parseError();
+		}
+	}
 }
 
 DeviceList::DeviceList(QNetworkReply* reply, QObject* parent) : QObject(parent), d(new DeviceListPrivate(this, reply))

@@ -35,7 +35,7 @@ class SettingsPrivate : public QObject
 
 public:
     SettingsPrivate(Settings* qq,QNetworkReply* reply);
-    ~SettingsPrivate();
+    virtual ~SettingsPrivate();
     QVariant settings() const;
 
 private:
@@ -90,9 +90,7 @@ bool SettingsPrivate::parse(const QByteArray& data)
 
 void SettingsPrivate::parseData()
 {
-    if (!m_reply->error()==QNetworkReply::NoError) {
-        error(m_reply->error());
-    } else {
+	if (m_reply->error() == QNetworkReply::NoError) {
         QJson::Parser parser;
         qDebug() << m_reply->peek(m_reply->bytesAvailable());
         if ( parse ( m_reply->readAll()  ) )

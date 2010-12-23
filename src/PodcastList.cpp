@@ -34,7 +34,7 @@ class PodcastListPrivate : QObject
   Q_OBJECT
 public:
   PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent = 0);
-  ~PodcastListPrivate();
+  virtual ~PodcastListPrivate();
   QList<PodcastPtr> list() const;
   QVariant podcasts() const;
     
@@ -65,8 +65,7 @@ PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QO
 
 PodcastListPrivate::~PodcastListPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+   delete m_reply;
 }
 
 
@@ -117,15 +116,16 @@ bool PodcastListPrivate::parse ( const QByteArray& data )
 
 void PodcastListPrivate::parseData()
 {
-    QJson::Parser parser;
-    if ( parse ( m_reply->readAll() ) )
-    {
-        emit q->finished();
-    }
-    else
-    {
-        emit q->parseError();
-    }
+	if (m_reply->error() == QNetworkReply::NoError) {
+		if ( parse ( m_reply->readAll() ) )
+		{
+			emit q->finished();
+		}
+		else
+		{
+			emit q->parseError();
+		}
+	}
 }
 
 void PodcastListPrivate::error ( QNetworkReply::NetworkError error )

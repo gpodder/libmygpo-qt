@@ -64,8 +64,7 @@ EpisodeActionListPrivate::EpisodeActionListPrivate(EpisodeActionList* qq, QNetwo
 
 EpisodeActionListPrivate::~EpisodeActionListPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+	delete m_reply;
 }
 
 QList<EpisodeActionPtr> EpisodeActionListPrivate::list() const
@@ -126,15 +125,16 @@ bool EpisodeActionListPrivate::parse ( const QByteArray& data )
 
 void EpisodeActionListPrivate::parseData()
 {
-    QJson::Parser parser;
-    if ( parse ( m_reply->readAll() ) )
-    {
-        emit q->finished();
-    }
-    else
-    {
-        emit q->parseError();
-    }
+	if (m_reply->error() == QNetworkReply::NoError) {
+		if ( parse ( m_reply->readAll() ) )
+		{
+			emit q->finished();
+		}
+		else
+		{
+			emit q->parseError();
+		}
+	}
 }
 
 qulonglong EpisodeActionListPrivate::timestamp() const {

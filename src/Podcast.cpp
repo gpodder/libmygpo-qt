@@ -34,7 +34,7 @@ class PodcastPrivate : QObject
 public:
   PodcastPrivate(Podcast* qq, QNetworkReply* reply );
   PodcastPrivate(Podcast* qq, const QVariant& variant );
-  ~PodcastPrivate();
+  virtual ~PodcastPrivate();
   //Getters
   QUrl url() const;
   QString title() const;
@@ -86,8 +86,7 @@ PodcastPrivate::PodcastPrivate(Podcast* qq, const QVariant& variant ): m_reply(0
 
 PodcastPrivate::~PodcastPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+   delete m_reply;
 }
 
 
@@ -188,27 +187,30 @@ bool PodcastPrivate::parse(const QVariant& data)
     v = podcastMap.value(QLatin1String("title"));
     if(!v.canConvert(QVariant::String)) 
       return false;
-    m_title = podcastMap.value(QLatin1String("title")).toString();
+    m_title = v.toString();
     v = podcastMap.value(QLatin1String("title"));
     if(!v.canConvert(QVariant::String))
       return false;
-    m_description = podcastMap.value(QLatin1String("description")).toString();
+    v = podcastMap.value(QLatin1String("description"));
+     if(!v.canConvert(QVariant::String))
+       return false;
+    m_description = v.toString();
     v = podcastMap.value(QLatin1String("subscribers"));
     if(!v.canConvert(QVariant::Int))
       return false;
-    m_subscribers = podcastMap.value(QLatin1String("subscribers")).toUInt();
+    m_subscribers = v.toUInt();
     v = podcastMap.value(QLatin1String("logo_url"));
     if(!v.canConvert(QVariant::Url))
       return false;
-    m_logoUrl = podcastMap.value(QLatin1String("logo_url")).toUrl();
+    m_logoUrl =v.toUrl();
     v = podcastMap.value(QLatin1String("website"));
     if(!v.canConvert(QVariant::Url))
       return false;
-    m_website = podcastMap.value(QLatin1String("website")).toUrl();
+    m_website = v.toUrl();
     v = podcastMap.value(QLatin1String("mygpo_link"));
     if(!v.canConvert(QVariant::Url))
       return false;
-    m_mygpoUrl = podcastMap.value(QLatin1String("mygpo_link")).toUrl();
+    m_mygpoUrl = v.toUrl();
     return true;
 }
 

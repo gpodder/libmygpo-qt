@@ -34,7 +34,7 @@ class AddRemoveResultPrivate : public QObject
     Q_OBJECT
 public:
     AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkReply* reply );
-    ~AddRemoveResultPrivate ( );
+    virtual ~AddRemoveResultPrivate ( );
     QVariant updateUrls() const;
     qulonglong timestamp() const;
     QList<QPair<QUrl, QUrl> > updateUrlsList() const;
@@ -62,7 +62,6 @@ AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkRe
 
 AddRemoveResultPrivate::~AddRemoveResultPrivate()
 {
-    if (m_reply)
         delete m_reply;
 }
 
@@ -120,14 +119,16 @@ bool AddRemoveResultPrivate::parse ( const QByteArray& data )
 
 void AddRemoveResultPrivate::parseData()
 {
-    QJson::Parser parser;
-    if ( parse ( m_reply->readAll( ) ) )
-    {
-        emit q->finished();
-    }
-    else
-    {
-        emit q->parseError();
+	if (m_reply->error() == QNetworkReply::NoError) {
+
+		if ( parse ( m_reply->readAll( ) ) )
+		{
+			emit q->finished();
+		}
+		else
+		{
+			emit q->parseError();
+		}
     }
 }
 

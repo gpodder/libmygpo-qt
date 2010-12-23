@@ -35,7 +35,7 @@ class EpisodePrivate : QObject
 public:
   EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* parent = 0);
   EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent = 0);
-  ~EpisodePrivate();
+  virtual ~EpisodePrivate();
   QUrl url() const;
   QString title() const;
   QUrl podcastUrl() const;
@@ -71,8 +71,7 @@ using namespace mygpo;
 
 EpisodePrivate::~EpisodePrivate()
 {
-    if (m_reply)
-        delete m_reply;
+	delete m_reply;
 }
 
 EpisodePrivate::EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* parent): QObject(parent), m_reply(reply), q(qq), m_error(QNetworkReply::NoError)
@@ -94,31 +93,31 @@ bool EpisodePrivate::parse(const QVariant& data)
     QVariant s = episodeMap.value(QLatin1String("url"));
     if (!s.canConvert(QVariant::Url)) 
       return false;
-    m_url = episodeMap.value(QLatin1String("url")).toUrl();
+    m_url = s.toUrl();
     s = episodeMap.value(QLatin1String("title"));
     if (!s.canConvert(QVariant::String)) 
       return false;
-    m_title = episodeMap.value(QLatin1String("title")).toString();
+    m_title = s.toString();
     s = episodeMap.value(QLatin1String("podcast_url"));
     if (!s.canConvert(QVariant::Url))
       return false;
-    m_podcastUrl = episodeMap.value(QLatin1String("podcast_url")).toUrl();
+    m_podcastUrl = s.toUrl();
     s = episodeMap.value(QLatin1String("podcast_title"));
     if (!s.canConvert(QVariant::String))
       return false;
-    m_podcastTitle = episodeMap.value(QLatin1String("podcast_title")).toString();
+    m_podcastTitle = s.toString();
     s = episodeMap.value(QLatin1String("description"));
     if (!s.canConvert(QVariant::String))
       return false;
-    m_description = episodeMap.value(QLatin1String("description")).toString();
+    m_description = s.toString();
     s = episodeMap.value(QLatin1String("website"));
     if(!s.canConvert(QVariant::Url))
       return false;
-    m_website = episodeMap.value(QLatin1String("website")).toUrl();
+    m_website = s.toUrl();
     s = episodeMap.value(QLatin1String("mygpo_link"));
     if(!s.canConvert(QVariant::Url))
       return false;
-    m_mygpoUrl = episodeMap.value(QLatin1String("mygpo_link")).toUrl();
+    m_mygpoUrl = s.toUrl();
     return true;
 }
 
@@ -136,13 +135,14 @@ bool EpisodePrivate::parse(const QByteArray& data)
 }
 
 void EpisodePrivate::parseData() {
-    //parse and send signal
-    QJson::Parser parser;
-    if (parse( m_reply->readAll() ) ) {
-      emit q->finished();
-    } else {
-      emit q->parseError();
-    }
+	//parse and send signal
+	if (m_reply->error()==QNetworkReply::NoError) {
+		if (parse( m_reply->readAll() ) ) {
+			emit q->finished();
+		} else {
+			emit q->parseError();
+		}
+	}
 }
 
 void EpisodePrivate::error(QNetworkReply::NetworkError error)
