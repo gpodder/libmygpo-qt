@@ -39,7 +39,7 @@ class MYGPO_EXPORT Tag : public QObject
 public:
     Tag(const QVariant& variant, QObject* parent = 0);
     virtual ~Tag();
-    const QString tag() const;
+    QString tag() const;
     uint usage() const;
 private:
     Q_DISABLE_COPY(Tag)

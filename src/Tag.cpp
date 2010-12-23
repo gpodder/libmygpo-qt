@@ -30,9 +30,7 @@ class TagPrivate : public QObject
 
 public:
     TagPrivate(Tag* qq, const QVariant& variant);
-    //TagPrivate(Tag* qq, QObject* parent = 0 );
-    //TagPrivate (Tag* qq, TagPrivate* pp, QObject* parent = 0);
-    const QString tag() const;
+    QString tag() const;
     uint usage() const;
 private:
     Tag* const q;
@@ -42,12 +40,16 @@ private:
     bool parse(const QVariant& data);
 };
 
-TagPrivate::TagPrivate (Tag* qq, const QVariant& variant) : q(qq)
+}
+
+using namespace mygpo;
+
+TagPrivate::TagPrivate (Tag* qq, const QVariant& variant) : q(qq), m_tag(QLatin1String("")), m_usage(0)
 {
     parse ( variant );
 }
 
-const QString TagPrivate::tag() const
+QString TagPrivate::tag() const
 {
     return m_tag;
 }
@@ -83,7 +85,7 @@ Tag::~Tag()
 	delete d;
 }
 
-const QString Tag::tag() const
+QString Tag::tag() const
 {
     return d->tag();
 }
@@ -91,8 +93,6 @@ const QString Tag::tag() const
 uint Tag::usage() const
 {
     return d->usage();
-}
-
 }
 
 #include "Tag.moc"
