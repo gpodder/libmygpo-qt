@@ -65,7 +65,7 @@ private slots:
 using namespace mygpo;
 
 
-DeviceUpdatesPrivate::DeviceUpdatesPrivate(DeviceUpdates* qq, QNetworkReply* reply): q(qq), m_reply(reply)
+DeviceUpdatesPrivate::DeviceUpdatesPrivate(DeviceUpdates* qq, QNetworkReply* reply): q(qq), m_timestamp(0), m_reply(reply)
 {
     QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
     QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
@@ -154,10 +154,12 @@ bool DeviceUpdatesPrivate::parse(const QByteArray& data)
 
 void DeviceUpdatesPrivate::parseData()
 {
-    if ( parse( m_reply->readAll() ) ) {
-      emit q->finished();
-    } else {
-      emit q->parseError();
+    if (m_reply->error() == QNetworkReply::NoError) {
+        if ( parse( m_reply->readAll() ) ) {
+            emit q->finished();
+        } else {
+            emit q->parseError();
+        }
     }
 }
 
