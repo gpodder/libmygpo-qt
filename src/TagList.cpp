@@ -30,6 +30,7 @@ namespace mygpo {
 class TagListPrivate : public QObject
 {
     Q_OBJECT
+
 public:
     TagListPrivate ( TagList* qq, QNetworkReply* reply );
     ~TagListPrivate();
@@ -49,7 +50,11 @@ private slots:
     void error(QNetworkReply::NetworkError error);
 };
 
-TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply ) : q(qq), m_reply ( reply )
+}
+
+using namespace mygpo;
+
+TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply ) : q(qq), m_reply ( reply ), m_tags(QVariant())
 {
     QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
     QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
@@ -98,8 +103,8 @@ bool TagListPrivate::parse(const QByteArray& data)
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if( ok ) {
-      ok = (parse( variant ));
+    if ( ok ) {
+        ok = (parse( variant ));
     }
     return ok;
 }
@@ -108,10 +113,16 @@ bool TagListPrivate::parse(const QByteArray& data)
 void TagListPrivate::parseData()
 {
     QJson::Parser parser;
-    if (parse( m_reply->peek( m_reply->bytesAvailable() ) ) ) {
-      emit q->finished();
-    } else {
-      emit q->parseError();
+    if (!m_reply->error()==QNetworkReply::NoError) {
+        error(m_reply->error());
+    }
+    else
+    {
+        if (parse( m_reply->readAll() ) )  {
+            emit q->finished();
+        } else {
+            emit q->parseError();
+        }
     }
 }
 
@@ -128,19 +139,17 @@ TagList::TagList ( QNetworkReply* reply, QObject* parent) : d(new TagListPrivate
 
 TagList::~TagList()
 {
-	delete d;
+    delete d;
 }
 
 QList<TagPtr> TagList::list() const
 {
-	return d->list();
+    return d->list();
 }
 
 QVariant TagList::tags() const
 {
-	return d->tags();
-}
-
+    return d->tags();
 }
 
 #include "TagList.moc"

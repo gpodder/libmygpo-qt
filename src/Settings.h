@@ -47,7 +47,6 @@ public:
     Settings(QNetworkReply* reply, QObject* parent = 0);
     virtual ~Settings();
     QVariant settings() const;
-    //QMap<QString,QString> settingsMap() const;
 private:
     Q_DISABLE_COPY(Settings)
     SettingsPrivate* d;

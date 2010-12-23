@@ -32,7 +32,9 @@
 
 namespace mygpo
 {
+    
 class TagListPrivate;
+
 class MYGPO_EXPORT TagList : public QObject
 {
     Q_OBJECT

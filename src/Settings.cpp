@@ -37,7 +37,6 @@ public:
     SettingsPrivate(Settings* qq,QNetworkReply* reply);
     ~SettingsPrivate();
     QVariant settings() const;
-    //QMap<QString,QString> settingsMap() const;
 
 private:
     Settings* const q;
@@ -55,7 +54,7 @@ private slots:
 
 };
 
-SettingsPrivate::SettingsPrivate(Settings* qq, QNetworkReply* reply): q(qq), m_reply(reply)
+SettingsPrivate::SettingsPrivate(Settings* qq, QNetworkReply* reply): q(qq), m_reply(reply), m_error(QNetworkReply::NoError)
 {
     QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
     QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ), this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
@@ -63,27 +62,13 @@ SettingsPrivate::SettingsPrivate(Settings* qq, QNetworkReply* reply): q(qq), m_r
 
 SettingsPrivate::~SettingsPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+    delete m_reply;
 }
 
 QVariant SettingsPrivate::settings() const
 {
     return m_settings;
 }
-
-// The Values of the Settings can be anything ... so it doesn't make sense to parse them ...
-/*
-QMap< QString, QString > SettingsPrivate::settingsMap() const
-{
-    QMap< QString, QString > map;
-    QVariantMap varMap = m_settings.toMap();
-    foreach (QString str, varMap.keys()) {
-        qDebug() << str;
-        qDebug() << varMap.value(str).type();
-    }
-    return map;
-}*/
 
 bool SettingsPrivate::parse(const QVariant& data)
 {
@@ -147,12 +132,6 @@ QVariant Settings::settings() const
 {
     return d->settings();
 }
-
-/*
-QMap< QString, QString > Settings::settingsMap() const
-{
-    return d->settingsMap();
-}*/
 
 #include "Settings.moc"
 

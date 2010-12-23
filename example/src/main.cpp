@@ -398,7 +398,7 @@ int main(int argc, char **argv)
     //
     printTitle("Test new requests");
     qDebug() << "Settings";
-    SettingsPtr settingsPtr = req.deviceSettings( "ase23", "dev0" );
+    SettingsPtr settingsPtr = req.accountSettings( "ase23" );
     
     loop.connect(settingsPtr.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(settingsPtr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
@@ -406,7 +406,37 @@ int main(int argc, char **argv)
     
     qDebug() << settingsPtr->settings().toMap();
     
+    qDebug() << "Set Public Profile false & some other Account Settings";
     
+    QVariantMap set;
+    QStringList remSettings;
+    
+    set.insert("public_profile",QVariant(false));
+    set.insert("leet",QVariant(1337));
+    set.insert("1337",QVariant("leet"));
+    
+    SettingsPtr settingsPtr2 = req.setAccountSettings( "ase23", set, remSettings);
+    
+    loop.connect(settingsPtr2.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(settingsPtr2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << settingsPtr2->settings().toMap();
+    
+    qDebug() << "Remove Setting leet";
+    
+    QVariantMap set2;
+    remSettings.append("leet");
+    
+    SettingsPtr settingsPtr3 = req.setAccountSettings( "ase23", set, remSettings);
+    
+    loop.connect(settingsPtr3.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(settingsPtr3.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << settingsPtr3->settings().toMap();    
+    
+    qDebug();
     qDebug() << "EpisodeActions";
     QList<EpisodeActionPtr> episodeActions1, episodeActions2;
     EpisodeActionPtr episodeAction1 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am/podcasts/twit")), QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")), QLatin1String(""), EpisodeAction::New, 0, 0, 0, 0));
