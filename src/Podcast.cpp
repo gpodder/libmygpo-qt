@@ -183,14 +183,11 @@ bool PodcastPrivate::parse(const QVariant& data)
     QVariant v = podcastMap.value(QLatin1String("url"));
     if(!v.canConvert(QVariant::Url))
       return false;
-    m_url = podcastMap.value(QLatin1String("url")).toUrl();
+    m_url = v.toUrl();
     v = podcastMap.value(QLatin1String("title"));
     if(!v.canConvert(QVariant::String)) 
       return false;
     m_title = v.toString();
-    v = podcastMap.value(QLatin1String("title"));
-    if(!v.canConvert(QVariant::String))
-      return false;
     v = podcastMap.value(QLatin1String("description"));
      if(!v.canConvert(QVariant::String))
        return false;
