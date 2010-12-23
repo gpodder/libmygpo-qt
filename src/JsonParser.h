@@ -39,7 +39,7 @@ class JsonParser
 
 public:
     static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
-    static QByteArray saveSettingsToJSON(const QMap<QString, QString >& set, const QList<QString>& remove);
+    static QByteArray saveSettingsToJSON(const QMap<QString, QVariant >& set, const QList<QString>& remove);
     static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
     static QByteArray renameDeviceStringToJSON(const QString& caption, const QString& type );
 

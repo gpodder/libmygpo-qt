@@ -44,13 +44,13 @@ QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList
     return jsonByteArray;
 }
 
-QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QString >& set, const QList< QString >& remove)
+QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QVariant >& set, const QList< QString >& remove)
 {
     QJson::Serializer serializer;
     QVariantMap jsonData;
-    QVariant setVar(stringMapToQVariantMap(set));
+    //QVariant setVar(stringMapToQVariantMap(set));
     QVariant removeVar(stringListToQVariantList(remove));
-    jsonData.insert(QString(QLatin1String("set")),setVar);
+    jsonData.insert(QString(QLatin1String("set")),set);
     jsonData.insert(QString(QLatin1String("remove")),removeVar);
     QByteArray jsonByteArray = serializer.serialize(QVariant(jsonData));
     return jsonByteArray;
