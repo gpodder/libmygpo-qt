@@ -20,36 +20,47 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef JSONPARSER_H
-#define JSONPARSER_H
+#ifndef DEVICELIST_H
+#define DEVICELIST_H
 
-#include <QByteArray>
-#include <QVariant>
-#include <QList>
-#include <QMap>
-#include "EpisodeAction.h"
+#include <QObject>
+#include <QNetworkReply>
+#include <QSharedPointer>
 
-class QUrl;
-class QString;
+#include "mygpo_export.h"
 
-namespace mygpo {
-
-class JsonParser
+namespace mygpo
 {
 
-public:
-    static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
-    static QByteArray saveSettingsToJSON(const QMap<QString, QVariant >& set, const QList<QString>& remove);
-    static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
-    static QByteArray renameDeviceStringToJSON(const QString& caption, const QString& type );
+class DeviceListPrivate;
 
+class MYGPO_EXPORT DeviceList : public QObject 
+{
+    Q_OBJECT
+    Q_PROPERTY ( QVariant devices READ devices CONSTANT )
+    
+public:
+    DeviceList(QNetworkReply* reply, QObject* parent = 0);
+    virtual ~DeviceList();
+    QVariant devices() const;
+    QList< QMap<QString,QString> > devicesList() const;
+    
 private:
-    static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
-    static QVariantList stringListToQVariantList(const QList<QString>& strings);
-    static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
-    static QVariantMap episodeActionToQVariantMap(const EpisodeActionPtr episodeAction);
+    Q_DISABLE_COPY(DeviceList)
+    DeviceListPrivate* const d;
+    friend class DeviceListPrivate;
+signals:
+    /**Gets emitted when the data is ready to read*/
+    void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError ( QNetworkReply::NetworkError error );
+    
 };
+
+typedef QSharedPointer<DeviceList> DeviceListPtr;
 
 }
 
-#endif // JSONPARSER_H
+#endif //DEVICELIST_H
