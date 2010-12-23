@@ -56,7 +56,7 @@ private slots:
 
 };
 
-EpisodeActionListPrivate::EpisodeActionListPrivate(EpisodeActionList* qq, QNetworkReply* reply): m_reply( reply ), q(qq)
+EpisodeActionListPrivate::EpisodeActionListPrivate(EpisodeActionList* qq, QNetworkReply* reply): m_reply( reply ), q(qq), m_error(QNetworkReply::NoError)
 {
   QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
   QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );

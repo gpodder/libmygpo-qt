@@ -32,7 +32,7 @@ private slots:
 
 using namespace mygpo;
 
-DeviceListPrivate::DeviceListPrivate(DeviceList* qq, QNetworkReply* reply) : q(qq), m_reply(reply)
+DeviceListPrivate::DeviceListPrivate(DeviceList* qq, QNetworkReply* reply) : q(qq), m_reply(reply), m_error(QNetworkReply::NoError)
 {
     QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
     QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
