@@ -95,14 +95,12 @@ bool EpisodeActionListPrivate::parse ( const QVariant& data )
       return false;
     m_timestamp = s.toULongLong();
 
-    qDebug() << "before actions";
     s = episodeActionListMap.value(QLatin1String("actions"));
     if (!s.canConvert(QVariant::List))
     	return false;
 
     QVariantList varList = s.toList();
     QVariantList episodeActionList;
-    qDebug() << "actionlist ok";
     foreach ( QVariant var,varList )
     {
         QVariant v;

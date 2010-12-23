@@ -36,10 +36,10 @@
 #include <Settings.h>
 #include <DeviceUpdates.h>
 #include <QDateTime>
-#include <DeviceList.h>
+/*#include <DeviceList.h>*/
  
 using namespace mygpo;
-/*
+
 void printTitle(const QString& title) {
     QString fillLine(80, QLatin1Char('#'));
 
@@ -48,62 +48,62 @@ void printTitle(const QString& title) {
     qDebug() << fillLine;
 }
 
-void printPodcastList(const PodcastList& podcastList) {
-	QList<Podcast> list;
-    QList<Podcast>::const_iterator iterator;
+void printPodcastList(const PodcastListPtr podcastList) {
+	QList<PodcastPtr> list;
+    QList<PodcastPtr>::const_iterator iterator;
 
-    list = podcastList.list();
+    list = podcastList->list();
     for (iterator = list.constBegin(); iterator != list.constEnd(); ++iterator) {
-    	qDebug() << "title:\t" << iterator->title();
-    	qDebug() << "url:\t" << iterator->url();
+    	qDebug() << "title:\t" << iterator->data()->title();
+    	qDebug() << "url:\t" << iterator->data()->url();
     	qDebug() << "";
     }
     qDebug() << "";
 }
 
-void printPodcast(const Podcast& podcast) {
-	qDebug() << "title:\t" << podcast.title();
-	qDebug() << "url:\t" << podcast.url();
-	qDebug() << "description:\t" << podcast.description();
+void printPodcast(const PodcastPtr podcast) {
+	qDebug() << "title:\t" << podcast->title();
+	qDebug() << "url:\t" << podcast->url();
+	qDebug() << "description:\t" << podcast->description();
 	qDebug() << "";
 }
 
-void printEpisode(const Episode& episode) {
-	qDebug() << "title:\t" << episode.title();
-	qDebug() << "url:\t" << episode.url();
+void printEpisode(const EpisodePtr episode) {
+	qDebug() << "title:\t" << episode->title();
+	qDebug() << "url:\t" << episode->url();
 	qDebug() << "";
 }
-*/
-/*
-void printEpisodeList(const EpisodeList& episodeList) {
-	QList<Episode> list;
-    QList<Episode>::const_iterator iterator;
 
-    list = episodeList.list();
+
+void printEpisodeList(const EpisodeListPtr episodeList) {
+	QList<EpisodePtr> list;
+    QList<EpisodePtr>::const_iterator iterator;
+
+    list = episodeList->list();
     for (iterator = list.constBegin(); iterator != list.constEnd(); ++iterator) {
-    	qDebug() << "title:\t" << iterator->title();
-    	qDebug() << "url:\t" << iterator->url();
+    	qDebug() << "title:\t" << iterator->data()->title();
+    	qDebug() << "url:\t" << iterator->data()->url();
     	qDebug() << "";
     }
     qDebug() << "";
 }
-*/
-/*
-void printTagList(const TagList& tagList) {
-	QList<Tag> list;
-    QList<Tag>::const_iterator iterator;
 
-    list = tagList.list();
+
+void printTagList(const TagListPtr tagList) {
+	QList<TagPtr> list;
+    QList<TagPtr>::const_iterator iterator;
+
+    list = tagList->list();
     for (iterator = list.constBegin(); iterator != list.constEnd(); ++iterator) {
-    	qDebug() << iterator->tag();
+    	qDebug() << iterator->data()->tag();
     }
     qDebug() << "";
 }
 
-void printAddRemoveResult(const AddRemoveResult& addRemoveResult) {
-	qDebug() << "timestamp:\t" << addRemoveResult.timestamp();
+void printAddRemoveResult(const AddRemoveResultPtr addRemoveResult) {
+	qDebug() << "timestamp:\t" << addRemoveResult->timestamp();
 
-	QList< QPair<QUrl, QUrl> > pairlist = addRemoveResult.updateUrlsList();
+	QList< QPair<QUrl, QUrl> > pairlist = addRemoveResult->updateUrlsList();
 
     for (int i=0; i<pairlist.size(); i++)
     {
@@ -114,7 +114,7 @@ void printAddRemoveResult(const AddRemoveResult& addRemoveResult) {
 
     qDebug() << "";
 }
-*/
+
 
 /**
  * A simple example application which calls all methods provided by the ApiRequest class
@@ -124,8 +124,8 @@ int main(int argc, char **argv)
     QApplication app(argc, argv, true);
     ApiRequest req("ase23", "csf-sepm");
     QEventLoop loop;
-    //QNetworkReply* reply;
-    /*
+    QNetworkReply* reply;
+
     //
     // QNetworkReply* toplistOpml(uint count);
     //
@@ -163,112 +163,112 @@ int main(int argc, char **argv)
     qDebug() << "";
 
     //
-    // PodcastList toplist(uint count);
+    // PodcastListPtr toplist(uint count);
     //
-    PodcastList topList(req.toplist(1));
+    PodcastListPtr topList(req.toplist(1));
 
-    loop.connect(&topList, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(topList.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Downloading podcast toplists [toplist(1)]"));
     printPodcastList(topList);
 
     //
-    // PodcastList search(const QString& query);
+    // PodcastListPtr search(const QString& query);
     //
-    PodcastList searchList(req.search(QLatin1String("linux outlaws")));
+    PodcastListPtr searchList(req.search(QLatin1String("linux outlaws")));
 
-    loop.connect(&searchList, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(searchList.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Searching for podcasts [search(\"linux outlaws\")]"));
     printPodcastList(searchList);
 
     //
-    // PodcastList suggestions(uint count);
+    // PodcastListPtr suggestions(uint count);
     //
-    PodcastList suggestionsList(req.suggestions(2));
+    PodcastListPtr suggestionsList(req.suggestions(2));
 
-    loop.connect(&suggestionsList, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(suggestionsList.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Downloading podcast suggestions [suggestions(2)]"));
     printPodcastList(suggestionsList);
 
     //
-    // PodcastList podcastsOfTag(uint count, const QString& tag);
+    // PodcastListPtr podcastsOfTag(uint count, const QString& tag);
     //
-    PodcastList podcastsOfTagList(req.podcastsOfTag(1,QLatin1String("linux")));
+    PodcastListPtr podcastsOfTagList(req.podcastsOfTag(1,QLatin1String("linux")));
 
-    loop.connect(&podcastsOfTagList, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(podcastsOfTagList.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Retrieving Podcasts of a Tag [podcastsOfTag(1,\"linux\")]"));
     printPodcastList(podcastsOfTagList);
 
     //
-    // Podcast podcastData (const QUrl& podcasturl);
+    // PodcastPtr podcastData (const QUrl& podcasturl);
     //
-    Podcast podcast(req.podcastData(QUrl(QLatin1String("http://surl.dk/7k5"))));
+    PodcastPtr podcast(req.podcastData(QUrl(QLatin1String("http://surl.dk/7k5"))));
 
-    loop.connect(&podcast, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(podcast.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Retrieving Podcast Data [podcastData(\"http://surl.dk/7k5\")]"));
     printPodcast(podcast);
 
     //
-    // Episode episodeData(const QUrl& podcasturl, const QUrl& episodeurl);
+    // EpisodePtr episodeData(const QUrl& podcasturl, const QUrl& episodeurl);
     //
-    Episode episode(req.episodeData(QUrl(QLatin1String("http://surl.dk/7k5")), QUrl(QLatin1String("http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws165.mp3"))));
+    EpisodePtr episode(req.episodeData(QUrl(QLatin1String("http://surl.dk/7k5")), QUrl(QLatin1String("http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws165.mp3"))));
 
-    loop.connect(&episode, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(episode.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Retrieving Episode Data [episodeData(\"http://surl.dk/7k5\",\"http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws165.mp3\")]"));
     printEpisode(episode);
 
     //
-    // EpisodeList favoriteEpisodes(const QString& username);
+    // EpisodeListPtr favoriteEpisodes(const QString& username);
     //
-    EpisodeList episodeList(req.favoriteEpisodes(QLatin1String("ase23")));
+    EpisodeListPtr episodeList(req.favoriteEpisodes(QLatin1String("ase23")));
 
-    loop.connect(&episodeList, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(episodeList.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Listing Favorite Episodes [favoriteEpisodes(\"ase23\")]"));
     printEpisodeList(episodeList);
 
     //
-    // TagList topTags(uint count);
+    // TagListPtr topTags(uint count);
     //
-    TagList tagList(req.topTags(3));
+    TagListPtr tagList(req.topTags(3));
 
-    loop.connect(&tagList, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(tagList.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Retrieving Top Tags [topTags(3)]"));
     printTagList(tagList);
 
     //
-    // AddRemoveResult addRemoveSubscriptions(const QString& username, const QString& device, const QList<QUrl>& add, const QList<QUrl>& remove);
+    // AddRemoveResultPtr addRemoveSubscriptions(const QString& username, const QString& device, const QList<QUrl>& add, const QList<QUrl>& remove);
     //
     QList<QUrl> add;
     QList<QUrl> remove;
     add << QUrl(QLatin1String("http://feeds.rucast.net/radio-t"));
     remove << QUrl(QLatin1String("http://hackermedley.org/feed/podcast/"));
 
-    AddRemoveResult addRemoveResult(req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), add, remove));
+    AddRemoveResultPtr addRemoveResult(req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), add, remove));
 
-    loop.connect(&addRemoveResult, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(addRemoveResult.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Add/remove subscriptions [addRemoveSubscriptions(\"ase23\", \"dev0\", {\"http://feeds.rucast.net/radio-t\"}, {http://hackermedley.org/feed/podcast/}]"));
     printAddRemoveResult(addRemoveResult);
     
-    AddRemoveResult addRemoveResult2(req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add));
+    AddRemoveResultPtr addRemoveResult2(req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add));
 
-    loop.connect(&addRemoveResult2, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(addRemoveResult2.data(), SIGNAL(finished()), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Add/remove subscriptions2 [addRemoveSubscriptions(\"ase23\", \"dev0\", {http://hackermedley.org/feed/podcast/}, {\"http://feeds.rucast.net/radio-t\"}]"));
@@ -281,83 +281,83 @@ int main(int argc, char **argv)
     printTitle(QLatin1String("Copy objects, and reicieve signals:"));
 
     qDebug() << "EpisodeList";
-    EpisodeList ret1 = req.favoriteEpisodes(QLatin1String("ase23"));
-        EpisodeList ret = ret1;
-        loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-        loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-        loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+    EpisodeListPtr ret1 = req.favoriteEpisodes(QLatin1String("ase23"));
+        EpisodeListPtr ret = ret1;
+        loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+        loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+        loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
         loop.exec();
-        qDebug() << "List1 size: " << ret.list().size();
-        qDebug() << "List2 size: " << ret1.list().size();
+        qDebug() << "List1 size: " << ret->list().size();
+        qDebug() << "List2 size: " << ret1->list().size();
     qDebug() << "";
 
     qDebug() << "Episode";
-    Episode episode1 = req.episodeData(QUrl(QLatin1String("http://surl.dk/7k5")), QUrl(QLatin1String("http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws165.mp3")));
-        Episode episode2 = episode1;
-        loop.connect(&episode2,SIGNAL(finished()),SLOT(quit()));
-        loop.connect(&episode2,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-        loop.connect(&episode2,SIGNAL(parseError()),SLOT(quit()));
+    EpisodePtr episode1 = req.episodeData(QUrl(QLatin1String("http://surl.dk/7k5")), QUrl(QLatin1String("http://traffic.libsyn.com/linuxoutlaws/linuxoutlaws165.mp3")));
+        EpisodePtr episode2 = episode1;
+        loop.connect(episode2.data(),SIGNAL(finished()),SLOT(quit()));
+        loop.connect(episode2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+        loop.connect(episode2.data(),SIGNAL(parseError()),SLOT(quit()));
         loop.exec();
-        qDebug() << "Episode1: " << episode1.title();
-        qDebug() << "Episode2: " << episode2.title();
+        qDebug() << "Episode1: " << episode1->title();
+        qDebug() << "Episode2: " << episode2->title();
     qDebug() << "";
 
     qDebug() << "PodcastList";
-    PodcastList podcastList1 = req.toplist(1);
-        PodcastList podcastList2 = podcastList1;
-        loop.connect(&podcastList1,SIGNAL(finished()),SLOT(quit()));
-        loop.connect(&podcastList1,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-        loop.connect(&podcastList1,SIGNAL(parseError()),SLOT(quit()));
+    PodcastListPtr podcastList1 = req.toplist(1);
+        PodcastListPtr podcastList2 = podcastList1;
+        loop.connect(podcastList1.data(),SIGNAL(finished()),SLOT(quit()));
+        loop.connect(podcastList1.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+        loop.connect(podcastList1.data(),SIGNAL(parseError()),SLOT(quit()));
         loop.exec();
-        qDebug() << "PodcastList1 size: " << podcastList1.list().size();
-        qDebug() << "PodcastList2 size: " << podcastList1.list().size();
+        qDebug() << "PodcastList1 size: " << podcastList1->list().size();
+        qDebug() << "PodcastList2 size: " << podcastList1->list().size();
     qDebug() << "";
 
     qDebug() << "Podcast";
-    Podcast podcast1 = req.podcastData(QUrl(QLatin1String("http://surl.dk/7k5")));
-    	Podcast podcast2 = podcast1;
-        loop.connect(&podcast2,SIGNAL(finished()),SLOT(quit()));
-        loop.connect(&podcast2,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-        loop.connect(&podcast2,SIGNAL(parseError()),SLOT(quit()));
+    PodcastPtr podcast1 = req.podcastData(QUrl(QLatin1String("http://surl.dk/7k5")));
+    	PodcastPtr podcast2 = podcast1;
+        loop.connect(podcast2.data(),SIGNAL(finished()),SLOT(quit()));
+        loop.connect(podcast2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+        loop.connect(podcast2.data(),SIGNAL(parseError()),SLOT(quit()));
         loop.exec();
-        qDebug() << "Podcast1: " << podcast1.title();
-        qDebug() << "Podcast2: " << podcast2.title();
+        qDebug() << "Podcast1: " << podcast1->title();
+        qDebug() << "Podcast2: " << podcast2->title();
     qDebug() << "";
 
     qDebug() << "TagList";
-    TagList tagList1 = req.topTags(3);
-    TagList tagList2 = tagList1;
-        loop.connect(&tagList2,SIGNAL(finished()),SLOT(quit()));
-        loop.connect(&tagList2,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-        loop.connect(&tagList2,SIGNAL(parseError()),SLOT(quit()));
+    TagListPtr tagList1 = req.topTags(3);
+    TagListPtr tagList2 = tagList1;
+        loop.connect(tagList2.data(),SIGNAL(finished()),SLOT(quit()));
+        loop.connect(tagList2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+        loop.connect(tagList2.data(),SIGNAL(parseError()),SLOT(quit()));
         loop.exec();
-        qDebug() << "TagList1 size: " << tagList1.list().size();
-        qDebug() << "TagList2 size: " << tagList2.list().size();
+        qDebug() << "TagList1 size: " << tagList1->list().size();
+        qDebug() << "TagList2 size: " << tagList2->list().size();
     qDebug() << "";
   
-    qDebug() << "AddRemoveResult";*/
+    qDebug() << "AddRemoveResult";
     /*QList<QUrl> add2;
     QList<QUrl> remove2;
     ad << QUrl(QLatin1String(""));
     rem << QUrl(QLatin1String(""));*/
-    /*
-    AddRemoveResult addRemove1 = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add);
-    AddRemoveResult addRemove2 = addRemove1;
-        loop.connect(&addRemove2,SIGNAL(finished()),SLOT(quit()));
-        loop.connect(&addRemove2,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-        loop.connect(&addRemove2,SIGNAL(parseError()),SLOT(quit()));
+
+    AddRemoveResultPtr addRemove1 = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add);
+    AddRemoveResultPtr addRemove2 = addRemove1;
+        loop.connect(addRemove2.data(),SIGNAL(finished()),SLOT(quit()));
+        loop.connect(addRemove2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+        loop.connect(addRemove2.data(),SIGNAL(parseError()),SLOT(quit()));
         loop.exec();
-        qDebug() << "AddRemoveResult1: " << addRemove1.timestamp();
-        qDebug() << "AddRemoveResult2: " << addRemove2.timestamp();
+        qDebug() << "AddRemoveResult1: " << addRemove1->timestamp();
+        qDebug() << "AddRemoveResult2: " << addRemove2->timestamp();
     qDebug() << "";
-    */
     
     
-    /*
-    QList<QUrl> add;
+
+
+    /*QList<QUrl> add;
     QList<QUrl> remove;
     add << QUrl(QLatin1String("http://feeds.rucast.net/radio-t"));
-    remove << QUrl(QLatin1String("http://hackermedley.org/feed/podcast/"));
+    remove << QUrl(QLatin1String("http://hackermedley.org/feed/podcast/"));*/
     AddRemoveResultPtr result = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"),add,remove);
         
     loop.connect(result.data(),SIGNAL(finished()),SLOT(quit()));
@@ -367,65 +367,84 @@ int main(int argc, char **argv)
     loop.exec();
     
     qDebug() << result->timestamp();
-    */
     
-    /*EpisodePtr ret = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
-    loop.connect( &(*ret), SIGNAL(finished()), SLOT(quit()));
-    loop.connect( &(*ret), SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-    loop.connect( &(*ret), SIGNAL(parseError()), SLOT(quit()));
+
+    //
+    // Test QSharedPointers
+    //
+    printTitle("Test QSharedPointers");
+    qDebug() << "EpisodePtr";
+    EpisodePtr episodePtr = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
+    loop.connect( &(*episodePtr), SIGNAL(finished()), SLOT(quit()));
+    loop.connect( &(*episodePtr), SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect( &(*episodePtr), SIGNAL(parseError()), SLOT(quit()));
     loop.exec();
-    qDebug() << ret->title();*/
-    /*
-    TagListPtr ret =  req.topTags(10);
-    loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
-    loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-    loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
+    qDebug() << episodePtr->title();
+
+    qDebug() << "TagListPtr";
+    TagListPtr tagListPtr =  req.topTags(10);
+    loop.connect(tagListPtr.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(tagListPtr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(tagListPtr.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
     
-    qDebug() << ret->list().size();
-    foreach (TagPtr tag, ret->list()) {
+    qDebug() << tagListPtr->list().size();
+    foreach (TagPtr tag, tagListPtr->list()) {
         qDebug() << tag->tag();
     }
-    */
-    /*
-    SettingsPtr ptr = req.deviceSettings( "ase23", "dev0" );
+
+    //
+    // Test new requests
+    //
+    printTitle("Test new requests");
+    qDebug() << "Settings";
+    SettingsPtr settingsPtr = req.deviceSettings( "ase23", "dev0" );
     
-    loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
-    
+    loop.connect(settingsPtr.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(settingsPtr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.exec();
     
+    qDebug() << settingsPtr->settings().toMap();
     
-    qDebug() << ptr->settings().toMap();
-    */
     
-    /*
-    QList<EpisodeActionPtr> episodeActions1;
+    qDebug() << "EpisodeActions";
+    QList<EpisodeActionPtr> episodeActions1, episodeActions2;
     EpisodeActionPtr episodeAction1 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am/podcasts/twit")), QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")), QLatin1String(""), EpisodeAction::New, 0, 0, 0, 0));
+    EpisodeActionPtr episodeAction2 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am/podcasts/twit")), QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")), QLatin1String(""), EpisodeAction::Delete, 0, 0, 0, 0));
     episodeActions1.append(episodeAction1);
+    episodeActions2.append(episodeAction2);
 
+    qDebug() << "UploadEpisodeActions";
     AddRemoveResultPtr addRemoveResult1 = req.uploadEpisodeActions("ase23", episodeActions1);
     loop.connect(addRemoveResult1.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(addRemoveResult1.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(addRemoveResult1.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
 
-    qDebug() << "UploadEpisodeActions";
     qDebug() << "timestamp: " << addRemoveResult1->timestamp();
     qDebug() << "";
 
-    EpisodeActionListPtr episodeActions2 = req.episodeActions("ase23");
-    loop.connect(episodeActions2.data(),SIGNAL(finished()),SLOT(quit()));
-    loop.connect(episodeActions2.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-    loop.connect(episodeActions2.data(),SIGNAL(parseError()),SLOT(quit()));
+    AddRemoveResultPtr addRemoveResult3 = req.uploadEpisodeActions("ase23", episodeActions2);
+    loop.connect(addRemoveResult3.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(addRemoveResult3.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(addRemoveResult3.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+
+    EpisodeActionListPtr episodeActions3 = req.episodeActions("ase23");
+    loop.connect(episodeActions3.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(episodeActions3.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(episodeActions3.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
     qDebug() << "EpisodeActions";
-    qDebug() << "timestamp: " << episodeActions2->timestamp();
-    foreach(const EpisodeActionPtr& episodeAction, episodeActions2->list()) {
+    qDebug() << "timestamp: " << episodeActions3->timestamp();
+    foreach(const EpisodeActionPtr& episodeAction, episodeActions3->list()) {
             qDebug() << episodeAction->podcastUrl();
+            qDebug() << episodeAction->action();
     }
 
-    */  
-    /*DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
+
+    qDebug() << "Devices";
+    DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
     loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
@@ -445,19 +464,19 @@ int main(int argc, char **argv)
     
     qDebug() << "Timestamp:";
     qDebug() << ptr->timestamp();
-    qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();*/
+    qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();
     
-    /*QNetworkReply* r = req.renameDevice("ase23","dev0","1337",ApiRequest::OTHER);
+    QNetworkReply* r = req.renameDevice("ase23","dev0","1337",ApiRequest::OTHER);
     loop.connect(r, SIGNAL(finished()), SLOT(quit()));
     loop.exec();
-    qDebug() << r->readAll();*/
+    qDebug() << r->readAll();
     
-    DeviceListPtr ptr = req.listDevices("ase23");
+    /*DeviceListPtr ptr = req.listDevices("ase23");
     loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
-    qDebug() << ptr->devicesList();
+    qDebug() << ptr->devicesList();*/
     
     return 0;
 }

@@ -40,7 +40,7 @@
 #include "TagList.h"
 #include "Settings.h"
 #include "DeviceUpdates.h"
-#include "DeviceList.h"
+/*#include "DeviceList.h"*/
 
 #include <QByteArray>
 #include <QString>
@@ -195,7 +195,7 @@ public:
     
     QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type);
     
-    DeviceListPtr listDevices( const QString& username );
+    /*DeviceListPtr listDevices( const QString& username );*/
     
     EpisodeActionListPtr episodeActions(const QString& username);
 

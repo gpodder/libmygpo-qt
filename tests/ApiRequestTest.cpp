@@ -59,134 +59,134 @@ void ApiRequestTest::cleanupTestCase()
 void ApiRequestTest::testToplist()
 {
   QEventLoop loop;
-  PodcastList ret = m_req.toplist(10);
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  PodcastListPtr ret = m_req.toplist(10);
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QCOMPARE(ret.list().size(),10);
+  QCOMPARE(ret->list().size(),10);
 }
 
 void ApiRequestTest::testSuggestions()
 {
   QEventLoop loop;
-  PodcastList ret = m_req.toplist(5);
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  PodcastListPtr ret = m_req.toplist(5);
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QVERIFY(ret.list().size() <= 5);
+  QVERIFY(ret->list().size() <= 5);
 }
 
 void ApiRequestTest::testPodcastsOfTag()
 {
   QEventLoop loop;
-  PodcastList ret = m_req.podcastsOfTag(3,QLatin1String("fm4"));
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  PodcastListPtr ret = m_req.podcastsOfTag(3,QLatin1String("fm4"));
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QVERIFY(ret.list().size() <= 3);
+  QVERIFY(ret->list().size() <= 3);
 }
 
 void ApiRequestTest::testPodcastData()
 {
   QEventLoop loop;
-  Podcast ret = m_req.podcastData(QUrl(QLatin1String("http://pauldotcom.com/podcast/psw.xml")));
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  PodcastPtr ret = m_req.podcastData(QUrl(QLatin1String("http://pauldotcom.com/podcast/psw.xml")));
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QCOMPARE(ret.title(),QLatin1String("PaulDotCom Security Weekly"));
-  QCOMPARE(ret.url(), QUrl(QLatin1String("http://pauldotcom.com/podcast/psw.xml")));
-  QCOMPARE(ret.description(), QLatin1String("PaulDotCom Security Weekly Podcast with Paul, Larry, Mick, Carlos, and special guests!"));
-  QCOMPARE(ret.logoUrl(), QUrl(QLatin1String("http://pauldotcom.com/images/psw-logo-sm.png")));
-  QCOMPARE(ret.website(), QUrl(QLatin1String("http://pauldotcom.com/")));
-  QCOMPARE(ret.mygpoUrl(), QUrl(QLatin1String("http://gpodder.net/podcast/11194")));
+  QCOMPARE(ret->title(),QLatin1String("PaulDotCom Security Weekly"));
+  QCOMPARE(ret->url(), QUrl(QLatin1String("http://pauldotcom.com/podcast/psw.xml")));
+  QCOMPARE(ret->description(), QLatin1String("PaulDotCom Security Weekly Podcast with Paul, Larry, Mick, Carlos, and special guests!"));
+  QCOMPARE(ret->logoUrl(), QUrl(QLatin1String("http://pauldotcom.com/images/psw-logo-sm.png")));
+  QCOMPARE(ret->website(), QUrl(QLatin1String("http://pauldotcom.com/")));
+  QCOMPARE(ret->mygpoUrl(), QUrl(QLatin1String("http://gpodder.net/podcast/11194")));
 }
 
-/*
+
 void ApiRequestTest::testEpisodeData()
 {
   QEventLoop loop;
-  Episode ret = m_req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  EpisodePtr ret = m_req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QCOMPARE(ret.title(),QLatin1String("TWiT 245: No Hitler For You"));
-  QCOMPARE(ret.url(), QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
-  QCOMPARE(ret.podcastTitle(), QLatin1String("this WEEK in TECH - MP3 Edition"));
-  QCOMPARE(ret.podcastUrl(), QUrl(QLatin1String("http://leo.am/podcasts/twit")));
+  QCOMPARE(ret->title(),QLatin1String("TWiT 245: No Hitler For You"));
+  QCOMPARE(ret->url(), QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
+  QCOMPARE(ret->podcastTitle(), QLatin1String("this WEEK in TECH - MP3 Edition"));
+  QCOMPARE(ret->podcastUrl(), QUrl(QLatin1String("http://leo.am/podcasts/twit")));
 }
-*/
 
-/*
+
+
 void ApiRequestTest::testFavoriteEpisodes()
 {
   QEventLoop loop;
-  EpisodeList ret = m_req.favoriteEpisodes(QLatin1String("ase23"));
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  EpisodeListPtr ret = m_req.favoriteEpisodes(QLatin1String("ase23"));
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QVERIFY(ret.list().size() == 2);
-  QCOMPARE(ret.list().at(0).title(), QLatin1String("Episode 5: Computer vision with opencv"));
-  QCOMPARE(ret.list().at(1).title(), QLatin1String("#420: Neighborhood Watch"));
-  QCOMPARE(ret.list().at(0).podcastTitle(), QLatin1String("Hacker Medley"));
-  QCOMPARE(ret.list().at(1).podcastTitle(), QLatin1String("This American Life"));
-  QCOMPARE(ret.list().at(0).url(),QUrl(QLatin1String("http://hackermedley.org/podcasts/medley5.mp3")));
-  QCOMPARE(ret.list().at(1).url(), QUrl(QLatin1String("http://feeds.thisamericanlife.org/~r/talpodcast/~5/9M6uAGaPVVY/420.mp3")));
-  QCOMPARE(ret.list().at(0).podcastUrl(),QUrl(QLatin1String("http://hackermedley.org/feed/podcast/")));
-  QCOMPARE(ret.list().at(1).podcastUrl(),QUrl(QLatin1String("http://feeds.thisamericanlife.org/talpodcast")));
+  QVERIFY(ret->list().size() == 2);
+  QCOMPARE(ret->list().at(0)->title(), QLatin1String("Episode 5: Computer vision with opencv"));
+  QCOMPARE(ret->list().at(1)->title(), QLatin1String("#420: Neighborhood Watch"));
+  QCOMPARE(ret->list().at(0)->podcastTitle(), QLatin1String("Hacker Medley"));
+  QCOMPARE(ret->list().at(1)->podcastTitle(), QLatin1String("This American Life"));
+  QCOMPARE(ret->list().at(0)->url(),QUrl(QLatin1String("http://hackermedley.org/podcasts/medley5.mp3")));
+  QCOMPARE(ret->list().at(1)->url(), QUrl(QLatin1String("http://feeds.thisamericanlife.org/~r/talpodcast/~5/9M6uAGaPVVY/420.mp3")));
+  QCOMPARE(ret->list().at(0)->podcastUrl(),QUrl(QLatin1String("http://hackermedley.org/feed/podcast/")));
+  QCOMPARE(ret->list().at(1)->podcastUrl(),QUrl(QLatin1String("http://feeds.thisamericanlife.org/talpodcast")));
 }
-*/
+
 
 void ApiRequestTest::testTopTags()
 {
   QEventLoop loop;
-  TagList ret = m_req.topTags(13);
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  TagListPtr ret = m_req.topTags(13);
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
-  QVERIFY(ret.list().size() == 13);
+  QVERIFY(ret->list().size() == 13);
 }
 
-/*
+
 void ApiRequestTest::testAddRemoveSubscriptionsAdd()
 {
   QEventLoop loop;
   QList<QUrl> addList;
   QList<QUrl> removeList;
   addList.append(QUrl(QLatin1String("http://downloads.bbc.co.uk/podcasts/worldservice/scia/rss.xml")));
-  AddRemoveResult ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  AddRemoveResultPtr ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
 }
@@ -197,16 +197,16 @@ void ApiRequestTest::testAddRemoveSubscriptionsRemove()
   QList<QUrl> addList;
   QList<QUrl> removeList;
   removeList.append(QUrl(QLatin1String("http://downloads.bbc.co.uk/podcasts/worldservice/scia/rss.xml")));
-  AddRemoveResult ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
-  QObject::connect(&ret,SIGNAL(parseError()), this, SLOT(error()));
-  QObject::connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-  loop.connect(&ret,SIGNAL(finished()),SLOT(quit()));
-  loop.connect(&ret,SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-  loop.connect(&ret,SIGNAL(parseError()),SLOT(quit()));
+  AddRemoveResultPtr ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
+  QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+  QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+  loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+  loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
   loop.exec();
   QVERIFY(m_ok);
 }
-*/
+
 
 void ApiRequestTest::error()
 {
