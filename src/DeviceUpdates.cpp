@@ -74,8 +74,7 @@ DeviceUpdatesPrivate::DeviceUpdatesPrivate(DeviceUpdates* qq, QNetworkReply* rep
 
 DeviceUpdatesPrivate::~DeviceUpdatesPrivate()
 {
-    if (m_reply)
-        delete m_reply;
+    delete m_reply;
 }
 
 
