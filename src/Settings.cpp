@@ -92,7 +92,6 @@ void SettingsPrivate::parseData()
 {
 	if (m_reply->error() == QNetworkReply::NoError) {
         QJson::Parser parser;
-        qDebug() << m_reply->peek(m_reply->bytesAvailable());
         if ( parse ( m_reply->readAll()  ) )
         {
             emit q->finished();

@@ -227,7 +227,7 @@ bool PodcastPrivate::parse(const QByteArray& data)
 void PodcastPrivate::parseData() {
     //parsen und signal senden
     QJson::Parser parser;
-    if (parse( m_reply->peek( m_reply->bytesAvailable() ) ) ) {
+    if (parse( m_reply->readAll( ) ) ) {
       emit q->finished();
     } else {
       emit q->parseError();
