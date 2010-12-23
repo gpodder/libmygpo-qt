@@ -36,7 +36,7 @@
 #include <Settings.h>
 #include <DeviceUpdates.h>
 #include <QDateTime>
-/*#include <DeviceList.h>*/
+#include <DeviceList.h>
  
 using namespace mygpo;
 
@@ -438,8 +438,7 @@ int main(int argc, char **argv)
     qDebug() << "EpisodeActions";
     qDebug() << "timestamp: " << episodeActions3->timestamp();
     foreach(const EpisodeActionPtr& episodeAction, episodeActions3->list()) {
-            qDebug() << episodeAction->podcastUrl();
-            qDebug() << episodeAction->action();
+            qDebug() << episodeAction->podcastUrl() << episodeAction->action();
     }
 
 
@@ -471,12 +470,12 @@ int main(int argc, char **argv)
     loop.exec();
     qDebug() << r->readAll();
     
-    /*DeviceListPtr ptr = req.listDevices("ase23");
-    loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
-    loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-    loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
+    DeviceListPtr deviceListPtr = req.listDevices("ase23");
+    loop.connect(deviceListPtr.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(deviceListPtr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(deviceListPtr.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
-    qDebug() << ptr->devicesList();*/
+    qDebug() << deviceListPtr->devicesList();
     
     return 0;
 }

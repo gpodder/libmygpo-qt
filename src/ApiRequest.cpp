@@ -64,7 +64,7 @@ public:
     SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QVariant >& set, const QList<QString>& remove);
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
     QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type);
-    /*DeviceListPtr listDevices( const QString& username );*/
+    DeviceListPtr listDevices( const QString& username );
     EpisodeActionListPtr episodeActions(const QString& username);
     EpisodeActionListPtr episodeActionsByPodcast(const QString& username, const QString& podcastUrl);
     EpisodeActionListPtr episodeActionsByDevice(const QString& username, const QString& deviceId);
@@ -383,14 +383,14 @@ QNetworkReply* ApiRequestPrivate::renameDevice(const QString& username , const Q
    return reply;
 }
 
-/*DeviceListPtr ApiRequestPrivate::listDevices(const QString& username)
+DeviceListPtr ApiRequestPrivate::listDevices(const QString& username)
 {
     QUrl requestUrl = UrlBuilder::getDeviceListUrl(username);
     QNetworkReply *reply;
     reply = m_requestHandler.getRequest( requestUrl );
     DeviceListPtr list(new DeviceList(reply));
     return list;
-}*/
+}
 
 
 ApiRequest::ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d(new ApiRequestPrivate( username, password, nam ))
@@ -555,7 +555,7 @@ QNetworkReply* ApiRequest::renameDevice(const QString& username , const QString&
    return d->renameDevice(username, deviceId, caption, type);
 }
 
-/*DeviceListPtr ApiRequest::listDevices(const QString& username)
+DeviceListPtr ApiRequest::listDevices(const QString& username)
 {
     return d->listDevices(username);
-}*/
+}
