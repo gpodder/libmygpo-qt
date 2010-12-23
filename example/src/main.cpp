@@ -471,9 +471,8 @@ int main(int argc, char **argv)
             qDebug() << episodeAction->podcastUrl() << episodeAction->action();
     }
 
-
     qDebug() << "Devices";
-    DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev1",QDateTime::fromString(QLatin1String("Tue Dez 7 01:00:00 2010")).toMSecsSinceEpoch());
+    DeviceUpdatesPtr ptr = req.deviceUpdates("ase23","dev0",QDateTime::fromString(QLatin1String("7.12.2010"), QLatin1String("dd.MM.yyyy")).toMSecsSinceEpoch()/1000);
     loop.connect(ptr.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(ptr.data(),SIGNAL(parseError()),SLOT(quit()));
