@@ -126,7 +126,7 @@ void TagListPrivate::error(QNetworkReply::NetworkError error)
     emit q->requestError(error);
 }
 
-TagList::TagList ( QNetworkReply* reply, QObject* parent) : d(new TagListPrivate(this,reply))
+TagList::TagList ( QNetworkReply* reply, QObject* parent) : QObject(parent), d(new TagListPrivate(this,reply))
 {
 
 }

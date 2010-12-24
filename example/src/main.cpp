@@ -37,6 +37,7 @@
 #include <DeviceUpdates.h>
 #include <QDateTime>
 #include <DeviceList.h>
+#include <Device.h>
  
 using namespace mygpo;
 
@@ -504,7 +505,14 @@ int main(int argc, char **argv)
     loop.connect(deviceListPtr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(deviceListPtr.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
-    qDebug() << deviceListPtr->devicesList();
+    qDebug() << "Device list:";
+    foreach(const DevicePtr& dev, deviceListPtr->devicesList()) {
+        qDebug() << dev->id();
+        qDebug() << dev->type();
+        qDebug() << dev->caption();
+        qDebug() << dev->subscriptions();
+    }
+    
     
     return 0;
 }

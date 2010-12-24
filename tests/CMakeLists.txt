@@ -28,6 +28,7 @@ set ( APIREQUEST_SRC
   ${TESTOBJECTS_SRCDIR}/DeviceList.cpp
   ${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp
   ${TESTOBJECTS_SRCDIR}/EpisodeActionList.cpp
+  ${TESTOBJECTS_SRCDIR}/Device.cpp
 )
 
 
@@ -51,6 +52,7 @@ set ( APIREQUEST_H
   ${TESTOBJECTS_SRCDIR}/DeviceList.h
   ${TESTOBJECTS_SRCDIR}/EpisodeAction.h 
   ${TESTOBJECTS_SRCDIR}/EpisodeActionList.h 
+  ${TESTOBJECTS_SRCDIR}/Device.h
 )
 
 QT4_WRAP_CPP(APIREQUEST_MOC_SRC ${APIREQUEST_H} )
@@ -66,9 +68,10 @@ QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/DeviceUpdates.cpp DeviceUpdates.moc)
 QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/DeviceList.cpp DeviceList.moc)
 QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp EpisodeAction.moc)
 QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/EpisodeActionList.cpp EpisodeActionList.moc)
+QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Device.cpp Device.moc)
 
 # ApiRequest library
-add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc Podcast.moc AddRemoveResult.moc TagList.moc Tag.moc Settings.moc DeviceUpdates.moc EpisodeAction.moc EpisodeActionList.moc DeviceList.moc)
+add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc Podcast.moc AddRemoveResult.moc TagList.moc Tag.moc Settings.moc DeviceUpdates.moc EpisodeAction.moc EpisodeActionList.moc DeviceList.moc Device.moc)
 
 # RequestHandler library
 QT4_WRAP_CPP(REQUESTHANDLER_MOC_SRC ${TESTOBJECTS_SRCDIR}/RequestHandler.h)
