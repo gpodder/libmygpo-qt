@@ -20,10 +20,10 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include <QNetworkReply>
-#include <parser.h>
 
-#include <QDebug>
+#include <QVariant>
+
+#include <parser.h>
 
 #include "Settings.h"
 
@@ -90,7 +90,7 @@ bool SettingsPrivate::parse(const QByteArray& data)
 
 void SettingsPrivate::parseData()
 {
-	if (m_reply->error() == QNetworkReply::NoError) {
+    if (m_reply->error() == QNetworkReply::NoError) {
         QJson::Parser parser;
         if ( parse ( m_reply->readAll()  ) )
         {

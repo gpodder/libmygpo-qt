@@ -24,8 +24,7 @@
 
 #include "AddRemoveResult.h"
 
-#include <QDebug>
-#include <QSharedPointer>
+#include <QUrl>
 
 namespace mygpo {
 
@@ -62,7 +61,7 @@ AddRemoveResultPrivate::AddRemoveResultPrivate ( AddRemoveResult* qq, QNetworkRe
 
 AddRemoveResultPrivate::~AddRemoveResultPrivate()
 {
-        delete m_reply;
+    delete m_reply;
 }
 
 
@@ -119,16 +118,16 @@ bool AddRemoveResultPrivate::parse ( const QByteArray& data )
 
 void AddRemoveResultPrivate::parseData()
 {
-	if (m_reply->error() == QNetworkReply::NoError) {
+    if (m_reply->error() == QNetworkReply::NoError) {
 
-		if ( parse ( m_reply->readAll( ) ) )
-		{
-			emit q->finished();
-		}
-		else
-		{
-			emit q->parseError();
-		}
+        if ( parse ( m_reply->readAll( ) ) )
+        {
+            emit q->finished();
+        }
+        else
+        {
+            emit q->parseError();
+        }
     }
 }
 
@@ -145,22 +144,22 @@ AddRemoveResult::AddRemoveResult( QNetworkReply* reply ,QObject* parent ) : QObj
 
 AddRemoveResult::~AddRemoveResult ()
 {
-	delete d;
+    delete d;
 }
 
 QVariant AddRemoveResult::updateUrls() const
 {
-	return d->updateUrls();
+    return d->updateUrls();
 }
 
 qulonglong AddRemoveResult::timestamp() const
 {
-	return d->timestamp();
+    return d->timestamp();
 }
 
 QList<QPair<QUrl, QUrl> > AddRemoveResult::updateUrlsList() const
 {
-	return d->updateUrlsList();
+    return d->updateUrlsList();
 }
 
 }

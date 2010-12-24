@@ -31,7 +31,7 @@
 #include "mygpo_export.h"
 
 namespace mygpo {
-  
+
 class PodcastListPrivate;
 
 class MYGPO_EXPORT PodcastList : public QObject {
@@ -49,13 +49,13 @@ private:
     friend class PodcastListPrivate;
 
 signals:
-  /**Gets emitted when the data is ready to read*/
-  void finished();
-  /**Gets emitted when an parse error ocurred*/
-  void parseError();
-  /**Gets emitted when an request error ocurred*/
-  void requestError(QNetworkReply::NetworkError error);
-  
+    /**Gets emitted when the data is ready to read*/
+    void finished();
+    /**Gets emitted when an parse error ocurred*/
+    void parseError();
+    /**Gets emitted when an request error ocurred*/
+    void requestError(QNetworkReply::NetworkError error);
+
 };
 
 typedef QSharedPointer<PodcastList> PodcastListPtr;

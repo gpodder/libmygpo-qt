@@ -36,8 +36,8 @@ namespace mygpo {
 class EpisodeActionPrivate;
 
 class MYGPO_EXPORT EpisodeAction : public QObject {
-	Q_OBJECT
-	Q_ENUMS(ActionType)
+    Q_OBJECT
+    Q_ENUMS(ActionType)
     Q_PROPERTY(QUrl podcastUrl READ podcastUrl CONSTANT)
     Q_PROPERTY(QUrl episodeUrl READ episodeUrl CONSTANT)
     Q_PROPERTY(QString deviceName READ deviceName CONSTANT)
@@ -49,9 +49,9 @@ class MYGPO_EXPORT EpisodeAction : public QObject {
 
 public:
     enum ActionType { Download, Play, Delete, New };
-	EpisodeAction(const QVariant& variant, QObject* parent = 0);
-	EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
-	virtual ~EpisodeAction();
+    EpisodeAction(const QVariant& variant, QObject* parent = 0);
+    EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
+    virtual ~EpisodeAction();
 
     QUrl podcastUrl() const;
     QUrl episodeUrl() const;
@@ -63,7 +63,7 @@ public:
     qulonglong total() const;
 
 private:
-	Q_DISABLE_COPY(EpisodeAction)
+    Q_DISABLE_COPY(EpisodeAction)
     EpisodeActionPrivate* const d;
     friend class EpisodeActionPrivate;
 };

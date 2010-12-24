@@ -5,7 +5,7 @@ set ( LIBMYGPO_QT_SRC
         Settings.cpp
         AddRemoveResult.cpp
         Tag.cpp 
-        JsonParser.cpp 
+        JsonCreator.cpp 
         Podcast.cpp
         Episode.cpp 
         EpisodeAction.cpp
@@ -13,7 +13,6 @@ set ( LIBMYGPO_QT_SRC
         ApiRequest.cpp
         RequestHandler.cpp
         UrlBuilder.cpp
-        RequestExceptions.cpp
         TagList.cpp
         EpisodeList.cpp
         PodcastList.cpp
@@ -25,8 +24,7 @@ set ( LIBMYGPO_QT_SRC
 set ( LIBMYGPO_QT_H
         Settings.h
         AddRemoveResult.h
-        JsonParser.h
-        mygpo.h
+        JsonCreator.h
         mygpo_export.h
         Podcast.h
         Episode.h
@@ -36,7 +34,6 @@ set ( LIBMYGPO_QT_H
         ApiRequest.h
         RequestHandler.h
         UrlBuilder.h
-        RequestExceptions.h
         TagList.h
         EpisodeList.h
         PodcastList.h

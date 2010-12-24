@@ -13,7 +13,7 @@ add_definitions( -Werror )
 set ( APIREQUEST_SRC
   ${TESTOBJECTS_SRCDIR}/AddRemoveResult.cpp
   ${TESTOBJECTS_SRCDIR}/Tag.cpp 
-  ${TESTOBJECTS_SRCDIR}/JsonParser.cpp 
+  ${TESTOBJECTS_SRCDIR}/JsonCreator.cpp 
   ${TESTOBJECTS_SRCDIR}/Podcast.cpp
   ${TESTOBJECTS_SRCDIR}/Episode.cpp 
   ${TESTOBJECTS_SRCDIR}/ApiRequest.cpp
@@ -22,7 +22,6 @@ set ( APIREQUEST_SRC
   ${TESTOBJECTS_SRCDIR}/TagList.cpp
   ${TESTOBJECTS_SRCDIR}/EpisodeList.cpp
   ${TESTOBJECTS_SRCDIR}/PodcastList.cpp
-  ${TESTOBJECTS_SRCDIR}/RequestExceptions.cpp
   ${TESTOBJECTS_SRCDIR}/Settings.cpp
   ${TESTOBJECTS_SRCDIR}/DeviceUpdates.cpp
   ${TESTOBJECTS_SRCDIR}/DeviceList.cpp
@@ -34,8 +33,7 @@ set ( APIREQUEST_SRC
 
 set ( APIREQUEST_H
   ${TESTOBJECTS_SRCDIR}/AddRemoveResult.h
-  ${TESTOBJECTS_SRCDIR}/JsonParser.h
-  ${TESTOBJECTS_SRCDIR}/mygpo.h
+  ${TESTOBJECTS_SRCDIR}/JsonCreator.h
   ${TESTOBJECTS_SRCDIR}/mygpo_export.h
   ${TESTOBJECTS_SRCDIR}/Podcast.h
   ${TESTOBJECTS_SRCDIR}/Episode.h
@@ -43,7 +41,6 @@ set ( APIREQUEST_H
   ${TESTOBJECTS_SRCDIR}/ApiRequest.h
   ${TESTOBJECTS_SRCDIR}/RequestHandler.h
   ${TESTOBJECTS_SRCDIR}/UrlBuilder.h
-  ${TESTOBJECTS_SRCDIR}/RequestExceptions.h
   ${TESTOBJECTS_SRCDIR}/TagList.h
   ${TESTOBJECTS_SRCDIR}/EpisodeList.h
   ${TESTOBJECTS_SRCDIR}/PodcastList.h

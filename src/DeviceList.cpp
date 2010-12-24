@@ -26,7 +26,7 @@
 
 namespace mygpo
 {
-    
+
 class DeviceListPrivate : public QObject
 {
     Q_OBJECT
@@ -35,17 +35,17 @@ public:
     virtual ~DeviceListPrivate();
     QVariant devices() const;
     QList< DevicePtr > devicesList() const;
-    
+
 private:
     DeviceList* q;
     QNetworkReply* m_reply;
     QVariant m_devices;
     QList<DevicePtr> m_devicesList;
     QNetworkReply::NetworkError m_error;
-    
+
     bool parse ( const QVariant& data );
     bool parse ( const QByteArray& data );
-    
+
 private slots:
     void parseData();
     void error ( QNetworkReply::NetworkError error );
@@ -74,7 +74,28 @@ QVariant DeviceListPrivate::devices() const
 
 QList< DevicePtr > DeviceListPrivate::devicesList() const
 {
-    return m_devicesList;
+    QVariantList varList = m_devices.toList();
+    QList< QMap< QString, QString > > ret;
+    foreach( const QVariant& var, varList)
+    {
+        if (var.canConvert(QVariant::Map))
+        {
+            QMap<QString,QVariant> varMap;
+            QMap<QString,QString> tmp;
+
+            varMap = var.toMap();
+            if (varMap.value(QLatin1String("id")).canConvert(QVariant::String))
+                tmp.insert(QLatin1String("id"),varMap.value(QLatin1String("id")).toString());
+            if (varMap.value(QLatin1String("caption")).canConvert(QVariant::String))
+                tmp.insert(QLatin1String("caption"),varMap.value(QLatin1String("caption")).toString());
+            if (varMap.value(QLatin1String("type")).canConvert(QVariant::String))
+                tmp.insert(QLatin1String("type"),varMap.value(QLatin1String("type")).toString());
+            if (varMap.value(QLatin1String("subscription")).canConvert(QVariant::Int))
+                tmp.insert(QLatin1String("subscription"),QString::number(varMap.value(QLatin1String("subscription")).toInt()));
+            ret.append(tmp);
+        }
+    }
+    return ret;
 }
 
 void DeviceListPrivate::error(QNetworkReply::NetworkError error)
@@ -106,8 +127,8 @@ bool DeviceListPrivate::parse(const QByteArray& data)
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if( ok ) {
-      ok = (parse( variant ));
+    if ( ok ) {
+        ok = (parse( variant ));
     }
     return ok;
 }

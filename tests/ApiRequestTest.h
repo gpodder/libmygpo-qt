@@ -28,34 +28,34 @@
 namespace mygpo {
 
 class ApiRequestTest : public QObject {
-	Q_OBJECT
+    Q_OBJECT
 public:
-  ApiRequestTest();
-  virtual ~ApiRequestTest();
+    ApiRequestTest();
+    virtual ~ApiRequestTest();
 
 private:
     ApiRequest m_req;
     bool m_ok;
-  
+
 private slots:
-  void initTestCase();
-  void cleanupTestCase();
-  void init();
-  void cleanup();
-  
-  void testToplist();
-  void testSuggestions();
-  void testPodcastsOfTag();
-  void testPodcastData();
-  void testEpisodeData();
-  void testFavoriteEpisodes();
-  void testTopTags();
-  void testAddRemoveSubscriptionsAdd();
-  void testAddRemoveSubscriptionsRemove();
-  
+    void initTestCase();
+    void cleanupTestCase();
+    void init();
+    void cleanup();
+
+    void testToplist();
+    void testSuggestions();
+    void testPodcastsOfTag();
+    void testPodcastData();
+    void testEpisodeData();
+    void testFavoriteEpisodes();
+    void testTopTags();
+    void testAddRemoveSubscriptionsAdd();
+    void testAddRemoveSubscriptionsRemove();
+
 public slots:
-  void error();
-  void error(QNetworkReply::NetworkError error);
+    void error();
+    void error(QNetworkReply::NetworkError error);
 };
 
 }

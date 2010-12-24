@@ -24,17 +24,12 @@
 #define APIREQUEST_H
 
 #define MYGPO_MAJOR_VERSION 0
-#define MYGPO_MINOR_VERSION 2
-#define MYGPO_PATCH_VERSION 5
+#define MYGPO_MINOR_VERSION 9
+#define MYGPO_PATCH_VERSION 0
 
-//#include "RequestHandler.h"
 #include "mygpo_export.h"
-#include "Podcast.h"
-#include "Episode.h"
-#include "Tag.h"
 #include "AddRemoveResult.h"
 #include "EpisodeList.h"
-#include "EpisodeAction.h"
 #include "EpisodeActionList.h"
 #include "PodcastList.h"
 #include "TagList.h"
@@ -213,7 +208,7 @@ public:
 
     AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
 
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
+    
     
 private:
     ApiRequestPrivate* const d;

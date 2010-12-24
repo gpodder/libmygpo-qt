@@ -20,9 +20,10 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "RequestHandler.h"
 #include <QAuthenticator>
 #include <QEventLoop>
+
+#include "RequestHandler.h"
 
 using namespace mygpo;
 
@@ -32,7 +33,7 @@ RequestHandler::RequestHandler(const QString& username, const QString& password,
     {
         m_nam = new QNetworkAccessManager();
         m_deleteNam = true;
-    }   
+    }
     QObject::connect(m_nam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,
                      SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
 }

@@ -27,7 +27,6 @@
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QNetworkRequest>
 
 namespace mygpo {
 
@@ -46,7 +45,7 @@ public:
      */
     RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam);
     RequestHandler(QNetworkAccessManager* nam);
-    
+
     virtual ~RequestHandler();
 
     /**
@@ -73,7 +72,7 @@ private:
     bool m_deleteNam;
 
 private slots:
-    void authenticate( QNetworkReply* reply, QAuthenticator* authentiactor );
+    void authenticate( QNetworkReply* reply, QAuthenticator* authenticator );
 };
 
 }
