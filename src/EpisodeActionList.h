@@ -27,6 +27,7 @@
 #include <QList>
 #include <QObject>
 #include <QVariant>
+
 #include "EpisodeAction.h"
 #include "mygpo_export.h"
 

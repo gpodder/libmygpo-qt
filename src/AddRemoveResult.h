@@ -23,12 +23,12 @@
 #ifndef ADDREMOVERESULT_H
 #define ADDREMOVERESULT_H
 
-#include <QObject>
 #include <QList>
-#include <QUrl>
 #include <QVariant>
 #include <QNetworkReply>
 #include <QSharedPointer>
+
+class QUrl;
 
 #include "mygpo_export.h"
 

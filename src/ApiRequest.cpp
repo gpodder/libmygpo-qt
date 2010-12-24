@@ -22,9 +22,9 @@
 
 
 #include "ApiRequest.h"
+
 #include "UrlBuilder.h"
-#include "JsonParser.h"
-//#include "RequestExceptions.h"
+#include "JsonCreator.h"
 #include "RequestHandler.h"
 
 
@@ -73,7 +73,6 @@ public:
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
     EpisodeActionListPtr episodeActionsByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
     AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, const QString& type);
 private:
     RequestHandler m_requestHandler;
 };
@@ -191,7 +190,7 @@ PodcastListPtr ApiRequestPrivate::suggestions ( uint count )
 AddRemoveResultPtr ApiRequestPrivate::addRemoveSubscriptions ( const QString& username, const QString& device,const QList< QUrl >& add, const QList< QUrl >& remove )
 {
     QUrl requesturl = UrlBuilder::getAddRemoveSubUrl ( username,device );
-    QByteArray data = JsonParser::addRemoveSubsToJSON ( add,remove );
+    QByteArray data = JsonCreator::addRemoveSubsToJSON ( add,remove );
     //TODO: Check if no URL is contained in both Lists
     QNetworkReply *reply;
     reply = m_requestHandler.postRequest ( data, requesturl );
@@ -240,7 +239,7 @@ SettingsPtr ApiRequestPrivate::setAccountSettings(const QString& username, QMap<
 {
     QUrl requesturl = UrlBuilder::getAccountSettingsUrl( username );
     QNetworkReply *reply;
-    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    QByteArray postData = JsonCreator::saveSettingsToJSON(set,remove);
     reply = m_requestHandler.postRequest(postData,requesturl);
     SettingsPtr settings(new Settings ( reply ));
     return settings;
@@ -250,7 +249,7 @@ SettingsPtr ApiRequestPrivate::setDeviceSettings(const QString& username, const 
 {
     QUrl requesturl = UrlBuilder::getDeviceSettingsUrl( username, device );
     QNetworkReply *reply;
-    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    QByteArray postData = JsonCreator::saveSettingsToJSON(set,remove);
     reply = m_requestHandler.postRequest(postData,requesturl);
     SettingsPtr settings(new Settings ( reply ));
     return settings;
@@ -260,7 +259,7 @@ SettingsPtr ApiRequestPrivate::setPodcastSettings(const QString& username, const
 {
     QUrl requesturl = UrlBuilder::getPodcastSettingsUrl( username, podcastUrl );
     QNetworkReply *reply;
-    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    QByteArray postData = JsonCreator::saveSettingsToJSON(set,remove);
     reply = m_requestHandler.postRequest(postData,requesturl);
     SettingsPtr settings(new Settings ( reply ));
     return settings;
@@ -270,7 +269,7 @@ SettingsPtr ApiRequestPrivate::setEpisodeSettings(const QString& username, const
 {
     QUrl requesturl = UrlBuilder::getEpisodeSettingsUrl( username, podcastUrl, episodeUrl );
     QNetworkReply *reply;
-    QByteArray postData = JsonParser::saveSettingsToJSON(set,remove);
+    QByteArray postData = JsonCreator::saveSettingsToJSON(set,remove);
     reply = m_requestHandler.postRequest(postData,requesturl);
     SettingsPtr settings(new Settings ( reply ));
     return settings;
@@ -351,7 +350,7 @@ EpisodeActionListPtr ApiRequestPrivate::episodeActionsByPodcastAndAggregate(cons
 AddRemoveResultPtr ApiRequestPrivate::uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions) {
     QUrl requesturl = UrlBuilder::getEpisodeActionsUrl(username);
     QNetworkReply *reply;
-    QByteArray postData = JsonParser::episodeActionListToJSON(episodeActions);
+    QByteArray postData = JsonCreator::episodeActionListToJSON(episodeActions);
     reply = m_requestHandler.postRequest(postData,requesturl);
     AddRemoveResultPtr addRemoveResult(new AddRemoveResult ( reply ));
     return addRemoveResult;
@@ -364,19 +363,19 @@ QNetworkReply* ApiRequestPrivate::renameDevice(const QString& username , const Q
    QByteArray data;
    switch (type) {
        case ApiRequest::DESKTOP:
-           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("desktop"));
+           data = JsonCreator::renameDeviceStringToJSON(caption,QLatin1String("desktop"));
            break;
        case ApiRequest::LAPTOP:
-           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("laptop"));
+           data = JsonCreator::renameDeviceStringToJSON(caption,QLatin1String("laptop"));
            break;
        case ApiRequest::MOBILE:
-           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("mobile"));
+           data = JsonCreator::renameDeviceStringToJSON(caption,QLatin1String("mobile"));
            break;
        case ApiRequest::SERVER:
-           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("server"));
+           data = JsonCreator::renameDeviceStringToJSON(caption,QLatin1String("server"));
            break;
        case ApiRequest::OTHER:
-           data = JsonParser::renameDeviceStringToJSON(caption,QLatin1String("other"));
+           data = JsonCreator::renameDeviceStringToJSON(caption,QLatin1String("other"));
            break;
    }
    reply = m_requestHandler.postRequest(data, requestUrl);

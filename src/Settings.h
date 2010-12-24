@@ -23,15 +23,13 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QObject>
 #include <QSharedPointer>
 #include <QMap>
-#include <QVariant>
 #include <QNetworkReply>
 
+class QVariant;
+
 #include "mygpo_export.h"
-
-
 
 namespace mygpo {
 
@@ -39,10 +37,10 @@ class SettingsPrivate;
 
 class MYGPO_EXPORT Settings : public QObject
 {
-    
+
     Q_OBJECT
     Q_PROPERTY( QVariant settings READ settings CONSTANT )
-    
+
 public:
     Settings(QNetworkReply* reply, QObject* parent = 0);
     virtual ~Settings();

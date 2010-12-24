@@ -24,12 +24,14 @@
 #define TAG_H
 
 #include <QSharedPointer>
-#include <QNetworkReply>
+#include <QVariant>
 
 #include "mygpo_export.h"
 
 namespace mygpo {
+
 class TagPrivate;
+
 class MYGPO_EXPORT Tag : public QObject
 {
     Q_OBJECT

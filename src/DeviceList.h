@@ -23,7 +23,6 @@
 #ifndef DEVICELIST_H
 #define DEVICELIST_H
 
-#include <QObject>
 #include <QNetworkReply>
 #include <QSharedPointer>
 
@@ -34,17 +33,17 @@ namespace mygpo
 
 class DeviceListPrivate;
 
-class MYGPO_EXPORT DeviceList : public QObject 
+class MYGPO_EXPORT DeviceList : public QObject
 {
     Q_OBJECT
     Q_PROPERTY ( QVariant devices READ devices CONSTANT )
-    
+
 public:
     DeviceList(QNetworkReply* reply, QObject* parent = 0);
     virtual ~DeviceList();
     QVariant devices() const;
     QList< QMap<QString,QString> > devicesList() const;
-    
+
 private:
     Q_DISABLE_COPY(DeviceList)
     DeviceListPrivate* const d;
@@ -56,7 +55,7 @@ signals:
     void parseError();
     /**Gets emitted when an request error ocurred*/
     void requestError ( QNetworkReply::NetworkError error );
-    
+
 };
 
 typedef QSharedPointer<DeviceList> DeviceListPtr;

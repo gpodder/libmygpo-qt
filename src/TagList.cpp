@@ -62,7 +62,7 @@ TagListPrivate::TagListPrivate ( TagList* qq, QNetworkReply* reply ) : q(qq), m_
 
 TagListPrivate::~TagListPrivate()
 {
-	delete m_reply;
+    delete m_reply;
 }
 
 QList<TagPtr> TagListPrivate::list() const
@@ -111,7 +111,7 @@ bool TagListPrivate::parse(const QByteArray& data)
 
 void TagListPrivate::parseData()
 {
-	if (m_reply->error() == QNetworkReply::NoError) {
+    if (m_reply->error() == QNetworkReply::NoError) {
         if (parse( m_reply->readAll() ) )  {
             emit q->finished();
         } else {

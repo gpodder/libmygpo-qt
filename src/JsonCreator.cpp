@@ -28,11 +28,11 @@
 #include <serializer.h>
 #include <parser.h>
 
-#include "JsonParser.h"
+#include "JsonCreator.h"
 
 using namespace mygpo;
 
-QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList< QUrl >& remove)
+QByteArray JsonCreator::addRemoveSubsToJSON(const QList< QUrl >& add, const QList< QUrl >& remove)
 {
     QJson::Serializer serializer;
     QVariantMap jsonData;
@@ -44,7 +44,7 @@ QByteArray JsonParser::addRemoveSubsToJSON(const QList< QUrl >& add, const QList
     return jsonByteArray;
 }
 
-QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QVariant >& set, const QList< QString >& remove)
+QByteArray JsonCreator::saveSettingsToJSON(const QMap< QString, QVariant >& set, const QList< QString >& remove)
 {
     QJson::Serializer serializer;
     QVariantMap jsonData;
@@ -56,7 +56,7 @@ QByteArray JsonParser::saveSettingsToJSON(const QMap< QString, QVariant >& set, 
     return jsonByteArray;
 }
 
-QByteArray JsonParser::episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions)
+QByteArray JsonCreator::episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions)
 {
     QJson::Serializer serializer;
     QVariantList jsonData;
@@ -69,7 +69,7 @@ QByteArray JsonParser::episodeActionListToJSON(const QList<EpisodeActionPtr>& ep
     return jsonByteArray;
 }
 
-QVariantList JsonParser::urlListToQVariantList(const QList< QUrl >& urls)
+QVariantList JsonCreator::urlListToQVariantList(const QList< QUrl >& urls)
 {
     QVariantList list;
     foreach (const QUrl& url,urls) {
@@ -79,7 +79,7 @@ QVariantList JsonParser::urlListToQVariantList(const QList< QUrl >& urls)
     return list;
 }
 
-QVariantList JsonParser::stringListToQVariantList(const QList< QString >& strings)
+QVariantList JsonCreator::stringListToQVariantList(const QList< QString >& strings)
 {
     QVariantList list;
     foreach (const QString& str,strings) {
@@ -89,7 +89,7 @@ QVariantList JsonParser::stringListToQVariantList(const QList< QString >& string
     return list;
 }
 
-QVariantMap mygpo::JsonParser::stringMapToQVariantMap(const QMap< QString, QString >& stringmap)
+QVariantMap mygpo::JsonCreator::stringMapToQVariantMap(const QMap< QString, QString >& stringmap)
 {
     QVariantMap map;
     foreach(const QString& str,stringmap.keys() ) {
@@ -98,7 +98,7 @@ QVariantMap mygpo::JsonParser::stringMapToQVariantMap(const QMap< QString, QStri
     return map;
 }
 
-QVariantMap JsonParser::episodeActionToQVariantMap(const EpisodeActionPtr episodeAction)
+QVariantMap JsonCreator::episodeActionToQVariantMap(const EpisodeActionPtr episodeAction)
 {
     QVariantMap map;
     map.insert(QLatin1String("podcast"), episodeAction->podcastUrl());
@@ -128,7 +128,7 @@ QVariantMap JsonParser::episodeActionToQVariantMap(const EpisodeActionPtr episod
     return map;
 }
 
-QByteArray mygpo::JsonParser::renameDeviceStringToJSON(const QString& caption, const QString& type ) 
+QByteArray mygpo::JsonCreator::renameDeviceStringToJSON(const QString& caption, const QString& type ) 
 {
   QJson::Serializer serializer;
   QVariantMap jsonData;

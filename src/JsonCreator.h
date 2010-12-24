@@ -20,22 +20,36 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "RequestExceptions.h"
-#include <QLatin1String>
+#ifndef JSONPARSER_H
+#define JSONPARSER_H
 
-using namespace mygpo;
+#include <QByteArray>
+#include <QVariant>
+#include <QList>
+#include <QMap>
+#include "EpisodeAction.h"
 
-RequestException::RequestException(const QString &s, QNetworkReply::NetworkError errorFlag)
-					: std::runtime_error(s.toStdString()), errorFlag(errorFlag) { }
+class QUrl;
+class QString;
 
-InvalidDeviceIdException::InvalidDeviceIdException()
-					: RequestException(QLatin1String("Invalid device id."), QNetworkReply::ContentNotFoundError) { }
+namespace mygpo {
 
-InvalidUserException::InvalidUserException()
-					: RequestException(QLatin1String("Invalid username."), QNetworkReply::ContentAccessDenied) { }
+class JsonCreator
+{
 
-InvalidAuthException::InvalidAuthException()
-					: RequestException(QLatin1String("Authentication failed."), QNetworkReply::ContentAccessDenied) { }
+public:
+    static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
+    static QByteArray saveSettingsToJSON(const QMap<QString, QVariant >& set, const QList<QString>& remove);
+    static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
+    static QByteArray renameDeviceStringToJSON(const QString& caption, const QString& type );
 
-ServerNotFoundException::ServerNotFoundException()
-					: RequestException(QLatin1String("Server not found."), QNetworkReply::AuthenticationRequiredError) { }
+private:
+    static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
+    static QVariantList stringListToQVariantList(const QList<QString>& strings);
+    static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
+    static QVariantMap episodeActionToQVariantMap(const EpisodeActionPtr episodeAction);
+};
+
+}
+
+#endif // JSONPARSER_H

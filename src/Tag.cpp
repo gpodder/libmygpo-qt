@@ -20,6 +20,7 @@
 * USA                                                                      *
 ***************************************************************************/
 
+
 #include "Tag.h"
 
 namespace mygpo {
@@ -82,7 +83,7 @@ Tag::Tag ( const QVariant& variant, QObject* parent ) : QObject ( parent ), d(ne
 
 Tag::~Tag()
 {
-	delete d;
+    delete d;
 }
 
 QString Tag::tag() const
