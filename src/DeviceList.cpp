@@ -74,28 +74,7 @@ QVariant DeviceListPrivate::devices() const
 
 QList< DevicePtr > DeviceListPrivate::devicesList() const
 {
-    QVariantList varList = m_devices.toList();
-    QList< QMap< QString, QString > > ret;
-    foreach( const QVariant& var, varList)
-    {
-        if (var.canConvert(QVariant::Map))
-        {
-            QMap<QString,QVariant> varMap;
-            QMap<QString,QString> tmp;
-
-            varMap = var.toMap();
-            if (varMap.value(QLatin1String("id")).canConvert(QVariant::String))
-                tmp.insert(QLatin1String("id"),varMap.value(QLatin1String("id")).toString());
-            if (varMap.value(QLatin1String("caption")).canConvert(QVariant::String))
-                tmp.insert(QLatin1String("caption"),varMap.value(QLatin1String("caption")).toString());
-            if (varMap.value(QLatin1String("type")).canConvert(QVariant::String))
-                tmp.insert(QLatin1String("type"),varMap.value(QLatin1String("type")).toString());
-            if (varMap.value(QLatin1String("subscription")).canConvert(QVariant::Int))
-                tmp.insert(QLatin1String("subscription"),QString::number(varMap.value(QLatin1String("subscription")).toInt()));
-            ret.append(tmp);
-        }
-    }
-    return ret;
+    return m_devicesList;
 }
 
 void DeviceListPrivate::error(QNetworkReply::NetworkError error)
