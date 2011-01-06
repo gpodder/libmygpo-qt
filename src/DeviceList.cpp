@@ -92,9 +92,10 @@ bool DeviceListPrivate::parse(const QVariant& data)
     QVariantList devList;
     foreach( const QVariant& var, varList)
     {
-        m_devicesList.append(DevicePtr (new Device(var)));
+		DevicePtr ptr(new Device(var));
+        m_devicesList.append(ptr);
         QVariant v;
-        v.setValue<DevicePtr>(DevicePtr (new Device(var)));
+        v.setValue<DevicePtr>(ptr);
         devList.append(v);
     }
     m_devices = devList;

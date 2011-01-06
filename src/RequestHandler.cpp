@@ -21,36 +21,35 @@
 ***************************************************************************/
 
 #include <QAuthenticator>
-#include <QEventLoop>
+#include <QCoreApplication>
 
 #include "RequestHandler.h"
 
 using namespace mygpo;
 
-RequestHandler::RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_username(username), m_password(password), m_loginFailed(false), m_nam(nam), m_deleteNam(false)
+RequestHandler::RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_username(username), m_password(password), m_loginFailed(false), m_nam(nam)
 {
     if (m_nam==0)
     {
-        m_nam = new QNetworkAccessManager();
-        m_deleteNam = true;
+        m_nam = new QNetworkAccessManager(qApp);
+        //m_nam->deleteLater();
     }
     QObject::connect(m_nam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,
                      SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
 }
 
-RequestHandler::RequestHandler(QNetworkAccessManager* nam) : m_password(), m_loginFailed(false), m_nam(nam), m_deleteNam(false)
+RequestHandler::RequestHandler(QNetworkAccessManager* nam) : m_password(), m_loginFailed(false), m_nam(nam)
 {
     if (m_nam==0)
     {
         m_nam = new QNetworkAccessManager();
-        m_deleteNam = true;
+        //m_nam->deleteLater();
     }
 }
 
 RequestHandler::~RequestHandler()
 {
-    if (m_deleteNam)
-        delete m_nam;
+    //m_nam->deleteLater();
 }
 
 QNetworkReply* RequestHandler::getRequest(const QUrl& url)

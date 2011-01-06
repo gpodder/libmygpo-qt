@@ -69,7 +69,6 @@ private:
     QString m_password;
     bool m_loginFailed;
     QNetworkAccessManager* m_nam;
-    bool m_deleteNam;
 
 private slots:
     void authenticate( QNetworkReply* reply, QAuthenticator* authenticator );
