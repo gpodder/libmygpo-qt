@@ -24,7 +24,7 @@
 
 using namespace mygpo;
 
-ApiRequestTest::ApiRequestTest() : m_req( QLatin1String("ase23"),QLatin1String("csf-sepm") )
+ApiRequestTest::ApiRequestTest() : m_req( QLatin1String("ase23"),QLatin1String("csf-sepm"), new QNetworkAccessManager() )
 {
 
 }

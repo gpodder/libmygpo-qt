@@ -64,8 +64,8 @@ public:
         OTHER
     };
     
-    ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam = 0 );
-    ApiRequest ( QNetworkAccessManager* nam = 0 );
+    ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam );
+    ApiRequest ( QNetworkAccessManager* nam );
     ~ApiRequest ( );
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"

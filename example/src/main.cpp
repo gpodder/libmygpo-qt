@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 #include <QApplication>
+#include <QCoreApplication>
 #include <iostream>
 #include <QTimer>
 #include <QtGui>
@@ -38,7 +39,7 @@
 #include <QDateTime>
 #include <DeviceList.h>
 #include <Device.h>
- 
+
 
 
 using namespace mygpo;
@@ -125,10 +126,11 @@ void printAddRemoveResult(const AddRemoveResultPtr addRemoveResult) {
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv, true);
-    ApiRequest req("ase23", "csf-sepm");
+	QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
+    ApiRequest req("ase23", "csf-sepm", nam);
     QEventLoop loop;
     QNetworkReply* reply;
-
+    /*
     //
     // QNetworkReply* toplistOpml(uint count);
     //
@@ -288,13 +290,13 @@ int main(int argc, char **argv)
     loop.exec();
 
     printTitle(QLatin1String("Add/remove subscriptions2 [addRemoveSubscriptions(\"ase23\", \"dev0\", {http://hackermedley.org/feed/podcast/}, {\"http://feeds.rucast.net/radio-t\"}]"));
-    printAddRemoveResult(addRemoveResult2);
+    printAddRemoveResult(addRemoveResult2);*/
 
 
     //
     // Copy objects and reicieve signals
     //
-    printTitle(QLatin1String("Copy objects, and receive signals:"));
+    /*printTitle(QLatin1String("Copy objects, and receive signals:"));
 
     qDebug() << "EpisodeList";
     EpisodeListPtr ret1 = req.favoriteEpisodes(QLatin1String("ase23"));
@@ -351,12 +353,12 @@ int main(int argc, char **argv)
     qDebug() << "TagList2 size: " << tagList2->list().size();
     qDebug() << "";
 
-    qDebug() << "AddRemoveResult";
+    qDebug() << "AddRemoveResult";*/
     /*QList<QUrl> add2;
     QList<QUrl> remove2;
     ad << QUrl(QLatin1String(""));
     rem << QUrl(QLatin1String(""));*/
-
+    /*
     AddRemoveResultPtr addRemove1 = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"), remove, add);
     AddRemoveResultPtr addRemove2 = addRemove1;
     loop.connect(addRemove2.data(),SIGNAL(finished()),SLOT(quit()));
@@ -366,7 +368,7 @@ int main(int argc, char **argv)
     qDebug() << "AddRemoveResult1: " << addRemove1->timestamp();
     qDebug() << "AddRemoveResult2: " << addRemove2->timestamp();
     qDebug() << "";
-
+    */
 
 
 
@@ -374,6 +376,7 @@ int main(int argc, char **argv)
     QList<QUrl> remove;
     add << QUrl(QLatin1String("http://feeds.rucast.net/radio-t"));
     remove << QUrl(QLatin1String("http://hackermedley.org/feed/podcast/"));*/
+    /*
     AddRemoveResultPtr result = req.addRemoveSubscriptions(QLatin1String("ase23"), QLatin1String("dev0"),add,remove);
 
     loop.connect(result.data(),SIGNAL(finished()),SLOT(quit()));
@@ -383,12 +386,12 @@ int main(int argc, char **argv)
     loop.exec();
 
     qDebug() << result->timestamp();
-
+	*/
 
     //
     // Test QSharedPointers
     //
-    printTitle("Test QSharedPointers");
+    /*printTitle("Test QSharedPointers");
     qDebug() << "EpisodePtr";
     EpisodePtr episodePtr = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
     loop.connect( &(*episodePtr), SIGNAL(finished()), SLOT(quit()));
@@ -528,6 +531,35 @@ int main(int argc, char **argv)
         qDebug() << dev->caption();
         qDebug() << dev->subscriptions();
     }
+    
+
+    
+
+    ApiRequest wrong("foobar","barfoofoo",nam);
+    DeviceListPtr devptr = wrong.listDevices("ase23");
+
+
+
+    loop.connect(devptr.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(devptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(devptr.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();*/
+
+	
+	qDebug() << "Test Auth Failure";
+	ApiRequest foo("foobar","abcdefg",nam);
+	
+	reply = foo.suggestionsOpml(1);
+	
+	loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+	
+	qDebug() << reply->error();
+	qDebug() << reply->errorString();
+	qDebug() << reply->readAll();
+	
+    nam->deleteLater();
 
     return 0;
 }
