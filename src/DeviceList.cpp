@@ -79,6 +79,8 @@ QList< DevicePtr > DeviceListPrivate::devicesList() const
 
 void DeviceListPrivate::error(QNetworkReply::NetworkError error)
 {
+	qDebug() << "error in Devicelist Request";
+	qDebug() << error;
     m_error = error;
     emit q->requestError(error);
 }
@@ -92,7 +94,7 @@ bool DeviceListPrivate::parse(const QVariant& data)
     QVariantList devList;
     foreach( const QVariant& var, varList)
     {
-        DevicePtr ptr(new Device(var));
+        DevicePtr ptr(new Device(var,this));
         m_devicesList.append(ptr);
         QVariant v;
         v.setValue<DevicePtr>(ptr);
@@ -116,6 +118,11 @@ bool DeviceListPrivate::parse(const QByteArray& data)
 
 void DeviceListPrivate::parseData()
 {
+	qDebug() << "DeviceList parseData";
+	qDebug() << m_reply->error();
+	qDebug() << m_reply->peek(m_reply->bytesAvailable());
+	qDebug() << "m_error following";
+	qDebug() << m_error;
     if (m_reply->error()==QNetworkReply::NoError) {
         if ( parse( m_reply->readAll() ) ) {
             emit q->finished();

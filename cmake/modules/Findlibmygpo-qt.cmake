@@ -21,12 +21,17 @@ find_path(LIBMYGPO_QT_INCLUDE_DIR NAMES mygpo.h
 find_library( LIBMYGPO_QT_LIBRARY NAMES mygpo-qt
     PATHS
     ~/usr/lib
+    ~/usr/lib64
    /opt/local/lib
+   /opt/local/lib64
    /usr/lib
    /usr/lib64
    /usr/local/lib
+   /usr/local/lib64
    /opt/kde4/lib
+   /opt/kde4/lib64
     ~/kde/lib
+    ~/kde/lib64
 )
 
 

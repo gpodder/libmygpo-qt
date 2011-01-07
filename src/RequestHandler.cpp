@@ -27,10 +27,9 @@
 
 using namespace mygpo;
 
-RequestHandler::RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_username(username), m_password(password), m_loginFailed(false), m_nam(nam)
+RequestHandler::RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_username(username), m_password(password), m_loginFailed(true), m_nam(nam)
 {
-    QObject::connect(m_nam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,
-                     SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
+    //QObject::connect(m_nam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
 }
 
 RequestHandler::RequestHandler(QNetworkAccessManager* nam) : m_password(), m_loginFailed(false), m_nam(nam)
@@ -45,7 +44,9 @@ RequestHandler::~RequestHandler()
 QNetworkReply* RequestHandler::getRequest(const QUrl& url)
 {
     m_loginFailed = false;
-    QNetworkRequest request(url);
+	QUrl authUrl(QString(QLatin1String("http://%1:%2@%3")).arg(m_username).arg(m_password).arg(url.toString()));
+    QNetworkRequest request(authUrl);
+	//request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Manual);
     QNetworkReply* reply = m_nam->get(request);
     return reply;
 }
@@ -54,6 +55,7 @@ QNetworkReply* RequestHandler::postRequest(const QByteArray data, const QUrl& ur
 {
     m_loginFailed = false;
     QNetworkRequest request( url );
+	//request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Manual);
     QNetworkReply* reply = m_nam->post( request, data );
     return reply;
 }

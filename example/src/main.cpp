@@ -126,10 +126,10 @@ void printAddRemoveResult(const AddRemoveResultPtr addRemoveResult) {
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv, true);
-	QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
+    /*QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
     ApiRequest req("ase23", "csf-sepm", nam);
     QEventLoop loop;
-    QNetworkReply* reply;
+    QNetworkReply* reply;*/
     /*
     //
     // QNetworkReply* toplistOpml(uint count);
@@ -386,7 +386,7 @@ int main(int argc, char **argv)
     loop.exec();
 
     qDebug() << result->timestamp();
-	*/
+    */
 
     //
     // Test QSharedPointers
@@ -531,9 +531,9 @@ int main(int argc, char **argv)
         qDebug() << dev->caption();
         qDebug() << dev->subscriptions();
     }
-    
 
-    
+
+
 
     ApiRequest wrong("foobar","barfoofoo",nam);
     DeviceListPtr devptr = wrong.listDevices("ase23");
@@ -545,20 +545,44 @@ int main(int argc, char **argv)
     loop.connect(devptr.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();*/
 
-	
-	qDebug() << "Test Auth Failure";
-	ApiRequest foo("foobar","abcdefg",nam);
-	
-	reply = foo.suggestionsOpml(1);
-	
-	loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+
+	QEventLoop loop;
+    QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
+	QNetworkAccessManager* nam2 = new QNetworkAccessManager(qApp);
+    //qDebug() << "Test Auth Failure";
+    ApiRequest foo("foobar","abdfhdcdefg",nam);
+    ApiRequest req("ase23","csf-sepm",nam2);
+    //QNetworkReply* reply = foo.suggestionsOpml(1);
+
+
+    /*QNetworkRequest request(QUrl(QString("http://ase23:csf-sepm@gpodder.net/api/2/devices/foo.json")));
+    QNetworkReply* reply = nam->get(request);
+
+    
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
     loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
     loop.exec();
+
+    qDebug() << reply->error();
+    qDebug() << reply->errorString();
+    qDebug() << reply->readAll();*/
+
+	DeviceListPtr wrong = foo.listDevices("abcdeft");
+	DeviceListPtr ok = req.listDevices("ase23");
 	
-	qDebug() << reply->error();
-	qDebug() << reply->errorString();
-	qDebug() << reply->readAll();
+	qDebug() << "doing something wrong";
+	loop.connect(wrong.data(), SIGNAL(finished()), SLOT(quit()));
+    loop.connect(wrong.data(), SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
+	loop.connect(wrong.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
 	
+	qDebug() << "this should work out";
+	loop.connect(ok.data(), SIGNAL(finished()), SLOT(quit()));
+    loop.connect(ok.data(), SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
+	loop.connect(ok.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+	
+    //reply->deleteLater();
     nam->deleteLater();
 
     return 0;
