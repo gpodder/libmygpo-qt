@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -21,8 +21,8 @@
 ***************************************************************************/
 
 #include "DeviceList.h"
+
 #include <parser.h>
-#include <QDebug>
 
 namespace mygpo
 {
@@ -31,7 +31,7 @@ class DeviceListPrivate : public QObject
 {
     Q_OBJECT
 public:
-    DeviceListPrivate(DeviceList* qq, QNetworkReply* reply);
+    DeviceListPrivate( DeviceList* qq, QNetworkReply* reply );
     virtual ~DeviceListPrivate();
     QVariant devices() const;
     QList< DevicePtr > devicesList() const;
@@ -43,12 +43,12 @@ private:
     QList<DevicePtr> m_devicesList;
     QNetworkReply::NetworkError m_error;
 
-    bool parse ( const QVariant& data );
-    bool parse ( const QByteArray& data );
+    bool parse( const QVariant& data );
+    bool parse( const QByteArray& data );
 
 private slots:
     void parseData();
-    void error ( QNetworkReply::NetworkError error );
+    void error( QNetworkReply::NetworkError error );
 };
 
 }
@@ -56,10 +56,10 @@ private slots:
 
 using namespace mygpo;
 
-DeviceListPrivate::DeviceListPrivate(DeviceList* qq, QNetworkReply* reply) : q(qq), m_reply(reply), m_error(QNetworkReply::NoError)
+DeviceListPrivate::DeviceListPrivate( DeviceList* qq, QNetworkReply* reply ) : q( qq ), m_reply( reply ), m_error( QNetworkReply::NoError )
 {
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
+    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
 DeviceListPrivate::~DeviceListPrivate()
@@ -77,40 +77,39 @@ QList< DevicePtr > DeviceListPrivate::devicesList() const
     return m_devicesList;
 }
 
-void DeviceListPrivate::error(QNetworkReply::NetworkError error)
+void DeviceListPrivate::error( QNetworkReply::NetworkError error )
 {
-	qDebug() << "error in Devicelist Request";
-	qDebug() << error;
     m_error = error;
-    emit q->requestError(error);
+    emit q->requestError( error );
 }
 
-bool DeviceListPrivate::parse(const QVariant& data)
+bool DeviceListPrivate::parse( const QVariant& data )
 {
-    if (!data.canConvert(QVariant::List))
+    if( !data.canConvert( QVariant::List ) )
         return false;
 
     QVariantList varList = data.toList();
     QVariantList devList;
-    foreach( const QVariant& var, varList)
+    foreach( const QVariant & var, varList )
     {
-        DevicePtr ptr(new Device(var,this));
-        m_devicesList.append(ptr);
+        DevicePtr ptr( new Device( var, this ) );
+        m_devicesList.append( ptr );
         QVariant v;
-        v.setValue<DevicePtr>(ptr);
-        devList.append(v);
+        v.setValue<DevicePtr>( ptr );
+        devList.append( v );
     }
     m_devices = devList;
     return true;
 }
 
-bool DeviceListPrivate::parse(const QByteArray& data)
+bool DeviceListPrivate::parse( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if ( ok ) {
-        ok = (parse( variant ));
+    if( ok )
+    {
+        ok = ( parse( variant ) );
     }
     return ok;
 }
@@ -118,21 +117,20 @@ bool DeviceListPrivate::parse(const QByteArray& data)
 
 void DeviceListPrivate::parseData()
 {
-	qDebug() << "DeviceList parseData";
-	qDebug() << m_reply->error();
-	qDebug() << m_reply->peek(m_reply->bytesAvailable());
-	qDebug() << "m_error following";
-	qDebug() << m_error;
-    if (m_reply->error()==QNetworkReply::NoError) {
-        if ( parse( m_reply->readAll() ) ) {
+    if( m_reply->error() == QNetworkReply::NoError )
+    {
+        if( parse( m_reply->readAll() ) )
+        {
             emit q->finished();
-        } else {
+        }
+        else
+        {
             emit q->parseError();
         }
     }
 }
 
-DeviceList::DeviceList(QNetworkReply* reply, QObject* parent) : QObject(parent), d(new DeviceListPrivate(this, reply))
+DeviceList::DeviceList( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new DeviceListPrivate( this, reply ) )
 {
 
 }

@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -27,53 +27,55 @@
 #include <QSharedPointer>
 #include <QDebug>
 
-namespace mygpo {
+namespace mygpo
+{
 
-class EpisodeActionListPrivate : public QObject {
-  Q_OBJECT
+class EpisodeActionListPrivate : public QObject
+{
+    Q_OBJECT
 
 public:
-  EpisodeActionListPrivate(EpisodeActionList* qq, QNetworkReply* reply);
-  virtual ~EpisodeActionListPrivate();
-  QList<EpisodeActionPtr> list() const;
-  QVariant episodeActions() const;
+    EpisodeActionListPrivate( EpisodeActionList* qq, QNetworkReply* reply );
+    virtual ~EpisodeActionListPrivate();
+    QList<EpisodeActionPtr> list() const;
+    QVariant episodeActions() const;
 
-  qulonglong timestamp() const;
+    qulonglong timestamp() const;
 
 private:
-  QNetworkReply* m_reply;
-  EpisodeActionList* const q;
-  QVariant m_episodeActions;
-  QNetworkReply::NetworkError m_error;
-  qulonglong m_timestamp;
+    QNetworkReply* m_reply;
+    EpisodeActionList* const q;
+    QVariant m_episodeActions;
+    QNetworkReply::NetworkError m_error;
+    qulonglong m_timestamp;
 
-  bool parse(const QVariant& data);
-  bool parse(const QByteArray& data);
+    bool parse( const QVariant& data );
+    bool parse( const QByteArray& data );
 
 private slots:
-  void parseData();
-  void error(QNetworkReply::NetworkError error);
+    void parseData();
+    void error( QNetworkReply::NetworkError error );
 
 };
 
-EpisodeActionListPrivate::EpisodeActionListPrivate(EpisodeActionList* qq, QNetworkReply* reply): m_reply( reply ), q(qq), m_error(QNetworkReply::NoError)
+EpisodeActionListPrivate::EpisodeActionListPrivate( EpisodeActionList* qq, QNetworkReply* reply ): m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
-  QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-  QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
+    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
 EpisodeActionListPrivate::~EpisodeActionListPrivate()
 {
-	delete m_reply;
+    delete m_reply;
 }
 
 QList<EpisodeActionPtr> EpisodeActionListPrivate::list() const
 {
     QList<EpisodeActionPtr> list;
     QVariantList varList = m_episodeActions.toList();
-    foreach ( QVariant var,varList )
+    foreach( QVariant var, varList )
     {
-        list.append ( var.value<mygpo::EpisodeActionPtr>() );
+        list.append( var.value<mygpo::EpisodeActionPtr>() );
     }
     return list;
 }
@@ -83,96 +85,98 @@ QVariant EpisodeActionListPrivate::episodeActions() const
     return m_episodeActions;
 }
 
-bool EpisodeActionListPrivate::parse ( const QVariant& data )
+bool EpisodeActionListPrivate::parse( const QVariant& data )
 {
-    if (!data.canConvert(QVariant::Map) )
-      return false;
+    if( !data.canConvert( QVariant::Map ) )
+        return false;
     QVariantMap episodeActionListMap = data.toMap();
 
-    QVariant s = episodeActionListMap.value(QLatin1String("timestamp"));
-    if (!s.canConvert(QVariant::ULongLong))
-      return false;
+    QVariant s = episodeActionListMap.value( QLatin1String( "timestamp" ) );
+    if( !s.canConvert( QVariant::ULongLong ) )
+        return false;
     m_timestamp = s.toULongLong();
 
-    s = episodeActionListMap.value(QLatin1String("actions"));
-    if (!s.canConvert(QVariant::List))
-    	return false;
+    s = episodeActionListMap.value( QLatin1String( "actions" ) );
+    if( !s.canConvert( QVariant::List ) )
+        return false;
 
     QVariantList varList = s.toList();
     QVariantList episodeActionList;
-    foreach ( QVariant var,varList )
+    foreach( QVariant var, varList )
     {
         QVariant v;
-        v.setValue<mygpo::EpisodeActionPtr> ( mygpo::EpisodeActionPtr (new EpisodeAction ( var ) ) );
-        episodeActionList.append ( v );
+        v.setValue<mygpo::EpisodeActionPtr> ( mygpo::EpisodeActionPtr( new EpisodeAction( var ) ) );
+        episodeActionList.append( v );
     }
-    m_episodeActions = QVariant ( episodeActionList );
+    m_episodeActions = QVariant( episodeActionList );
     return true;
 }
 
 
-bool EpisodeActionListPrivate::parse ( const QByteArray& data )
+bool EpisodeActionListPrivate::parse( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
-    QVariant variant = parser.parse ( data, &ok );
-    if ( ok )
+    QVariant variant = parser.parse( data, &ok );
+    if( ok )
     {
-        ok = ( parse ( variant ) );
+        ok = ( parse( variant ) );
     }
     return ok;
 }
 
 void EpisodeActionListPrivate::parseData()
 {
-	if (m_reply->error() == QNetworkReply::NoError) {
-		if ( parse ( m_reply->readAll() ) )
-		{
-			emit q->finished();
-		}
-		else
-		{
-			emit q->parseError();
-		}
-	}
+    if( m_reply->error() == QNetworkReply::NoError )
+    {
+        if( parse( m_reply->readAll() ) )
+        {
+            emit q->finished();
+        }
+        else
+        {
+            emit q->parseError();
+        }
+    }
 }
 
-qulonglong EpisodeActionListPrivate::timestamp() const {
-	return m_timestamp;
+qulonglong EpisodeActionListPrivate::timestamp() const
+{
+    return m_timestamp;
 }
 
-void EpisodeActionListPrivate::error ( QNetworkReply::NetworkError error )
+void EpisodeActionListPrivate::error( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit q->requestError ( error );
+    emit q->requestError( error );
 }
 
 // ### End of EpisodeActionListPrivate
 
-EpisodeActionList::EpisodeActionList ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), d(new EpisodeActionListPrivate(this, reply))
+EpisodeActionList::EpisodeActionList( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new EpisodeActionListPrivate( this, reply ) )
 {
 
 }
 
 QVariant EpisodeActionList::episodeActions() const
 {
-  return d->episodeActions();
+    return d->episodeActions();
 }
 
 
 QList< EpisodeActionPtr > EpisodeActionList::list() const
 {
-  return d->list();
+    return d->list();
 }
 
 qulonglong EpisodeActionList::timestamp() const
 {
-	return d->timestamp();
+    return d->timestamp();
 }
 
 EpisodeActionList::~EpisodeActionList()
 {
-  delete d;
+    delete d;
 }
 
 #include "EpisodeActionList.moc"

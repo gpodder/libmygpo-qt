@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -30,31 +30,33 @@
 #include "Episode.h"
 #include "mygpo_export.h"
 
-namespace mygpo {
-  
-  class EpisodeListPrivate;
+namespace mygpo
+{
 
-class MYGPO_EXPORT EpisodeList : public QObject {
-	Q_OBJECT
-	Q_PROPERTY(QVariant episodes READ episodes CONSTANT)
+class EpisodeListPrivate;
+
+class MYGPO_EXPORT EpisodeList : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY( QVariant episodes READ episodes CONSTANT )
 public:
-	EpisodeList(QNetworkReply* reply, QObject* parent = 0);
-	//EpisodeList(const EpisodeList& other);
-	virtual ~EpisodeList();
+    EpisodeList( QNetworkReply* reply, QObject* parent = 0 );
+    //EpisodeList(const EpisodeList& other);
+    virtual ~EpisodeList();
 
-	QList<EpisodePtr> list() const;
-	QVariant episodes() const;
+    QList<EpisodePtr> list() const;
+    QVariant episodes() const;
 private:
-  EpisodeListPrivate* const d;
-  friend class EpisodeListPrivate;
+    EpisodeListPrivate* const d;
+    friend class EpisodeListPrivate;
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/
     void parseError();
     /**Gets emitted when an request error ocurred*/
-    void requestError(QNetworkReply::NetworkError error);
-  
+    void requestError( QNetworkReply::NetworkError error );
+
 };
 
 typedef QSharedPointer<EpisodeList> EpisodeListPtr;

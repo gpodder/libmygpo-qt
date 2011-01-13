@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -30,21 +30,23 @@
 #include "Podcast.h"
 #include "mygpo_export.h"
 
-namespace mygpo {
+namespace mygpo
+{
 
 class PodcastListPrivate;
 
-class MYGPO_EXPORT PodcastList : public QObject {
+class MYGPO_EXPORT PodcastList : public QObject
+{
     Q_OBJECT
-    Q_PROPERTY(QVariant podcasts READ podcasts CONSTANT)
+    Q_PROPERTY( QVariant podcasts READ podcasts CONSTANT )
 public:
-    PodcastList(QNetworkReply* reply, QObject* parent = 0);
+    PodcastList( QNetworkReply* reply, QObject* parent = 0 );
     virtual ~PodcastList();
     QList<PodcastPtr> list() const;
     QVariant podcasts() const;
 
 private:
-    Q_DISABLE_COPY(PodcastList)
+    Q_DISABLE_COPY( PodcastList )
     PodcastListPrivate* const d;
     friend class PodcastListPrivate;
 
@@ -54,7 +56,7 @@ signals:
     /**Gets emitted when an parse error ocurred*/
     void parseError();
     /**Gets emitted when an request error ocurred*/
-    void requestError(QNetworkReply::NetworkError error);
+    void requestError( QNetworkReply::NetworkError error );
 
 };
 

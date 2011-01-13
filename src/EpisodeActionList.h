@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -31,33 +31,35 @@
 #include "EpisodeAction.h"
 #include "mygpo_export.h"
 
-namespace mygpo {
+namespace mygpo
+{
 
 class EpisodeActionListPrivate;
 
-class MYGPO_EXPORT EpisodeActionList : public QObject {
-	Q_OBJECT
-	Q_PROPERTY(QVariant episodeActions READ episodeActions CONSTANT)
-	Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
+class MYGPO_EXPORT EpisodeActionList : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY( QVariant episodeActions READ episodeActions CONSTANT )
+    Q_PROPERTY( qulonglong timestamp READ timestamp CONSTANT )
 public:
-	EpisodeActionList(QNetworkReply* reply, QObject* parent = 0);
-	virtual ~EpisodeActionList();
+    EpisodeActionList( QNetworkReply* reply, QObject* parent = 0 );
+    virtual ~EpisodeActionList();
 
-	QList<EpisodeActionPtr> list() const;
-	QVariant episodeActions() const;
+    QList<EpisodeActionPtr> list() const;
+    QVariant episodeActions() const;
 
-	qulonglong timestamp() const;
+    qulonglong timestamp() const;
 
 private:
-  EpisodeActionListPrivate* const d;
-  friend class EpisodeActionListPrivate;
+    EpisodeActionListPrivate* const d;
+    friend class EpisodeActionListPrivate;
 signals:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/
     void parseError();
     /**Gets emitted when an request error ocurred*/
-    void requestError(QNetworkReply::NetworkError error);
+    void requestError( QNetworkReply::NetworkError error );
 
 };
 
@@ -65,6 +67,6 @@ typedef QSharedPointer<EpisodeActionList> EpisodeActionListPtr;
 
 }
 
-Q_DECLARE_METATYPE(mygpo::EpisodeActionListPtr);
+Q_DECLARE_METATYPE( mygpo::EpisodeActionListPtr );
 
 #endif /* EPISODEACTIONLIST_H_ */

@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -27,39 +27,51 @@
 
 using namespace mygpo;
 
-RequestHandler::RequestHandler(const QString& username, const QString& password, QNetworkAccessManager* nam) : m_username(username), m_password(password), m_loginFailed(true), m_nam(nam)
+RequestHandler::RequestHandler( const QString& username, const QString& password, QNetworkAccessManager* nam ) : m_username( username ), m_password( password ), m_nam( nam )
 {
-    //QObject::connect(m_nam, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this,SLOT(authenticate( QNetworkReply*, QAuthenticator*)));
 }
 
-RequestHandler::RequestHandler(QNetworkAccessManager* nam) : m_password(), m_loginFailed(false), m_nam(nam)
+RequestHandler::RequestHandler( QNetworkAccessManager* nam ) : m_username(), m_password(), m_nam( nam )
 {
 }
 
 RequestHandler::~RequestHandler()
 {
-    //m_nam->deleteLater();
 }
 
-QNetworkReply* RequestHandler::getRequest(const QUrl& url)
+QNetworkReply* RequestHandler::getRequest( const QString& url )
 {
-    m_loginFailed = false;
-	QUrl authUrl(QString(QLatin1String("http://%1:%2@%3")).arg(m_username).arg(m_password).arg(url.toString()));
-    QNetworkRequest request(authUrl);
-	//request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Manual);
-    QNetworkReply* reply = m_nam->get(request);
+    QUrl reqUrl( QLatin1String( "http://" ) + url );
+    QNetworkRequest request( reqUrl );
+    QNetworkReply* reply = m_nam->get( request );
     return reply;
 }
 
-QNetworkReply* RequestHandler::postRequest(const QByteArray data, const QUrl& url )
+QNetworkReply* RequestHandler::authGetRequest( const QString& url )
 {
-    m_loginFailed = false;
-    QNetworkRequest request( url );
-	//request.setAttribute(QNetworkRequest::CookieLoadControlAttribute, QNetworkRequest::Manual);
+    QUrl authUrl = addAuthData( url );
+    QNetworkRequest request( authUrl );
+    QNetworkReply* reply = m_nam->get( request );
+    return reply;
+}
+
+
+QNetworkReply* RequestHandler::postRequest( const QByteArray data, const QString& url )
+{
+    QUrl authUrl = addAuthData( url );
+    QNetworkRequest request( authUrl );
     QNetworkReply* reply = m_nam->post( request, data );
     return reply;
 }
 
+QUrl RequestHandler::addAuthData( const QString& url )
+{
+    return QUrl( QString( QLatin1String( "http://%1:%2@" ) + url ).arg( m_username ).arg( m_password ), QUrl::TolerantMode );
+}
+
+
+//no longer used slot
+/*
 void RequestHandler::authenticate( QNetworkReply* reply, QAuthenticator* authenticator )
 {
     if (m_loginFailed) {
@@ -69,4 +81,4 @@ void RequestHandler::authenticate( QNetworkReply* reply, QAuthenticator* authent
         authenticator->setUser(m_username);
         authenticator->setPassword(m_password);
     }
-}
+}*/

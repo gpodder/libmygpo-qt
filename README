@@ -1,7 +1,7 @@
 ==========  README ==========
-libmygpo-qt will be a Qt Library that wraps the gpodder.net Web API (http://wiki.gpodder.org/wiki/Web_Services/API_2)
+libmygpo-qt is a Qt Library that wraps the gpodder.net Web API (http://wiki.gpodder.org/wiki/Web_Services/API_2)
 
-v0.9 wraps nearly every Request from the gpodder.net API except:
+v0.10 wraps nearly every Request from the gpodder.net API except:
 -) Simple API Calls Downloading subscription Lists & Uploading subscription Lists
 -) Txt Format for simple API Calls is not supported yet
 -) Retrieving Subscription Changes (you should use "Retrieving Updates for a given Device" instead)

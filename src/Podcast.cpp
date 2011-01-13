@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -26,67 +26,68 @@
 #include <parser.h>
 #include <QDebug>
 
-namespace mygpo {
-  
+namespace mygpo
+{
+
 class PodcastPrivate : QObject
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  PodcastPrivate(Podcast* qq, QNetworkReply* reply );
-  PodcastPrivate(Podcast* qq, const QVariant& variant );
-  virtual ~PodcastPrivate();
-  //Getters
-  QUrl url() const;
-  QString title() const;
-  QString description() const;
-  uint subscribers() const;
-  //const uint subscriberstLastWeek();
-  QUrl logoUrl() const;
-  QUrl website() const;
-  QUrl mygpoUrl() const;
-  
+    PodcastPrivate( Podcast* qq, QNetworkReply* reply );
+    PodcastPrivate( Podcast* qq, const QVariant& variant );
+    virtual ~PodcastPrivate();
+    //Getters
+    QUrl url() const;
+    QString title() const;
+    QString description() const;
+    uint subscribers() const;
+    //const uint subscriberstLastWeek();
+    QUrl logoUrl() const;
+    QUrl website() const;
+    QUrl mygpoUrl() const;
+
 private:
-  QNetworkReply* m_reply;
-  Podcast* const q;
-  QUrl m_url;
-  QString m_title;
-  QString m_description;
-  uint m_subscribers;
-  //uint m_SubscribersLastWeek;
-  QUrl m_logoUrl;
-  QUrl m_website;
-  QUrl m_mygpoUrl;
-  QNetworkReply::NetworkError m_error;
+    QNetworkReply* m_reply;
+    Podcast* const q;
+    QUrl m_url;
+    QString m_title;
+    QString m_description;
+    uint m_subscribers;
+    //uint m_SubscribersLastWeek;
+    QUrl m_logoUrl;
+    QUrl m_website;
+    QUrl m_mygpoUrl;
+    QNetworkReply::NetworkError m_error;
 
-  
-  bool parse(const QVariant& data);
-  bool parse(const QByteArray& data);
+
+    bool parse( const QVariant& data );
+    bool parse( const QByteArray& data );
 private slots:
-  void parseData();
-  void error(QNetworkReply::NetworkError error);
+    void parseData();
+    void error( QNetworkReply::NetworkError error );
 
-  
+
 };
-  
+
 };
 
 
 using namespace mygpo;
 
-PodcastPrivate::PodcastPrivate(Podcast* qq, QNetworkReply* reply ): m_reply(reply), q(qq), m_error(QNetworkReply::NoError)
+PodcastPrivate::PodcastPrivate( Podcast* qq, QNetworkReply* reply ): m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
-    QObject::connect(m_reply,SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(m_reply,SIGNAL(error(QNetworkReply::NetworkError)), this,SLOT(error(QNetworkReply::NetworkError)));
+    QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
+    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
-PodcastPrivate::PodcastPrivate(Podcast* qq, const QVariant& variant ): m_reply(0), q(qq), m_error(QNetworkReply::NoError)
+PodcastPrivate::PodcastPrivate( Podcast* qq, const QVariant& variant ): m_reply( 0 ), q( qq ), m_error( QNetworkReply::NoError )
 {
-    parse(variant);
+    parse( variant );
 }
 
 PodcastPrivate::~PodcastPrivate()
 {
-   delete m_reply;
+    delete m_reply;
 }
 
 
@@ -125,19 +126,19 @@ QUrl PodcastPrivate::mygpoUrl() const
     return m_mygpoUrl;
 }
 
-Podcast::Podcast(QNetworkReply* reply, QObject* parent) : QObject(parent), d(new PodcastPrivate(this,reply))
+Podcast::Podcast( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new PodcastPrivate( this, reply ) )
 {
-   
+
 }
 
-Podcast::Podcast(const QVariant& variant, QObject* parent): QObject(parent), d(new PodcastPrivate(this,variant))
+Podcast::Podcast( const QVariant& variant, QObject* parent ): QObject( parent ), d( new PodcastPrivate( this, variant ) )
 {
 
 }
 
 Podcast::~Podcast()
 {
-  delete d;
+    delete d;
 }
 
 QUrl Podcast::url() const
@@ -175,68 +176,76 @@ QUrl Podcast::mygpoUrl() const
     return d->mygpoUrl();
 }
 
-bool PodcastPrivate::parse(const QVariant& data) 
+bool PodcastPrivate::parse( const QVariant& data )
 {
-    if(!data.canConvert(QVariant::Map))
-      return false;
+    if( !data.canConvert( QVariant::Map ) )
+        return false;
     QVariantMap podcastMap = data.toMap();
-    QVariant v = podcastMap.value(QLatin1String("url"));
-    if(!v.canConvert(QVariant::Url))
-      return false;
+    QVariant v = podcastMap.value( QLatin1String( "url" ) );
+    if( !v.canConvert( QVariant::Url ) )
+        return false;
     m_url = v.toUrl();
-    v = podcastMap.value(QLatin1String("title"));
-    if(!v.canConvert(QVariant::String)) 
-      return false;
+    v = podcastMap.value( QLatin1String( "title" ) );
+    if( !v.canConvert( QVariant::String ) )
+        return false;
     m_title = v.toString();
-    v = podcastMap.value(QLatin1String("description"));
-     if(!v.canConvert(QVariant::String))
-       return false;
+    v = podcastMap.value( QLatin1String( "description" ) );
+    if( !v.canConvert( QVariant::String ) )
+        return false;
     m_description = v.toString();
-    v = podcastMap.value(QLatin1String("subscribers"));
-    if(!v.canConvert(QVariant::Int))
-      return false;
+    v = podcastMap.value( QLatin1String( "subscribers" ) );
+    if( !v.canConvert( QVariant::Int ) )
+        return false;
     m_subscribers = v.toUInt();
-    v = podcastMap.value(QLatin1String("logo_url"));
-    if(!v.canConvert(QVariant::Url))
-      return false;
-    m_logoUrl =v.toUrl();
-    v = podcastMap.value(QLatin1String("website"));
-    if(!v.canConvert(QVariant::Url))
-      return false;
+    v = podcastMap.value( QLatin1String( "logo_url" ) );
+    if( !v.canConvert( QVariant::Url ) )
+        return false;
+    m_logoUrl = v.toUrl();
+    v = podcastMap.value( QLatin1String( "website" ) );
+    if( !v.canConvert( QVariant::Url ) )
+        return false;
     m_website = v.toUrl();
-    v = podcastMap.value(QLatin1String("mygpo_link"));
-    if(!v.canConvert(QVariant::Url))
-      return false;
+    v = podcastMap.value( QLatin1String( "mygpo_link" ) );
+    if( !v.canConvert( QVariant::Url ) )
+        return false;
     m_mygpoUrl = v.toUrl();
     return true;
 }
 
-bool PodcastPrivate::parse(const QByteArray& data)
-{	
+bool PodcastPrivate::parse( const QByteArray& data )
+{
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if( ok ) {
-      if (!parse( variant )) return false;
-      return true;
-    } else {
-      return false;
+    if( ok )
+    {
+        if( !parse( variant ) ) return false;
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
-void PodcastPrivate::parseData() {
+void PodcastPrivate::parseData()
+{
     //parsen und signal senden
     QJson::Parser parser;
-    if (parse( m_reply->readAll( ) ) ) {
-      emit q->finished();
-    } else {
-      emit q->parseError();
+    if( parse( m_reply->readAll( ) ) )
+    {
+        emit q->finished();
+    }
+    else
+    {
+        emit q->parseError();
     }
 }
 
-void PodcastPrivate::error(QNetworkReply::NetworkError error) {
+void PodcastPrivate::error( QNetworkReply::NetworkError error )
+{
     this->m_error = error;
-    emit q->requestError(error);
+    emit q->requestError( error );
 }
 
 

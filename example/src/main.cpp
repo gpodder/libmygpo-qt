@@ -1,8 +1,8 @@
 /***************************************************************************
  * This file is part of libmygpo-qt                                         *
- * Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
- * Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
- * Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+ * Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+ * Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+ * Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
  *                                                                          *
  * This library is free software; you can redistribute it and/or            *
  * modify it under the terms of the GNU Lesser General Public               *
@@ -126,11 +126,11 @@ void printAddRemoveResult(const AddRemoveResultPtr addRemoveResult) {
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv, true);
-    /*QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
+    QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
     ApiRequest req("ase23", "csf-sepm", nam);
     QEventLoop loop;
-    QNetworkReply* reply;*/
-    /*
+    QNetworkReply* reply;
+
     //
     // QNetworkReply* toplistOpml(uint count);
     //
@@ -290,13 +290,13 @@ int main(int argc, char **argv)
     loop.exec();
 
     printTitle(QLatin1String("Add/remove subscriptions2 [addRemoveSubscriptions(\"ase23\", \"dev0\", {http://hackermedley.org/feed/podcast/}, {\"http://feeds.rucast.net/radio-t\"}]"));
-    printAddRemoveResult(addRemoveResult2);*/
+    printAddRemoveResult(addRemoveResult2);
 
 
     //
     // Copy objects and reicieve signals
     //
-    /*printTitle(QLatin1String("Copy objects, and receive signals:"));
+    printTitle(QLatin1String("Copy objects, and receive signals:"));
 
     qDebug() << "EpisodeList";
     EpisodeListPtr ret1 = req.favoriteEpisodes(QLatin1String("ase23"));
@@ -353,7 +353,8 @@ int main(int argc, char **argv)
     qDebug() << "TagList2 size: " << tagList2->list().size();
     qDebug() << "";
 
-    qDebug() << "AddRemoveResult";*/
+    qDebug() << "AddRemoveResult";
+
     /*QList<QUrl> add2;
     QList<QUrl> remove2;
     ad << QUrl(QLatin1String(""));
@@ -391,7 +392,7 @@ int main(int argc, char **argv)
     //
     // Test QSharedPointers
     //
-    /*printTitle("Test QSharedPointers");
+    printTitle("Test QSharedPointers");
     qDebug() << "EpisodePtr";
     EpisodePtr episodePtr = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
     loop.connect( &(*episodePtr), SIGNAL(finished()), SLOT(quit()));
@@ -533,56 +534,7 @@ int main(int argc, char **argv)
     }
 
 
-
-
-    ApiRequest wrong("foobar","barfoofoo",nam);
-    DeviceListPtr devptr = wrong.listDevices("ase23");
-
-
-
-    loop.connect(devptr.data(),SIGNAL(finished()),SLOT(quit()));
-    loop.connect(devptr.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-    loop.connect(devptr.data(),SIGNAL(parseError()),SLOT(quit()));
-    loop.exec();*/
-
-
-	QEventLoop loop;
-    QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
-	QNetworkAccessManager* nam2 = new QNetworkAccessManager(qApp);
-    //qDebug() << "Test Auth Failure";
-    ApiRequest foo("foobar","abdfhdcdefg",nam);
-    ApiRequest req("ase23","csf-sepm",nam2);
-    //QNetworkReply* reply = foo.suggestionsOpml(1);
-
-
-    /*QNetworkRequest request(QUrl(QString("http://ase23:csf-sepm@gpodder.net/api/2/devices/foo.json")));
-    QNetworkReply* reply = nam->get(request);
-
-    
-    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
-    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
-    loop.exec();
-
-    qDebug() << reply->error();
-    qDebug() << reply->errorString();
-    qDebug() << reply->readAll();*/
-
-	DeviceListPtr wrong = foo.listDevices("abcdeft");
-	DeviceListPtr ok = req.listDevices("ase23");
-	
-	qDebug() << "doing something wrong";
-	loop.connect(wrong.data(), SIGNAL(finished()), SLOT(quit()));
-    loop.connect(wrong.data(), SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
-	loop.connect(wrong.data(),SIGNAL(parseError()),SLOT(quit()));
-    loop.exec();
-	
-	qDebug() << "this should work out";
-	loop.connect(ok.data(), SIGNAL(finished()), SLOT(quit()));
-    loop.connect(ok.data(), SIGNAL(requestError(QNetworkReply::NetworkError)),SLOT(quit()));
-	loop.connect(ok.data(),SIGNAL(parseError()),SLOT(quit()));
-    loop.exec();
-	
-    //reply->deleteLater();
+    reply->deleteLater();
     nam->deleteLater();
 
     return 0;

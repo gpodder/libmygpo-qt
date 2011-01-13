@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -28,23 +28,24 @@
 
 #include "mygpo_export.h"
 
-namespace mygpo {
+namespace mygpo
+{
 
 class TagPrivate;
 
 class MYGPO_EXPORT Tag : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString tag READ tag CONSTANT)
-    Q_PROPERTY(uint usage READ usage CONSTANT)
+    Q_PROPERTY( QString tag READ tag CONSTANT )
+    Q_PROPERTY( uint usage READ usage CONSTANT )
 
 public:
-    Tag(const QVariant& variant, QObject* parent = 0);
+    Tag( const QVariant& variant, QObject* parent = 0 );
     virtual ~Tag();
     QString tag() const;
     uint usage() const;
 private:
-    Q_DISABLE_COPY(Tag)
+    Q_DISABLE_COPY( Tag )
     TagPrivate* const d;
     friend class TagPrivate;
 };
@@ -53,6 +54,6 @@ typedef QSharedPointer<Tag> TagPtr;
 
 }
 
-Q_DECLARE_METATYPE(mygpo::TagPtr);
+Q_DECLARE_METATYPE( mygpo::TagPtr );
 
 #endif // TAG_H

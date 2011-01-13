@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -32,7 +32,7 @@ class PodcastListPrivate : QObject
 {
     Q_OBJECT
 public:
-    PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent = 0);
+    PodcastListPrivate( PodcastList* qq, QNetworkReply* reply, QObject* parent = 0 );
     virtual ~PodcastListPrivate();
     QList<PodcastPtr> list() const;
     QVariant podcasts() const;
@@ -43,11 +43,11 @@ private:
     QVariant m_podcasts;
     QNetworkReply::NetworkError m_error;
 
-    bool parse ( const QVariant& data );
-    bool parse ( const QByteArray& data );
+    bool parse( const QVariant& data );
+    bool parse( const QByteArray& data );
 private slots:
     void parseData();
-    void error(QNetworkReply::NetworkError error);
+    void error( QNetworkReply::NetworkError error );
 };
 
 }
@@ -55,10 +55,10 @@ private slots:
 using namespace mygpo;
 
 
-PodcastListPrivate::PodcastListPrivate(PodcastList* qq, QNetworkReply* reply, QObject* parent) : QObject ( parent ), m_reply ( reply ), q(qq), m_error(QNetworkReply::NoError)
+PodcastListPrivate::PodcastListPrivate( PodcastList* qq, QNetworkReply* reply, QObject* parent ) : QObject( parent ), m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
-    QObject::connect ( m_reply,SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply,SIGNAL ( error ( QNetworkReply::NetworkError ) ),this,SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
+    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
 PodcastListPrivate::~PodcastListPrivate()
@@ -71,9 +71,9 @@ QList< PodcastPtr > PodcastListPrivate::list() const
 {
     QList<PodcastPtr> list;
     QVariantList varList = m_podcasts.toList();
-    foreach ( QVariant var,varList )
+    foreach( QVariant var, varList )
     {
-        list.append ( var.value<mygpo::PodcastPtr>() );
+        list.append( var.value<mygpo::PodcastPtr>() );
     }
     return list;
 }
@@ -83,38 +83,39 @@ QVariant PodcastListPrivate::podcasts() const
     return m_podcasts;
 }
 
-bool PodcastListPrivate::parse ( const QVariant& data )
+bool PodcastListPrivate::parse( const QVariant& data )
 {
-    if ( !data.canConvert ( QVariant::List ) )
+    if( !data.canConvert( QVariant::List ) )
         return false;
     QVariantList varList = data.toList();
     QVariantList podcastList;
-    foreach ( QVariant var,varList )
+    foreach( QVariant var, varList )
     {
         QVariant v;
-        v.setValue<mygpo::PodcastPtr> ( PodcastPtr ( new Podcast( var ) ) );
-        podcastList.append ( v );
+        v.setValue<mygpo::PodcastPtr> ( PodcastPtr( new Podcast( var ) ) );
+        podcastList.append( v );
     }
-    m_podcasts = QVariant ( podcastList );
+    m_podcasts = QVariant( podcastList );
     return true;
 }
 
-bool PodcastListPrivate::parse ( const QByteArray& data )
+bool PodcastListPrivate::parse( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
-    QVariant variant = parser.parse ( data, &ok );
-    if ( ok )
+    QVariant variant = parser.parse( data, &ok );
+    if( ok )
     {
-        ok = ( parse ( variant ) );
+        ok = ( parse( variant ) );
     }
     return ok;
 }
 
 void PodcastListPrivate::parseData()
 {
-    if (m_reply->error() == QNetworkReply::NoError) {
-        if ( parse ( m_reply->readAll() ) )
+    if( m_reply->error() == QNetworkReply::NoError )
+    {
+        if( parse( m_reply->readAll() ) )
         {
             emit q->finished();
         }
@@ -125,13 +126,13 @@ void PodcastListPrivate::parseData()
     }
 }
 
-void PodcastListPrivate::error ( QNetworkReply::NetworkError error )
+void PodcastListPrivate::error( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit q->requestError ( error );
+    emit q->requestError( error );
 }
 
-PodcastList::PodcastList ( QNetworkReply* reply, QObject* parent ) : QObject(parent), d(new PodcastListPrivate(this,reply))
+PodcastList::PodcastList( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new PodcastListPrivate( this, reply ) )
 {
 
 }

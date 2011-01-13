@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -31,24 +31,25 @@
 
 #include "mygpo_export.h"
 
-namespace mygpo {
-    
+namespace mygpo
+{
+
 class EpisodePrivate;
 
 class MYGPO_EXPORT Episode : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl url READ url CONSTANT)
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QUrl podcastUrl READ url CONSTANT)
-    Q_PROPERTY(QString podcastTitle READ title CONSTANT)
-    Q_PROPERTY(QString description READ description CONSTANT)
-    Q_PROPERTY(QUrl website READ website CONSTANT)
-    Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
-    
+    Q_PROPERTY( QUrl url READ url CONSTANT )
+    Q_PROPERTY( QString title READ title CONSTANT )
+    Q_PROPERTY( QUrl podcastUrl READ url CONSTANT )
+    Q_PROPERTY( QString podcastTitle READ title CONSTANT )
+    Q_PROPERTY( QString description READ description CONSTANT )
+    Q_PROPERTY( QUrl website READ website CONSTANT )
+    Q_PROPERTY( QUrl mygpoUrl READ mygpoUrl CONSTANT )
+
 public:
-    Episode(QNetworkReply* reply, QObject* parent = 0);
-    Episode(const QVariant& variant, QObject* parent = 0);
+    Episode( QNetworkReply* reply, QObject* parent = 0 );
+    Episode( const QVariant& variant, QObject* parent = 0 );
     virtual ~Episode();
     QUrl url() const;
     QString title() const;
@@ -58,7 +59,7 @@ public:
     QUrl website() const;
     QUrl mygpoUrl() const;
 private:
-    Q_DISABLE_COPY(Episode)
+    Q_DISABLE_COPY( Episode )
     EpisodePrivate* const d;
     friend class EpisodePrivate;
 signals:
@@ -67,14 +68,14 @@ signals:
     /**Gets emitted when an parse error ocurred*/
     void parseError();
     /**Gets emitted when an request error ocurred*/
-    void requestError(QNetworkReply::NetworkError error);
-    
+    void requestError( QNetworkReply::NetworkError error );
+
 };
 
 typedef QSharedPointer<Episode> EpisodePtr;
 
 }
 
-Q_DECLARE_METATYPE(mygpo::EpisodePtr);
+Q_DECLARE_METATYPE( mygpo::EpisodePtr );
 
 #endif // EPISODE_H

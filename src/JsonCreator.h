@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -32,22 +32,23 @@
 class QUrl;
 class QString;
 
-namespace mygpo {
+namespace mygpo
+{
 
 class JsonCreator
 {
 
 public:
-    static QByteArray addRemoveSubsToJSON(const QList<QUrl>& add, const QList<QUrl>& remove);
-    static QByteArray saveSettingsToJSON(const QMap<QString, QVariant >& set, const QList<QString>& remove);
-    static QByteArray episodeActionListToJSON(const QList<EpisodeActionPtr>& episodeActions);
-    static QByteArray renameDeviceStringToJSON(const QString& caption, const QString& type );
+    static QByteArray addRemoveSubsToJSON( const QList<QUrl>& add, const QList<QUrl>& remove );
+    static QByteArray saveSettingsToJSON( const QMap<QString, QVariant >& set, const QList<QString>& remove );
+    static QByteArray episodeActionListToJSON( const QList<EpisodeActionPtr>& episodeActions );
+    static QByteArray renameDeviceStringToJSON( const QString& caption, const QString& type );
 
 private:
-    static QVariantList urlListToQVariantList(const QList<QUrl>& urls);
-    static QVariantList stringListToQVariantList(const QList<QString>& strings);
-    static QVariantMap stringMapToQVariantMap(const QMap<QString, QString >& stringmap);
-    static QVariantMap episodeActionToQVariantMap(const EpisodeActionPtr episodeAction);
+    static QVariantList urlListToQVariantList( const QList<QUrl>& urls );
+    static QVariantList stringListToQVariantList( const QList<QString>& strings );
+    static QVariantMap stringMapToQVariantMap( const QMap<QString, QString >& stringmap );
+    static QVariantMap episodeActionToQVariantMap( const EpisodeActionPtr episodeAction );
 };
 
 }

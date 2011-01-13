@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -30,26 +30,27 @@
 
 #include "mygpo_export.h"
 
-namespace mygpo {
-    
+namespace mygpo
+{
+
 class PodcastPrivate;
 
 class MYGPO_EXPORT Podcast : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QUrl url READ url CONSTANT)
-    Q_PROPERTY(QString title READ title CONSTANT)
-    Q_PROPERTY(QString description READ description CONSTANT)
-    Q_PROPERTY(uint subscribers READ subscribers CONSTANT)
+    Q_PROPERTY( QUrl url READ url CONSTANT )
+    Q_PROPERTY( QString title READ title CONSTANT )
+    Q_PROPERTY( QString description READ description CONSTANT )
+    Q_PROPERTY( uint subscribers READ subscribers CONSTANT )
     //Subscribers last Week not yet used because of a Bug in the gpodder.net API
     //Q_PROPERTY(uint subscribersLastWeek READ subscriberstLastWeek CONSTANT)
-    Q_PROPERTY(QUrl logoUrl READ logoUrl CONSTANT)
-    Q_PROPERTY(QUrl website READ website CONSTANT)
-    Q_PROPERTY(QUrl mygpoUrl READ mygpoUrl CONSTANT)
-    
+    Q_PROPERTY( QUrl logoUrl READ logoUrl CONSTANT )
+    Q_PROPERTY( QUrl website READ website CONSTANT )
+    Q_PROPERTY( QUrl mygpoUrl READ mygpoUrl CONSTANT )
+
 public:
-    Podcast(QNetworkReply* reply,QObject* parent = 0);
-    Podcast(const QVariant& variant, QObject* parent = 0);
+    Podcast( QNetworkReply* reply, QObject* parent = 0 );
+    Podcast( const QVariant& variant, QObject* parent = 0 );
     virtual ~Podcast();
     //Getters
     QUrl url() const;
@@ -62,7 +63,7 @@ public:
     QUrl mygpoUrl() const;
 
 private:
-    Q_DISABLE_COPY(Podcast)
+    Q_DISABLE_COPY( Podcast )
     PodcastPrivate* const d;
     friend class PodcastPrivate;
     bool m_copy;		//true if this object was created by the copy-ctor
@@ -72,13 +73,13 @@ signals:
     /**Gets emitted when an parse error ocurred*/
     void parseError();
     /**Gets emitted when an request error ocurred*/
-    void requestError(QNetworkReply::NetworkError error);
+    void requestError( QNetworkReply::NetworkError error );
 };
 
 typedef QSharedPointer<Podcast> PodcastPtr;
 
 }
 
-Q_DECLARE_METATYPE(mygpo::PodcastPtr);
+Q_DECLARE_METATYPE( mygpo::PodcastPtr );
 
 #endif // PODCAST_H

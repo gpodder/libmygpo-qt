@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -56,24 +56,25 @@ class MYGPO_EXPORT ApiRequest
 {
 public:
 
-    enum Type {
+    enum Type
+    {
         DESKTOP,
         LAPTOP,
         MOBILE,
         SERVER,
         OTHER
     };
-    
-    ApiRequest ( const QString& username, const QString& password, QNetworkAccessManager* nam );
-    ApiRequest ( QNetworkAccessManager* nam );
-    ~ApiRequest ( );
+
+    ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam );
+    ApiRequest( QNetworkAccessManager* nam );
+    ~ApiRequest( );
     /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return
      *
      */
-    QNetworkReply* toplistOpml ( uint count );
+    QNetworkReply* toplistOpml( uint count );
 
     /**
      * Returns the OPML Result for the Simple API Call "Searching for Podcasts"
@@ -81,7 +82,7 @@ public:
      * @return
      *
      */
-    QNetworkReply* searchOpml ( const QString& query );
+    QNetworkReply* searchOpml( const QString& query );
 
     /**
      * Returns the Result for the Simple API Call "Downloading podcast suggestions"
@@ -90,7 +91,7 @@ public:
      * @return
      *
      */
-    QNetworkReply* suggestionsOpml ( uint count );
+    QNetworkReply* suggestionsOpml( uint count );
 
     /**
      * Returns the Result for the Simple API Call "Downloading Podcast Toplists"
@@ -98,7 +99,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastListPtr toplist ( uint count );
+    PodcastListPtr toplist( uint count );
 
     /**
      * Returns the Result for the Simple API Call "Searching for Podcasts"
@@ -106,7 +107,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastListPtr search ( const QString& query );
+    PodcastListPtr search( const QString& query );
 
     /**
      * Returns the Result for the Simple API Call "Downloading podcast suggestions"
@@ -115,7 +116,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastListPtr suggestions ( uint count );
+    PodcastListPtr suggestions( uint count );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcasts of a Tag"
@@ -124,7 +125,7 @@ public:
      * @return List of Podcast Objects containing the Data from gPodder
      *
      */
-    PodcastListPtr podcastsOfTag ( uint count, const QString& tag );
+    PodcastListPtr podcastsOfTag( uint count, const QString& tag );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcast Data"
@@ -132,7 +133,7 @@ public:
      * @return Podcast Object containing the Data from gPodder
      *
      */
-    PodcastPtr podcastData ( const QUrl& podcasturl );
+    PodcastPtr podcastData( const QUrl& podcasturl );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Episode Data"
@@ -141,7 +142,7 @@ public:
      * @return Episode Object containing the Data from gPodder
      *
      */
-    EpisodePtr episodeData ( const QUrl& podcasturl, const QUrl& episodeurl );
+    EpisodePtr episodeData( const QUrl& podcasturl, const QUrl& episodeurl );
 
     /**
      * Returns the Result for the Advanced API Call "Listing Favorite Episodes"
@@ -149,7 +150,7 @@ public:
      * @return List of Episode Objects containing the Data from gPodder
      *
      */
-    EpisodeListPtr favoriteEpisodes ( const QString& username );
+    EpisodeListPtr favoriteEpisodes( const QString& username );
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Top Tags"
@@ -157,7 +158,7 @@ public:
      * @return List of Tag Objects containing the Data from gPodder
      *
      */
-    TagListPtr topTags ( uint count );
+    TagListPtr topTags( uint count );
 
     /**
      * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
@@ -168,48 +169,48 @@ public:
      * @param remove URLs of Podcasts that should be removed from the Subscriptions of the User
      *
      */
-    AddRemoveResultPtr addRemoveSubscriptions ( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
-    
-    SettingsPtr accountSettings ( const QString& username );
-    
-    SettingsPtr deviceSettings ( const QString& username, const QString& device );
-    
-    SettingsPtr podcastSettings ( const QString& username, const QString& podcastUrl );
-    
-    SettingsPtr episodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
-    
-    SettingsPtr setAccountSettings ( const QString& username, QMap<QString, QVariant >& set, const QList<QString>& remove);
-    
-    SettingsPtr setDeviceSettings ( const QString& username, const QString& device, QMap<QString, QVariant >& set, const QList<QString>& remove);
-    
-    SettingsPtr setPodcastSettings ( const QString& username, const QString& podcastUrl, QMap<QString, QVariant >& set, const QList<QString>& remove);
-    
-    SettingsPtr setEpisodeSettings ( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QVariant >& set, const QList<QString>& remove);
+    AddRemoveResultPtr addRemoveSubscriptions( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
+
+    SettingsPtr accountSettings( const QString& username );
+
+    SettingsPtr deviceSettings( const QString& username, const QString& device );
+
+    SettingsPtr podcastSettings( const QString& username, const QString& podcastUrl );
+
+    SettingsPtr episodeSettings( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
+
+    SettingsPtr setAccountSettings( const QString& username, QMap<QString, QVariant >& set, const QList<QString>& remove );
+
+    SettingsPtr setDeviceSettings( const QString& username, const QString& device, QMap<QString, QVariant >& set, const QList<QString>& remove );
+
+    SettingsPtr setPodcastSettings( const QString& username, const QString& podcastUrl, QMap<QString, QVariant >& set, const QList<QString>& remove );
+
+    SettingsPtr setEpisodeSettings( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QVariant >& set, const QList<QString>& remove );
 
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
-    
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type);
-    
+
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type );
+
     DeviceListPtr listDevices( const QString& username );
-    
-    EpisodeActionListPtr episodeActions(const QString& username);
 
-    EpisodeActionListPtr episodeActionsByPodcast(const QString& username, const QString& podcastUrl);
+    EpisodeActionListPtr episodeActions( const QString& username );
 
-    EpisodeActionListPtr episodeActionsByDevice(const QString& username, const QString& deviceId);
+    EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl );
 
-    EpisodeActionListPtr episodeActionsByTimestamp(const QString& username, const qulonglong since);
+    EpisodeActionListPtr episodeActionsByDevice( const QString& username, const QString& deviceId );
 
-    EpisodeActionListPtr episodeActionsByPodcastAndTimestamp(const QString& username, const QString& podcastUrl, const qulonglong since);
+    EpisodeActionListPtr episodeActionsByTimestamp( const QString& username, const qulonglong since );
 
-    EpisodeActionListPtr episodeActionsByDeviceAndTimestamp(const QString& username, const QString& deviceId, const qulonglong since);
+    EpisodeActionListPtr episodeActionsByPodcastAndTimestamp( const QString& username, const QString& podcastUrl, const qulonglong since );
 
-    EpisodeActionListPtr episodeActionsByPodcastAndAggregate(const QString& username, const QString& podcastUrl, const bool aggregated);
+    EpisodeActionListPtr episodeActionsByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
 
-    AddRemoveResultPtr uploadEpisodeActions(const QString& username, const QList<EpisodeActionPtr>& episodeActions);
+    EpisodeActionListPtr episodeActionsByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated );
 
-    
-    
+    AddRemoveResultPtr uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions );
+
+
+
 private:
     ApiRequestPrivate* const d;
 };

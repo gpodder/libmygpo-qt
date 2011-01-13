@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -25,15 +25,16 @@
 #include <parser.h>
 #include <QSharedPointer>
 
-namespace mygpo {
+namespace mygpo
+{
 
 class EpisodePrivate : QObject
 {
     Q_OBJECT
 
 public:
-    EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* parent = 0);
-    EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent = 0);
+    EpisodePrivate( Episode* qq, QNetworkReply* reply, QObject* parent = 0 );
+    EpisodePrivate( Episode* qq, const QVariant& variant, QObject* parent = 0 );
     virtual ~EpisodePrivate();
     QUrl url() const;
     QString title() const;
@@ -54,12 +55,12 @@ private:
     QUrl m_website;
     QUrl m_mygpoUrl;
     QNetworkReply::NetworkError m_error;
-    bool parse(const QVariant& data);
-    bool parse(const QByteArray& data);
+    bool parse( const QVariant& data );
+    bool parse( const QByteArray& data );
 
 private slots:
     void parseData();
-    void error(QNetworkReply::NetworkError error);
+    void error( QNetworkReply::NetworkError error );
 
 };
 
@@ -73,81 +74,89 @@ EpisodePrivate::~EpisodePrivate()
     delete m_reply;
 }
 
-EpisodePrivate::EpisodePrivate(Episode* qq, QNetworkReply* reply, QObject* parent): QObject(parent), m_reply(reply), q(qq), m_error(QNetworkReply::NoError)
+EpisodePrivate::EpisodePrivate( Episode* qq, QNetworkReply* reply, QObject* parent ): QObject( parent ), m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
-    QObject::connect(m_reply,SIGNAL(finished()), this, SLOT(parseData()));
-    QObject::connect(m_reply,SIGNAL(error(QNetworkReply::NetworkError)), this,SLOT(error(QNetworkReply::NetworkError)));
+    QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
+    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
-EpisodePrivate::EpisodePrivate(Episode* qq, const QVariant& variant, QObject* parent): QObject(parent), m_reply(0), q(qq)
+EpisodePrivate::EpisodePrivate( Episode* qq, const QVariant& variant, QObject* parent ): QObject( parent ), m_reply( 0 ), q( qq )
 {
-    parse(variant);
+    parse( variant );
 }
 
-bool EpisodePrivate::parse(const QVariant& data)
+bool EpisodePrivate::parse( const QVariant& data )
 {
-    if (!data.canConvert(QVariant::Map) )
+    if( !data.canConvert( QVariant::Map ) )
         return false;
     QVariantMap episodeMap = data.toMap();
-    QVariant s = episodeMap.value(QLatin1String("url"));
-    if (!s.canConvert(QVariant::Url))
+    QVariant s = episodeMap.value( QLatin1String( "url" ) );
+    if( !s.canConvert( QVariant::Url ) )
         return false;
     m_url = s.toUrl();
-    s = episodeMap.value(QLatin1String("title"));
-    if (!s.canConvert(QVariant::String))
+    s = episodeMap.value( QLatin1String( "title" ) );
+    if( !s.canConvert( QVariant::String ) )
         return false;
     m_title = s.toString();
-    s = episodeMap.value(QLatin1String("podcast_url"));
-    if (!s.canConvert(QVariant::Url))
+    s = episodeMap.value( QLatin1String( "podcast_url" ) );
+    if( !s.canConvert( QVariant::Url ) )
         return false;
     m_podcastUrl = s.toUrl();
-    s = episodeMap.value(QLatin1String("podcast_title"));
-    if (!s.canConvert(QVariant::String))
+    s = episodeMap.value( QLatin1String( "podcast_title" ) );
+    if( !s.canConvert( QVariant::String ) )
         return false;
     m_podcastTitle = s.toString();
-    s = episodeMap.value(QLatin1String("description"));
-    if (!s.canConvert(QVariant::String))
+    s = episodeMap.value( QLatin1String( "description" ) );
+    if( !s.canConvert( QVariant::String ) )
         return false;
     m_description = s.toString();
-    s = episodeMap.value(QLatin1String("website"));
-    if (!s.canConvert(QVariant::Url))
+    s = episodeMap.value( QLatin1String( "website" ) );
+    if( !s.canConvert( QVariant::Url ) )
         return false;
     m_website = s.toUrl();
-    s = episodeMap.value(QLatin1String("mygpo_link"));
-    if (!s.canConvert(QVariant::Url))
+    s = episodeMap.value( QLatin1String( "mygpo_link" ) );
+    if( !s.canConvert( QVariant::Url ) )
         return false;
     m_mygpoUrl = s.toUrl();
     return true;
 }
 
-bool EpisodePrivate::parse(const QByteArray& data)
+bool EpisodePrivate::parse( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if ( ok ) {
-        if (!parse( variant )) return false;
+    if( ok )
+    {
+        if( !parse( variant ) ) return false;
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
 
-void EpisodePrivate::parseData() {
+void EpisodePrivate::parseData()
+{
     //parse and send signal
-    if (m_reply->error()==QNetworkReply::NoError) {
-        if (parse( m_reply->readAll() ) ) {
+    if( m_reply->error() == QNetworkReply::NoError )
+    {
+        if( parse( m_reply->readAll() ) )
+        {
             emit q->finished();
-        } else {
+        }
+        else
+        {
             emit q->parseError();
         }
     }
 }
 
-void EpisodePrivate::error(QNetworkReply::NetworkError error)
+void EpisodePrivate::error( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit q->requestError(error);
+    emit q->requestError( error );
 }
 
 QString EpisodePrivate::description() const
@@ -185,12 +194,12 @@ QUrl EpisodePrivate::website() const
     return m_website;
 }
 
-Episode::Episode(QNetworkReply* reply,QObject* parent) : QObject(parent), d(new EpisodePrivate(this, reply))
+Episode::Episode( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new EpisodePrivate( this, reply ) )
 {
 
 }
 
-Episode::Episode(const QVariant& variant, QObject* parent): QObject(parent), d(new EpisodePrivate(this,variant))
+Episode::Episode( const QVariant& variant, QObject* parent ): QObject( parent ), d( new EpisodePrivate( this, variant ) )
 {
 
 }

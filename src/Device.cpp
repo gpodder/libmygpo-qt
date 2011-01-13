@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -30,9 +30,9 @@ namespace mygpo
 class DevicePrivate : public QObject
 {
     Q_OBJECT
-    
+
 public:
-    DevicePrivate(const QVariant& var);
+    DevicePrivate( const QVariant& var );
     QString id() const;
     QString caption() const;
     QString type() const;
@@ -42,14 +42,14 @@ private:
     QString m_caption;
     QString m_type;
     qulonglong m_subscriptions;
-    bool parse(const QVariant& var);
-};    
-    
+    bool parse( const QVariant& var );
+};
+
 }
 
 using namespace mygpo;
 
-Device::Device(const QVariant& var, QObject* parent): QObject(parent), d(new DevicePrivate(var))
+Device::Device( const QVariant& var, QObject* parent ): QObject( parent ), d( new DevicePrivate( var ) )
 {
 
 }
@@ -80,33 +80,33 @@ QString Device::type() const
 }
 
 
-DevicePrivate::DevicePrivate(const QVariant& var) : m_id(), m_caption(), m_type(), m_subscriptions(0)
+DevicePrivate::DevicePrivate( const QVariant& var ) : m_id(), m_caption(), m_type(), m_subscriptions( 0 )
 {
-    parse(var);
+    parse( var );
 }
 
-bool DevicePrivate::parse(const QVariant& var)
+bool DevicePrivate::parse( const QVariant& var )
 {
-    if(var.canConvert(QVariant::Map)) 
+    if( var.canConvert( QVariant::Map ) )
     {
         QVariant vid, vcaption, vtype, vsubscriptions;
-        QMap<QString,QVariant> varMap;
+        QMap<QString, QVariant> varMap;
         varMap = var.toMap();
-        vid = varMap.value(QLatin1String("id"));
-        vcaption = varMap.value(QLatin1String("caption"));
-        vtype = varMap.value(QLatin1String("type"));
-        vsubscriptions = varMap.value(QLatin1String("subscriptions"));
-        if(vid.canConvert(QVariant::String) &&
-            vcaption.canConvert(QVariant::String) &&
-            vtype.canConvert(QVariant::String) &&
-            vsubscriptions.canConvert(QVariant::LongLong)) 
+        vid = varMap.value( QLatin1String( "id" ) );
+        vcaption = varMap.value( QLatin1String( "caption" ) );
+        vtype = varMap.value( QLatin1String( "type" ) );
+        vsubscriptions = varMap.value( QLatin1String( "subscriptions" ) );
+        if( vid.canConvert( QVariant::String ) &&
+                vcaption.canConvert( QVariant::String ) &&
+                vtype.canConvert( QVariant::String ) &&
+                vsubscriptions.canConvert( QVariant::LongLong ) )
         {
             m_id = vid.toString();
             m_caption = vcaption.toString();
             m_type = vtype.toString();
             m_subscriptions = vsubscriptions.toLongLong();
             return true;
-        }        
+        }
     }
     return false;
 }
@@ -134,4 +134,3 @@ QString DevicePrivate::type() const
 
 
 #include "Device.moc"
-                                                                                                                                                                                                                                                                

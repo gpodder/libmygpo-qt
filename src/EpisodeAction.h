@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -31,26 +31,28 @@
 
 #include "mygpo_export.h"
 
-namespace mygpo {
+namespace mygpo
+{
 
 class EpisodeActionPrivate;
 
-class MYGPO_EXPORT EpisodeAction : public QObject {
+class MYGPO_EXPORT EpisodeAction : public QObject
+{
     Q_OBJECT
-    Q_ENUMS(ActionType)
-    Q_PROPERTY(QUrl podcastUrl READ podcastUrl CONSTANT)
-    Q_PROPERTY(QUrl episodeUrl READ episodeUrl CONSTANT)
-    Q_PROPERTY(QString deviceName READ deviceName CONSTANT)
-    Q_PROPERTY(ActionType action READ action CONSTANT)
-    Q_PROPERTY(qulonglong timestamp READ timestamp CONSTANT)
-    Q_PROPERTY(qulonglong started READ started CONSTANT)
-    Q_PROPERTY(qulonglong position READ position CONSTANT)
-    Q_PROPERTY(qulonglong total READ total CONSTANT)
+    Q_ENUMS( ActionType )
+    Q_PROPERTY( QUrl podcastUrl READ podcastUrl CONSTANT )
+    Q_PROPERTY( QUrl episodeUrl READ episodeUrl CONSTANT )
+    Q_PROPERTY( QString deviceName READ deviceName CONSTANT )
+    Q_PROPERTY( ActionType action READ action CONSTANT )
+    Q_PROPERTY( qulonglong timestamp READ timestamp CONSTANT )
+    Q_PROPERTY( qulonglong started READ started CONSTANT )
+    Q_PROPERTY( qulonglong position READ position CONSTANT )
+    Q_PROPERTY( qulonglong total READ total CONSTANT )
 
 public:
     enum ActionType { Download, Play, Delete, New };
-    EpisodeAction(const QVariant& variant, QObject* parent = 0);
-    EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
+    EpisodeAction( const QVariant& variant, QObject* parent = 0 );
+    EpisodeAction( const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
     virtual ~EpisodeAction();
 
     QUrl podcastUrl() const;
@@ -63,7 +65,7 @@ public:
     qulonglong total() const;
 
 private:
-    Q_DISABLE_COPY(EpisodeAction)
+    Q_DISABLE_COPY( EpisodeAction )
     EpisodeActionPrivate* const d;
     friend class EpisodeActionPrivate;
 };
@@ -72,6 +74,6 @@ typedef QSharedPointer<EpisodeAction> EpisodeActionPtr;
 
 }
 
-Q_DECLARE_METATYPE(mygpo::EpisodeActionPtr);
+Q_DECLARE_METATYPE( mygpo::EpisodeActionPtr );
 
 #endif /* EPISODEACTION_H_ */

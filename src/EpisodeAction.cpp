@@ -1,8 +1,8 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
-* Copyright (c) 2010 Stefan Derkits <stefan@derkits.at>                    *
-* Copyright (c) 2010 Christian Wagner <christian.wagner86@gmx.at>          *
-* Copyright (c) 2010 Felix Winter <ixos01@gmail.com>                       *
+* Copyright (c) 2010 - 2011 Stefan Derkits <stefan@derkits.at>             *
+* Copyright (c) 2010 - 2011 Christian Wagner <christian.wagner86@gmx.at>   *
+* Copyright (c) 2010 - 2011 Felix Winter <ixos01@gmail.com>                *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -24,14 +24,16 @@
 
 #include <parser.h>
 
-namespace mygpo {
+namespace mygpo
+{
 
-class EpisodeActionPrivate : QObject {
+class EpisodeActionPrivate : QObject
+{
     Q_OBJECT
 
 public:
-    EpisodeActionPrivate(EpisodeAction* qq, const QVariant& variant, QObject* parent = 0);
-    EpisodeActionPrivate(EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
+    EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent = 0 );
+    EpisodeActionPrivate( EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
     virtual ~EpisodeActionPrivate();
 
     QUrl podcastUrl() const;
@@ -54,130 +56,150 @@ private:
     qulonglong m_position;
     qulonglong m_total;
 
-    bool parse(const QVariant& data);
-    bool parse(const QByteArray& data);
-    bool parseActionType(const QString& data);
+    bool parse( const QVariant& data );
+    bool parse( const QByteArray& data );
+    bool parseActionType( const QString& data );
 };
 
-EpisodeActionPrivate::EpisodeActionPrivate(EpisodeAction* qq, const QVariant& variant, QObject* parent) : QObject(parent), q(qq) {
-    parse(variant);
+EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent ) : QObject( parent ), q( qq )
+{
+    parse( variant );
 }
 
-EpisodeActionPrivate::EpisodeActionPrivate(EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent)
-        : QObject(parent), q(qq), m_podcastUrl(podcastUrl), m_episodeUrl(episodeUrl), m_deviceName(deviceName), m_action(action), m_timestamp(timestamp), m_started(started), m_position(position), m_total(total)
+EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent )
+    : QObject( parent ), q( qq ), m_podcastUrl( podcastUrl ), m_episodeUrl( episodeUrl ), m_deviceName( deviceName ), m_action( action ), m_timestamp( timestamp ), m_started( started ), m_position( position ), m_total( total )
 {
 
 }
 
-EpisodeActionPrivate::~EpisodeActionPrivate() {
+EpisodeActionPrivate::~EpisodeActionPrivate()
+{
 
 }
 
-bool EpisodeActionPrivate::parse(const QVariant& data)
+bool EpisodeActionPrivate::parse( const QVariant& data )
 {
-    if (!data.canConvert(QVariant::Map) )
+    if( !data.canConvert( QVariant::Map ) )
         return false;
     QVariantMap episodeActionMap = data.toMap();
 
-    QVariant s = episodeActionMap.value(QLatin1String("podcast"));
-    if (!s.canConvert(QVariant::Url))
+    QVariant s = episodeActionMap.value( QLatin1String( "podcast" ) );
+    if( !s.canConvert( QVariant::Url ) )
         return false;
     m_podcastUrl = s.toUrl();
 
-    s = episodeActionMap.value(QLatin1String("episode"));
-    if (!s.canConvert(QVariant::Url))
+    s = episodeActionMap.value( QLatin1String( "episode" ) );
+    if( !s.canConvert( QVariant::Url ) )
         return false;
     m_episodeUrl = s.toUrl();
 
-    if (episodeActionMap.contains(QLatin1String("device"))) {
-        s = episodeActionMap.value(QLatin1String("device"));
-        if (!s.canConvert(QVariant::String))
+    if( episodeActionMap.contains( QLatin1String( "device" ) ) )
+    {
+        s = episodeActionMap.value( QLatin1String( "device" ) );
+        if( !s.canConvert( QVariant::String ) )
             return false;
         m_deviceName = s.toString();
     }
-    else {
-        m_deviceName = QLatin1String("");
+    else
+    {
+        m_deviceName = QLatin1String( "" );
     }
 
-    s = episodeActionMap.value(QLatin1String("action"));
-    if (!s.canConvert(QVariant::String))
+    s = episodeActionMap.value( QLatin1String( "action" ) );
+    if( !s.canConvert( QVariant::String ) )
         return false;
-    if (!parseActionType(s.toString()))
+    if( !parseActionType( s.toString() ) )
         return false;
 
-    if (episodeActionMap.contains(QLatin1String("started"))) {
-        s = episodeActionMap.value(QLatin1String("started"));
-        if (!s.canConvert(QVariant::ULongLong))
+    if( episodeActionMap.contains( QLatin1String( "started" ) ) )
+    {
+        s = episodeActionMap.value( QLatin1String( "started" ) );
+        if( !s.canConvert( QVariant::ULongLong ) )
             return false;
         m_started = s.toULongLong();
     }
-    else {
+    else
+    {
         m_started = 0;
     }
 
-    if (episodeActionMap.contains(QLatin1String("position"))) {
-        s = episodeActionMap.value(QLatin1String("position"));
-        if (!s.canConvert(QVariant::ULongLong))
+    if( episodeActionMap.contains( QLatin1String( "position" ) ) )
+    {
+        s = episodeActionMap.value( QLatin1String( "position" ) );
+        if( !s.canConvert( QVariant::ULongLong ) )
             return false;
         m_position = s.toULongLong();
     }
-    else {
+    else
+    {
         m_position = 0;
     }
 
-    if (episodeActionMap.contains(QLatin1String("total"))) {
-        s = episodeActionMap.value(QLatin1String("total"));
-        if (!s.canConvert(QVariant::ULongLong))
+    if( episodeActionMap.contains( QLatin1String( "total" ) ) )
+    {
+        s = episodeActionMap.value( QLatin1String( "total" ) );
+        if( !s.canConvert( QVariant::ULongLong ) )
             return false;
         m_total = s.toULongLong();
     }
-    else {
+    else
+    {
         m_total = 0;
     }
 
-    if (episodeActionMap.contains(QLatin1String("timestamp"))) {
-        s = episodeActionMap.value(QLatin1String("timestamp"));
+    if( episodeActionMap.contains( QLatin1String( "timestamp" ) ) )
+    {
+        s = episodeActionMap.value( QLatin1String( "timestamp" ) );
         m_timestamp = s.toULongLong();
     }
-    else {
+    else
+    {
         m_timestamp = 0;
     }
 
     return true;
 }
 
-bool EpisodeActionPrivate::parseActionType(const QString& data)
+bool EpisodeActionPrivate::parseActionType( const QString& data )
 {
-    if (data.compare(QLatin1String("delete")) == 0) {
+    if( data.compare( QLatin1String( "delete" ) ) == 0 )
+    {
         m_action = EpisodeAction::Delete;
         return true;
     }
-    else if (data.compare(QLatin1String("download")) == 0) {
+    else if( data.compare( QLatin1String( "download" ) ) == 0 )
+    {
         m_action = EpisodeAction::Download;
         return true;
     }
-    else if (data.compare(QLatin1String("play")) == 0) {
+    else if( data.compare( QLatin1String( "play" ) ) == 0 )
+    {
         m_action = EpisodeAction::Play;
         return true;
     }
-    else if (data.compare(QLatin1String("new")) == 0) {
+    else if( data.compare( QLatin1String( "new" ) ) == 0 )
+    {
         m_action = EpisodeAction::New;
         return true;
     }
-    else {
+    else
+    {
         return false;
     }
 }
 
-bool EpisodeActionPrivate::parse(const QByteArray& data)
+bool EpisodeActionPrivate::parse( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if ( ok ) {
-        if (!parse( variant )) return false;
+    if( ok )
+    {
+        if( !parse( variant ) ) return false;
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
 }
@@ -224,13 +246,13 @@ qulonglong EpisodeActionPrivate::total() const
 
 // ### End of EpisodeActionPrivate
 
-EpisodeAction::EpisodeAction(const QVariant& variant, QObject* parent): QObject(parent), d(new EpisodeActionPrivate(this,variant))
+EpisodeAction::EpisodeAction( const QVariant& variant, QObject* parent ): QObject( parent ), d( new EpisodeActionPrivate( this, variant ) )
 {
 
 }
 
-EpisodeAction::EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent)
-        : QObject(parent), d(new EpisodeActionPrivate(this, podcastUrl, episodeUrl, deviceName, action, timestamp, started, position, total))
+EpisodeAction::EpisodeAction( const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent )
+    : QObject( parent ), d( new EpisodeActionPrivate( this, podcastUrl, episodeUrl, deviceName, action, timestamp, started, position, total ) )
 {
 
 }
