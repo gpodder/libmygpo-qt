@@ -60,7 +60,7 @@ public:
     SettingsPtr setPodcastSettings( const QString& username, const QString& podcastUrl, QMap<QString, QVariant >& set, const QList<QString>& remove );
     SettingsPtr setEpisodeSettings( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QVariant >& set, const QList<QString>& remove );
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type );
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, Device::Type type );
     DeviceListPtr listDevices( const QString& username );
     EpisodeActionListPtr episodeActions( const QString& username );
     EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl );
@@ -352,26 +352,26 @@ AddRemoveResultPtr ApiRequestPrivate::uploadEpisodeActions( const QString& usern
     return addRemoveResult;
 }
 
-QNetworkReply* ApiRequestPrivate::renameDevice( const QString& username , const QString& deviceId , const QString& caption, ApiRequest::Type type )
+QNetworkReply* ApiRequestPrivate::renameDevice( const QString& username , const QString& deviceId , const QString& caption, Device::Type type )
 {
     QString requestUrl = UrlBuilder::getRenameDeviceUrl( username, deviceId );
     QNetworkReply* reply;
     QByteArray data;
     switch( type )
     {
-    case ApiRequest::DESKTOP:
+    case Device::DESKTOP:
         data = JsonCreator::renameDeviceStringToJSON( caption, QLatin1String( "desktop" ) );
         break;
-    case ApiRequest::LAPTOP:
+    case Device::LAPTOP:
         data = JsonCreator::renameDeviceStringToJSON( caption, QLatin1String( "laptop" ) );
         break;
-    case ApiRequest::MOBILE:
+    case Device::MOBILE:
         data = JsonCreator::renameDeviceStringToJSON( caption, QLatin1String( "mobile" ) );
         break;
-    case ApiRequest::SERVER:
+    case Device::SERVER:
         data = JsonCreator::renameDeviceStringToJSON( caption, QLatin1String( "server" ) );
         break;
-    case ApiRequest::OTHER:
+    case Device::OTHER:
         data = JsonCreator::renameDeviceStringToJSON( caption, QLatin1String( "other" ) );
         break;
     }
@@ -547,7 +547,7 @@ AddRemoveResultPtr ApiRequest::uploadEpisodeActions( const QString& username, co
     return d->uploadEpisodeActions( username, episodeActions );
 }
 
-QNetworkReply* ApiRequest::renameDevice( const QString& username , const QString& deviceId, const QString& caption, ApiRequest::Type type )
+QNetworkReply* ApiRequest::renameDevice( const QString& username , const QString& deviceId, const QString& caption, Device::Type type )
 {
     return d->renameDevice( username, deviceId, caption, type );
 }

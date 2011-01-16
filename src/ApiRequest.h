@@ -56,15 +56,6 @@ class MYGPO_EXPORT ApiRequest
 {
 public:
 
-    enum Type
-    {
-        DESKTOP,
-        LAPTOP,
-        MOBILE,
-        SERVER,
-        OTHER
-    };
-
     ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam );
     ApiRequest( QNetworkAccessManager* nam );
     ~ApiRequest( );
@@ -189,7 +180,7 @@ public:
 
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
 
-    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, ApiRequest::Type type );
+    QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, Device::Type type );
 
     DeviceListPtr listDevices( const QString& username );
 

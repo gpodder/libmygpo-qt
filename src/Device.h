@@ -40,6 +40,16 @@ class MYGPO_EXPORT Device : public QObject
     Q_PROPERTY( qulonglong subscriptions READ subscriptions CONSTANT )
 
 public:
+
+    enum Type
+    {
+        DESKTOP,
+        LAPTOP,
+        MOBILE,
+        SERVER,
+        OTHER
+    };
+
     Device( const QVariant& var, QObject* parent = 0 );
     virtual ~Device();
     QString id() const;
