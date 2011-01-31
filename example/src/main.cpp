@@ -69,6 +69,8 @@ void printPodcast(const PodcastPtr podcast) {
     qDebug() << "title:\t" << podcast->title();
     qDebug() << "url:\t" << podcast->url();
     qDebug() << "description:\t" << podcast->description();
+	qDebug() << "subscriber:\t" << podcast->subscribers();
+	qDebug() << "subscriber:\t" << podcast->subscribersLastWeek();
     qDebug() << "";
 }
 
@@ -456,6 +458,16 @@ int main(int argc, char **argv)
 
     qDebug() << settingsPtr3->settings().toMap();
 
+    qDebug() << "Test Device Settings";
+
+	SettingsPtr settingsPtr4 = req.deviceSettings("ase23","dev0");
+	
+	loop.connect(settingsPtr4.data(),SIGNAL(finished()),SLOT(quit()));
+    //loop.connect(settingsPtr4.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.exec();
+
+	qDebug() << settingsPtr4->settings().toMap();
+
     qDebug();
     qDebug() << "EpisodeActions";
     QList<EpisodeActionPtr> episodeActions1, episodeActions2;
@@ -514,7 +526,7 @@ int main(int argc, char **argv)
     qDebug() << ptr->timestamp();
     qDebug() << QDateTime::fromTime_t(ptr->timestamp()).toString();
 
-	qDebug() << "Rename Device:";
+    qDebug() << "Rename Device:";
     QNetworkReply* r = req.renameDevice("ase23","dev0","dev0Device",Device::OTHER);
     loop.connect(r, SIGNAL(finished()), SLOT(quit()));
     loop.exec();
@@ -537,14 +549,14 @@ int main(int argc, char **argv)
     qDebug() << "Test Anonymous Requests";
 
     mygpo::ApiRequest anonym(nam);
-	PodcastListPtr top = anonym.toplist(10);
-	loop.connect(top.data(),SIGNAL(finished()),SLOT(quit()));
+    PodcastListPtr top = anonym.toplist(10);
+    loop.connect(top.data(),SIGNAL(finished()),SLOT(quit()));
     loop.connect(top.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(top.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
 
-	printPodcastList(top);
-	
+    printPodcastList(top);
+
     reply->deleteLater();
     nam->deleteLater();
 

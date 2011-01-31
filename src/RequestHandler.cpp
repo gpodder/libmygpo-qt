@@ -41,7 +41,7 @@ RequestHandler::~RequestHandler()
 
 QNetworkReply* RequestHandler::getRequest( const QString& url )
 {
-    QUrl reqUrl( QLatin1String( "http://" ) + url );
+    QUrl reqUrl( url );
     QNetworkRequest request( reqUrl );
     QNetworkReply* reply = m_nam->get( request );
     return reply;
@@ -66,7 +66,10 @@ QNetworkReply* RequestHandler::postRequest( const QByteArray data, const QString
 
 QUrl RequestHandler::addAuthData( const QString& url )
 {
-    return QUrl( QString( QLatin1String( "http://%1:%2@" ) + url ).arg( m_username ).arg( m_password ), QUrl::TolerantMode );
+    QUrl authUrl( url );
+    authUrl.setUserName( m_username );
+    authUrl.setPassword( m_password );
+    return authUrl;
 }
 
 

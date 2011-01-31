@@ -247,19 +247,19 @@ void UrlBuilderTest::testGetFavEpisodesUrlSpecialCharacters() {
  */
 void UrlBuilderTest::testGetAddRemoveSubUrl() {
     QCOMPARE(UrlBuilder::getAddRemoveSubUrl(QLatin1String("podcast1"), QLatin1String("linux")),
-             _server + _api1 + QLatin1String("/subscriptions/podcast1/linux.json"));
+             _server + _api2 + QLatin1String("/subscriptions/podcast1/linux.json"));
     QCOMPARE(UrlBuilder::getAddRemoveSubUrl(QLatin1String("podcast2"), QLatin1String("linux lastfm")),
-             _server + _api1 + QLatin1String("/subscriptions/podcast2/linux lastfm.json"));
+             _server + _api2 + QLatin1String("/subscriptions/podcast2/linux lastfm.json"));
 }
 
 void UrlBuilderTest::testGetAddRemoveSubUrlEmpty() {
     QCOMPARE(UrlBuilder::getAddRemoveSubUrl(QLatin1String(""), QLatin1String("")),
-             _server + _api1 + QLatin1String("/subscriptions//.json"));
+             _server + _api2 + QLatin1String("/subscriptions//.json"));
 }
 
 void UrlBuilderTest::testGetAddRemoveSubUrlSpecialCharacters() {
     QCOMPARE(UrlBuilder::getAddRemoveSubUrl(QLatin1String("ÖÄÜ"), QLatin1String("!\"§$%$&/()=?ß{}Ä")),
-             _server + _api1 + QLatin1String("/subscriptions/ÖÄÜ/!\"§$%$&/()=?ß{}Ä.json"));
+             _server + _api2 + QLatin1String("/subscriptions/ÖÄÜ/!\"§$%$&/()=?ß{}Ä.json"));
 }
 
 QTEST_MAIN(UrlBuilderTest)

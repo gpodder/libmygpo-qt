@@ -42,8 +42,7 @@ class MYGPO_EXPORT Podcast : public QObject
     Q_PROPERTY( QString title READ title CONSTANT )
     Q_PROPERTY( QString description READ description CONSTANT )
     Q_PROPERTY( uint subscribers READ subscribers CONSTANT )
-    //Subscribers last Week not yet used because of a Bug in the gpodder.net API
-    //Q_PROPERTY(uint subscribersLastWeek READ subscriberstLastWeek CONSTANT)
+    Q_PROPERTY( uint subscribersLastWeek READ subscribersLastWeek CONSTANT )
     Q_PROPERTY( QUrl logoUrl READ logoUrl CONSTANT )
     Q_PROPERTY( QUrl website READ website CONSTANT )
     Q_PROPERTY( QUrl mygpoUrl READ mygpoUrl CONSTANT )
@@ -57,7 +56,7 @@ public:
     QString title() const;
     QString description() const;
     uint subscribers() const;
-    //const uint subscriberstLastWeek();
+    uint subscribersLastWeek() const;
     QUrl logoUrl() const;
     QUrl website() const;
     QUrl mygpoUrl() const;

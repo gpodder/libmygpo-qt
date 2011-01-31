@@ -7,7 +7,7 @@
 # LIBMYGPO_QT_FOUND, whether libmygpo-qt was found
 
 
-find_path(LIBMYGPO_QT_INCLUDE_DIR NAMES mygpo.h
+find_path(LIBMYGPO_QT_INCLUDE_DIR NAMES ApiRequest.h
    HINTS
    ~/usr/include
    /opt/local/include

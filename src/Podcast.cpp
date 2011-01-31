@@ -41,7 +41,7 @@ public:
     QString title() const;
     QString description() const;
     uint subscribers() const;
-    //const uint subscriberstLastWeek();
+    const uint subscribersLastWeek() const;
     QUrl logoUrl() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
@@ -53,7 +53,7 @@ private:
     QString m_title;
     QString m_description;
     uint m_subscribers;
-    //uint m_SubscribersLastWeek;
+    uint m_SubscribersLastWeek;
     QUrl m_logoUrl;
     QUrl m_website;
     QUrl m_mygpoUrl;
@@ -111,6 +111,12 @@ uint PodcastPrivate::subscribers() const
     return m_subscribers;
 }
 
+const uint PodcastPrivate::subscribersLastWeek() const
+{
+    return m_SubscribersLastWeek;
+}
+
+
 QUrl PodcastPrivate::logoUrl() const
 {
     return m_logoUrl;
@@ -161,6 +167,12 @@ uint Podcast::subscribers() const
     return d->subscribers();
 }
 
+uint Podcast::subscribersLastWeek() const
+{
+    return d->subscribersLastWeek();
+}
+
+
 QUrl Podcast::logoUrl() const
 {
     return d->logoUrl();
@@ -178,35 +190,39 @@ QUrl Podcast::mygpoUrl() const
 
 bool PodcastPrivate::parse( const QVariant& data )
 {
-    if( !data.canConvert( QVariant::Map ) )
+    if ( !data.canConvert( QVariant::Map ) )
         return false;
     QVariantMap podcastMap = data.toMap();
     QVariant v = podcastMap.value( QLatin1String( "url" ) );
-    if( !v.canConvert( QVariant::Url ) )
+    if ( !v.canConvert( QVariant::Url ) )
         return false;
     m_url = v.toUrl();
     v = podcastMap.value( QLatin1String( "title" ) );
-    if( !v.canConvert( QVariant::String ) )
+    if ( !v.canConvert( QVariant::String ) )
         return false;
     m_title = v.toString();
     v = podcastMap.value( QLatin1String( "description" ) );
-    if( !v.canConvert( QVariant::String ) )
+    if ( !v.canConvert( QVariant::String ) )
         return false;
     m_description = v.toString();
     v = podcastMap.value( QLatin1String( "subscribers" ) );
-    if( !v.canConvert( QVariant::Int ) )
+    if ( !v.canConvert( QVariant::Int ) )
         return false;
     m_subscribers = v.toUInt();
+    v = podcastMap.value( QLatin1String( "subscribers_last_week" ) );
+    if ( !v.canConvert( QVariant::Int ) )
+        return false;
+    m_SubscribersLastWeek = v.toUInt();
     v = podcastMap.value( QLatin1String( "logo_url" ) );
-    if( !v.canConvert( QVariant::Url ) )
+    if ( !v.canConvert( QVariant::Url ) )
         return false;
     m_logoUrl = v.toUrl();
     v = podcastMap.value( QLatin1String( "website" ) );
-    if( !v.canConvert( QVariant::Url ) )
+    if ( !v.canConvert( QVariant::Url ) )
         return false;
     m_website = v.toUrl();
     v = podcastMap.value( QLatin1String( "mygpo_link" ) );
-    if( !v.canConvert( QVariant::Url ) )
+    if ( !v.canConvert( QVariant::Url ) )
         return false;
     m_mygpoUrl = v.toUrl();
     return true;
@@ -217,9 +233,9 @@ bool PodcastPrivate::parse( const QByteArray& data )
     QJson::Parser parser;
     bool ok;
     QVariant variant = parser.parse( data, &ok );
-    if( ok )
+    if ( ok )
     {
-        if( !parse( variant ) ) return false;
+        if ( !parse( variant ) ) return false;
         return true;
     }
     else
@@ -232,7 +248,7 @@ void PodcastPrivate::parseData()
 {
     //parsen und signal senden
     QJson::Parser parser;
-    if( parse( m_reply->readAll( ) ) )
+    if ( parse( m_reply->readAll( ) ) )
     {
         emit q->finished();
     }
