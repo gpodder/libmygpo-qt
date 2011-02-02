@@ -111,9 +111,8 @@ private slots:
 
   /** These constans must be equal to the constants defined for UrlBuilder */
 private:
-  const QString _server;
-  const QString _api2;
-  const QString _api1;
+  const QString m_server;
+  const QString m_api2;
 };
 
 }
