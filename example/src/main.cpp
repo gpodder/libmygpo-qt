@@ -52,25 +52,23 @@ void printTitle(const QString& title) {
     qDebug() << fillLine;
 }
 
+void printPodcast(const Podcast* podcast) {
+    qDebug() << "title:\t" << podcast->title();
+    qDebug() << "url:\t" << podcast->url();
+    qDebug() << "description:\t" << podcast->description();
+    qDebug() << "subscribers:\t" << podcast->subscribers();
+    qDebug() << "subscribers last week:\t" << podcast->subscribersLastWeek();
+    qDebug() << "";
+}
+
 void printPodcastList(const PodcastListPtr podcastList) {
     QList<PodcastPtr> list;
     QList<PodcastPtr>::const_iterator iterator;
 
     list = podcastList->list();
     for (iterator = list.constBegin(); iterator != list.constEnd(); ++iterator) {
-        qDebug() << "title:\t" << iterator->data()->title();
-        qDebug() << "url:\t" << iterator->data()->url();
-        qDebug() << "";
+        printPodcast(iterator->data());
     }
-    qDebug() << "";
-}
-
-void printPodcast(const PodcastPtr podcast) {
-    qDebug() << "title:\t" << podcast->title();
-    qDebug() << "url:\t" << podcast->url();
-    qDebug() << "description:\t" << podcast->description();
-	qDebug() << "subscriber:\t" << podcast->subscribers();
-	qDebug() << "subscriber:\t" << podcast->subscribersLastWeek();
     qDebug() << "";
 }
 
@@ -230,7 +228,7 @@ int main(int argc, char **argv)
     loop.exec();
 
     printTitle(QLatin1String("Retrieving Podcast Data [podcastData(\"http://surl.dk/7k5\")]"));
-    printPodcast(podcast);
+    printPodcast(podcast.data());
 
     //
     // EpisodePtr episodeData(const QUrl& podcasturl, const QUrl& episodeurl);
@@ -460,13 +458,13 @@ int main(int argc, char **argv)
 
     qDebug() << "Test Device Settings";
 
-	SettingsPtr settingsPtr4 = req.deviceSettings("ase23","dev0");
-	
-	loop.connect(settingsPtr4.data(),SIGNAL(finished()),SLOT(quit()));
+    SettingsPtr settingsPtr4 = req.deviceSettings("ase23","dev0");
+
+    loop.connect(settingsPtr4.data(),SIGNAL(finished()),SLOT(quit()));
     //loop.connect(settingsPtr4.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.exec();
 
-	qDebug() << settingsPtr4->settings().toMap();
+    qDebug() << settingsPtr4->settings().toMap();
 
     qDebug();
     qDebug() << "EpisodeActions";
