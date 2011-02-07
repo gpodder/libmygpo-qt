@@ -1,24 +1,35 @@
 ==========  README ==========
+
+=== What is libmygpo-qt ===
+
 libmygpo-qt is a Qt Library that wraps the gpodder.net Web API (http://wiki.gpodder.org/wiki/Web_Services/API_2)
 
-v0.10 wraps nearly every Request from the gpodder.net API except:
+v1.0 wraps nearly every Request from the gpodder.net API except:
 -) Simple API Calls Downloading subscription Lists & Uploading subscription Lists
--) Txt Format for simple API Calls is not supported yet
 -) Retrieving Subscription Changes (you should use "Retrieving Updates for a given Device" instead)
 
-Created 2010 by Stefan Derkits, Christian Wagner & Felix Winter
+=== Copyright & License ===
 
-Requirements:
+Copyright 2010 - 2011 Stefan Derkits (stefan@derkits.at) , Christian Wagner (christian.wagner86@gmx.at) & Felix Winter (ixos01@gmail.com)
+
+See COPYING File for License
+
+=== Requirements ===
+
 -) Qt 4.6 or higher
 -) Cmake 2.6 or higher
 -) QJson
 
-Git Repo: https://github.com/ase23/libmygpo-qt
-Doxygen Documentation: http://stefan.derkits.at/libmygpo-doc/ 
-Bugreports: http://bugs.gpodder.org
-Contact: gpodder-devel@lists.berlios.de
+=== Links ===
 
-How to Install:
+Git Repo:                https://github.com/ase23/libmygpo-qt
+Doxygen Documentation:   http://stefan.derkits.at/libmygpo-doc/ 
+Bugreports:              http://bugs.gpodder.org
+Contact:                 gpodder-devel@lists.berlios.de
+IRC Channel:             #gpodder on FreeNode (irc.freenode.net)
+
+=== How to Install ===
+
 -) Create Directory "build"
 -) change into build and run "cmake .. -DCMAKE_INSTALL_PREFIX=BASE_PATH_OF_INSTALLATION -DCMAKE_BUILD_TYPE=Debug"
 -) make && make install
