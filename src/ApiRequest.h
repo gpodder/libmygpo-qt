@@ -59,7 +59,8 @@ public:
     ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam );
     ApiRequest( QNetworkAccessManager* nam );
     ~ApiRequest( );
-    /**
+    
+	/**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return
@@ -76,7 +77,7 @@ public:
     QNetworkReply* searchOpml( const QString& query );
 
     /**
-     * Returns the Result for the Simple API Call "Downloading podcast suggestions"
+     * Returns the OPML Result for the Simple API Call "Downloading podcast suggestions"
      * Requires Authentication
      * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return
@@ -84,6 +85,31 @@ public:
      */
     QNetworkReply* suggestionsOpml( uint count );
 
+	/**
+     * Returns the TXT Result for the Simple API Call "Downloading Podcast Toplists"
+     * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return
+     *
+     */
+    QNetworkReply* toplistTxt( uint count );
+
+    /**
+     * Returns the TXT Result for the Simple API Call "Searching for Podcasts"
+     * @param query The String you want to search for
+     * @return
+     *
+     */
+    QNetworkReply* searchTxt( const QString& query );
+
+    /**
+     * Returns the TXT Result for the Simple API Call "Downloading podcast suggestions"
+     * Requires Authentication
+     * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return
+     *
+     */
+    QNetworkReply* suggestionsTxt( uint count );
+	
     /**
      * Returns the Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1

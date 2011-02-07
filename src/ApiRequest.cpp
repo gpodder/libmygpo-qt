@@ -42,6 +42,9 @@ public:
     QNetworkReply* toplistOpml( uint count );
     QNetworkReply* searchOpml( const QString& query );
     QNetworkReply* suggestionsOpml( uint count );
+	QNetworkReply* toplistTxt( uint count );
+    QNetworkReply* searchTxt( const QString& query );
+    QNetworkReply* suggestionsTxt( uint count );
     PodcastListPtr toplist( uint count );
     PodcastListPtr search( const QString& query );
     PodcastListPtr suggestions( uint count );
@@ -100,10 +103,27 @@ QNetworkReply* ApiRequestPrivate::searchOpml( const QString& query )
     return m_requestHandler.getRequest( requestUrl );
 }
 
-
 QNetworkReply* ApiRequestPrivate::suggestionsOpml( uint count )
 {
     QString requestUrl = UrlBuilder::getSuggestionsUrl( count , UrlBuilder::OPML );
+    return m_requestHandler.authGetRequest( requestUrl );
+}
+
+QNetworkReply* ApiRequestPrivate::toplistTxt( uint count )
+{
+    QString requestUrl = UrlBuilder::getToplistUrl( count, UrlBuilder::TEXT );
+    return m_requestHandler.getRequest( requestUrl );
+}
+
+QNetworkReply* ApiRequestPrivate::searchTxt( const QString& query )
+{
+    QString requestUrl = UrlBuilder::getPodcastSearchUrl( query, UrlBuilder::TEXT );
+    return m_requestHandler.getRequest( requestUrl );
+}
+
+QNetworkReply* ApiRequestPrivate::suggestionsTxt( uint count )
+{
+    QString requestUrl = UrlBuilder::getSuggestionsUrl( count , UrlBuilder::TEXT );
     return m_requestHandler.authGetRequest( requestUrl );
 }
 
@@ -415,6 +435,21 @@ QNetworkReply* ApiRequest::searchOpml( const QString& query )
 QNetworkReply* ApiRequest::suggestionsOpml( uint count )
 {
     return d->suggestionsOpml( count );
+}
+
+QNetworkReply* ApiRequest::toplistTxt( uint count )
+{
+    return d->toplistTxt( count );
+}
+
+QNetworkReply* ApiRequest::searchTxt( const QString& query )
+{
+    return d->searchTxt( query );
+}
+
+QNetworkReply* ApiRequest::suggestionsTxt( uint count )
+{
+    return d->suggestionsTxt( count );
 }
 
 PodcastListPtr ApiRequest::toplist( uint count )
