@@ -48,6 +48,16 @@ class MYGPO_EXPORT Episode : public QObject
     Q_PROPERTY( QUrl mygpoUrl READ mygpoUrl CONSTANT )
 
 public:
+
+    enum Status
+    {
+        UNKNOWN,
+        NEW,
+        PLAY,
+        DOWNLOAD,
+        DELETE
+    };
+
     Episode( QNetworkReply* reply, QObject* parent = 0 );
     Episode( const QVariant& variant, QObject* parent = 0 );
     virtual ~Episode();
@@ -58,6 +68,7 @@ public:
     QString description() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
+    Episode::Status status() const;
 private:
     Q_DISABLE_COPY( Episode )
     EpisodePrivate* const d;

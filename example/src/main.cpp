@@ -75,6 +75,7 @@ void printPodcastList(const PodcastListPtr podcastList) {
 void printEpisode(const EpisodePtr episode) {
     qDebug() << "title:\t" << episode->title();
     qDebug() << "url:\t" << episode->url();
+    qDebug() << "status:\t" << episode->status();
     qDebug() << "";
 }
 
@@ -87,6 +88,7 @@ void printEpisodeList(const EpisodeListPtr episodeList) {
     for (iterator = list.constBegin(); iterator != list.constEnd(); ++iterator) {
         qDebug() << "title:\t" << iterator->data()->title();
         qDebug() << "url:\t" << iterator->data()->url();
+        qDebug() << "Status:\t" << iterator->data()->status();
         qDebug() << "";
     }
     qDebug() << "";
@@ -167,6 +169,47 @@ int main(int argc, char **argv)
     loop.exec();
 
     printTitle(QLatin1String("Downloading podcast suggestions (OPML) [suggestionsOpml(2)]"));
+    qDebug() << reply->readAll();
+    qDebug() << "";
+
+	//
+    // QNetworkReply* toplistO(uint count);
+    //
+    reply = req.toplistTxt(10);
+
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Downloading podcast toplists (TXT) [toplistOpml(10)]"));
+    qDebug() << reply->readAll();
+	qDebug() << "";
+
+
+    //
+    // QNetworkReply* suggestionsOpml(uint count);
+    //
+
+    reply = req.searchTxt(QLatin1String("coverville"));
+
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Searching for podcasts (TXT) [searchTxt(\"coverville\")]"));
+    qDebug() << reply->readAll();
+    qDebug() << "";
+
+    //
+    // QNetworkReply* suggestionsTxt(uint count);
+    //
+    reply = req.suggestionsTxt(4);
+
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Downloading podcast suggestions (TXT) [suggestionsTxt(4)]"));
     qDebug() << reply->readAll();
     qDebug() << "";
 
@@ -517,7 +560,7 @@ int main(int argc, char **argv)
     }
     qDebug() << "UpdateList:";
     foreach(const EpisodePtr& e, ptr->updateList()) {
-        qDebug() << e->podcastUrl();
+        printEpisode(e);
     }
 
     qDebug() << "Timestamp:";

@@ -33,8 +33,8 @@ class EpisodePrivate : QObject
     Q_OBJECT
 
 public:
-    EpisodePrivate( Episode* qq, QNetworkReply* reply, QObject* parent = 0 );
-    EpisodePrivate( Episode* qq, const QVariant& variant, QObject* parent = 0 );
+    EpisodePrivate ( Episode* qq, QNetworkReply* reply, QObject* parent = 0 );
+    EpisodePrivate ( Episode* qq, const QVariant& variant, QObject* parent = 0 );
     virtual ~EpisodePrivate();
     QUrl url() const;
     QString title() const;
@@ -43,6 +43,7 @@ public:
     QString description() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
+    Episode::Status status() const;
 
 private:
     QNetworkReply* m_reply;
@@ -54,18 +55,17 @@ private:
     QString m_description;
     QUrl m_website;
     QUrl m_mygpoUrl;
+    Episode::Status m_status;
     QNetworkReply::NetworkError m_error;
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-
+    bool parse ( const QVariant& data );
+    bool parse ( const QByteArray& data );
 private slots:
     void parseData();
-    void error( QNetworkReply::NetworkError error );
+    void error ( QNetworkReply::NetworkError error );
 
 };
 
 };
-
 
 using namespace mygpo;
 
@@ -74,61 +74,87 @@ EpisodePrivate::~EpisodePrivate()
     delete m_reply;
 }
 
-EpisodePrivate::EpisodePrivate( Episode* qq, QNetworkReply* reply, QObject* parent ): QObject( parent ), m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
+EpisodePrivate::EpisodePrivate ( Episode* qq, QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply ), q ( qq ), m_error ( QNetworkReply::NoError )
 {
-    QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
-    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
+    QObject::connect ( m_reply, SIGNAL ( finished() ), this, SLOT ( parseData() ) );
+    QObject::connect ( m_reply, SIGNAL ( error ( QNetworkReply::NetworkError ) ), this, SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
-EpisodePrivate::EpisodePrivate( Episode* qq, const QVariant& variant, QObject* parent ): QObject( parent ), m_reply( 0 ), q( qq )
+EpisodePrivate::EpisodePrivate ( Episode* qq, const QVariant& variant, QObject* parent ) : QObject ( parent ), m_reply ( 0 ), q ( qq )
 {
-    parse( variant );
+    parse ( variant );
 }
 
-bool EpisodePrivate::parse( const QVariant& data )
+bool EpisodePrivate::parse ( const QVariant& data )
 {
-    if( !data.canConvert( QVariant::Map ) )
+    if ( !data.canConvert ( QVariant::Map ) )
         return false;
     QVariantMap episodeMap = data.toMap();
-    QVariant s = episodeMap.value( QLatin1String( "url" ) );
-    if( !s.canConvert( QVariant::Url ) )
+    QVariant s = episodeMap.value ( QLatin1String ( "url" ) );
+    if ( !s.canConvert ( QVariant::Url ) )
         return false;
     m_url = s.toUrl();
-    s = episodeMap.value( QLatin1String( "title" ) );
-    if( !s.canConvert( QVariant::String ) )
+    s = episodeMap.value ( QLatin1String ( "title" ) );
+    if ( !s.canConvert ( QVariant::String ) )
         return false;
     m_title = s.toString();
-    s = episodeMap.value( QLatin1String( "podcast_url" ) );
-    if( !s.canConvert( QVariant::Url ) )
+    s = episodeMap.value ( QLatin1String ( "podcast_url" ) );
+    if ( !s.canConvert ( QVariant::Url ) )
         return false;
     m_podcastUrl = s.toUrl();
-    s = episodeMap.value( QLatin1String( "podcast_title" ) );
-    if( !s.canConvert( QVariant::String ) )
+    s = episodeMap.value ( QLatin1String ( "podcast_title" ) );
+    if ( !s.canConvert ( QVariant::String ) )
         return false;
     m_podcastTitle = s.toString();
-    s = episodeMap.value( QLatin1String( "description" ) );
-    if( !s.canConvert( QVariant::String ) )
+    s = episodeMap.value ( QLatin1String ( "description" ) );
+    if ( !s.canConvert ( QVariant::String ) )
         return false;
     m_description = s.toString();
-    s = episodeMap.value( QLatin1String( "website" ) );
-    if( !s.canConvert( QVariant::Url ) )
+    s = episodeMap.value ( QLatin1String ( "website" ) );
+    if ( !s.canConvert ( QVariant::Url ) )
         return false;
     m_website = s.toUrl();
-    s = episodeMap.value( QLatin1String( "mygpo_link" ) );
-    if( !s.canConvert( QVariant::Url ) )
+    s = episodeMap.value ( QLatin1String ( "mygpo_link" ) );
+    if ( !s.canConvert ( QVariant::Url ) )
         return false;
     m_mygpoUrl = s.toUrl();
+    s = episodeMap.value ( QLatin1String ( "status" ) );
+    if ( s.canConvert ( QVariant::String ) )
+    {
+        QString status = s.toString();
+        m_status = Episode::UNKNOWN;
+        if ( QString::compare ( status, QLatin1String ( "new" ) ,Qt::CaseInsensitive ) == 0 )
+        {
+            m_status = Episode::NEW;
+        }
+        else if ( QString::compare ( status, QLatin1String ( "play" ) ,Qt::CaseInsensitive ) == 0 )
+        {
+            m_status = Episode::PLAY;
+        }
+        else if ( QString::compare ( status, QLatin1String ( "download" ) ,Qt::CaseInsensitive ) == 0 )
+        {
+            m_status = Episode::DOWNLOAD;
+        }
+        else if ( QString::compare ( status, QLatin1String ( "delete" ) ,Qt::CaseInsensitive ) == 0 )
+        {
+            m_status = Episode::DELETE;
+        }
+    }
+    else
+    {
+        m_status = Episode::UNKNOWN;
+    }
     return true;
 }
 
-bool EpisodePrivate::parse( const QByteArray& data )
+bool EpisodePrivate::parse ( const QByteArray& data )
 {
     QJson::Parser parser;
     bool ok;
-    QVariant variant = parser.parse( data, &ok );
-    if( ok )
+    QVariant variant = parser.parse ( data, &ok );
+    if ( ok )
     {
-        if( !parse( variant ) ) return false;
+        if ( !parse ( variant ) ) return false;
         return true;
     }
     else
@@ -140,9 +166,9 @@ bool EpisodePrivate::parse( const QByteArray& data )
 void EpisodePrivate::parseData()
 {
     //parse and send signal
-    if( m_reply->error() == QNetworkReply::NoError )
+    if ( m_reply->error() == QNetworkReply::NoError )
     {
-        if( parse( m_reply->readAll() ) )
+        if ( parse ( m_reply->readAll() ) )
         {
             emit q->finished();
         }
@@ -153,10 +179,10 @@ void EpisodePrivate::parseData()
     }
 }
 
-void EpisodePrivate::error( QNetworkReply::NetworkError error )
+void EpisodePrivate::error ( QNetworkReply::NetworkError error )
 {
     this->m_error = error;
-    emit q->requestError( error );
+    emit q->requestError ( error );
 }
 
 QString EpisodePrivate::description() const
@@ -194,12 +220,17 @@ QUrl EpisodePrivate::website() const
     return m_website;
 }
 
-Episode::Episode( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new EpisodePrivate( this, reply ) )
+Episode::Status EpisodePrivate::status() const
+{
+    return m_status;
+}
+
+Episode::Episode ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), d ( new EpisodePrivate ( this, reply ) )
 {
 
 }
 
-Episode::Episode( const QVariant& variant, QObject* parent ): QObject( parent ), d( new EpisodePrivate( this, variant ) )
+Episode::Episode ( const QVariant& variant, QObject* parent ) : QObject ( parent ), d ( new EpisodePrivate ( this, variant ) )
 {
 
 }
@@ -242,6 +273,11 @@ QUrl Episode::website() const
 QUrl Episode::mygpoUrl() const
 {
     return d->mygpoUrl();
+}
+
+Episode::Status Episode::status() const
+{
+    return d->status();
 }
 
 #include "Episode.moc"
