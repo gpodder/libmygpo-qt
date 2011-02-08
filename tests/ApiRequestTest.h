@@ -44,7 +44,7 @@ private slots:
     void cleanup();
 
     void testToplist();
-    void testSuggestions();
+//    void testSuggestions();
     void testPodcastsOfTag();
     void testPodcastData();
     void testEpisodeData();
@@ -56,6 +56,7 @@ private slots:
 public slots:
     void error();
     void error(QNetworkReply::NetworkError error);
+    void finished();
 };
 
 }
