@@ -23,7 +23,8 @@
 #include "Episode.h"
 
 #include <parser.h>
-#include <QSharedPointer>
+
+#include <qdebug.h>
 
 namespace mygpo
 {
@@ -43,8 +44,8 @@ public:
     QString description() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
+    QDateTime releaded() const;
     Episode::Status status() const;
-
 private:
     QNetworkReply* m_reply;
     Episode* const q;
@@ -55,6 +56,7 @@ private:
     QString m_description;
     QUrl m_website;
     QUrl m_mygpoUrl;
+    QDateTime m_released;
     Episode::Status m_status;
     QNetworkReply::NetworkError m_error;
     bool parse ( const QVariant& data );
@@ -144,6 +146,16 @@ bool EpisodePrivate::parse ( const QVariant& data )
     {
         m_status = Episode::UNKNOWN;
     }
+    s = episodeMap.value( QLatin1String ( "released" ) );
+    if ( s.canConvert( QVariant::String ) )
+    {
+        QString date = s.toString();
+        m_released = QDateTime::fromString( date, Qt::ISODate );
+    }
+    else
+    {
+        m_released = QDateTime::currentDateTime();
+    }
     return true;
 }
 
@@ -225,6 +237,11 @@ Episode::Status EpisodePrivate::status() const
     return m_status;
 }
 
+QDateTime EpisodePrivate::releaded() const
+{
+    return m_released;
+}
+
 Episode::Episode ( QNetworkReply* reply, QObject* parent ) : QObject ( parent ), d ( new EpisodePrivate ( this, reply ) )
 {
 
@@ -278,6 +295,11 @@ QUrl Episode::mygpoUrl() const
 Episode::Status Episode::status() const
 {
     return d->status();
+}
+
+QDateTime Episode::released() const
+{
+    return d->releaded();
 }
 
 #include "Episode.moc"

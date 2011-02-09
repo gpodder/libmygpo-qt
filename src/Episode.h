@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QUrl>
 #include <QString>
+#include <QDateTime>
 #include <QNetworkReply>
 #include <QSharedPointer>
 
@@ -45,6 +46,8 @@ class MYGPO_EXPORT Episode : public QObject
     Q_PROPERTY( QString podcastTitle READ title CONSTANT )
     Q_PROPERTY( QString description READ description CONSTANT )
     Q_PROPERTY( QUrl website READ website CONSTANT )
+    Q_PROPERTY( QDateTime released READ released CONSTANT )
+    Q_PROPERTY( int status READ status CONSTANT )
     Q_PROPERTY( QUrl mygpoUrl READ mygpoUrl CONSTANT )
 
 public:
@@ -68,6 +71,7 @@ public:
     QString description() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
+    QDateTime released() const;
     Episode::Status status() const;
 private:
     Q_DISABLE_COPY( Episode )

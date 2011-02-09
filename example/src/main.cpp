@@ -76,6 +76,7 @@ void printEpisode(const EpisodePtr episode) {
     qDebug() << "title:\t" << episode->title();
     qDebug() << "url:\t" << episode->url();
     qDebug() << "status:\t" << episode->status();
+    qDebug() << "released:\t" << episode->released().toString();
     qDebug() << "";
 }
 
@@ -88,7 +89,8 @@ void printEpisodeList(const EpisodeListPtr episodeList) {
     for (iterator = list.constBegin(); iterator != list.constEnd(); ++iterator) {
         qDebug() << "title:\t" << iterator->data()->title();
         qDebug() << "url:\t" << iterator->data()->url();
-        qDebug() << "Status:\t" << iterator->data()->status();
+        qDebug() << "status:\t" << iterator->data()->status();
+        qDebug() << "released:\t" << iterator->data()->released().toString();
         qDebug() << "";
     }
     qDebug() << "";
