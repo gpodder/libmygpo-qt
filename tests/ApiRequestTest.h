@@ -53,6 +53,10 @@ private slots:
     void testAddRemoveSubscriptionsAdd();
     void testAddRemoveSubscriptionsRemove();
 
+    void testListDevices();
+    void testRenameDevices();
+    void testDeviceUpdates();
+
 public slots:
     void error();
     void error(QNetworkReply::NetworkError error);

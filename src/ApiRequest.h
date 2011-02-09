@@ -63,7 +63,7 @@ public:
 	/**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
-     * @return
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
      *
      */
     QNetworkReply* toplistOpml( uint count );
@@ -71,7 +71,7 @@ public:
     /**
      * Returns the OPML Result for the Simple API Call "Searching for Podcasts"
      * @param query The String you want to search for
-     * @return
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
      *
      */
     QNetworkReply* searchOpml( const QString& query );
@@ -80,7 +80,7 @@ public:
      * Returns the OPML Result for the Simple API Call "Downloading podcast suggestions"
      * Requires Authentication
      * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
-     * @return
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
      *
      */
     QNetworkReply* suggestionsOpml( uint count );
@@ -88,7 +88,7 @@ public:
 	/**
      * Returns the TXT Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
-     * @return
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
      *
      */
     QNetworkReply* toplistTxt( uint count );
@@ -96,7 +96,7 @@ public:
     /**
      * Returns the TXT Result for the Simple API Call "Searching for Podcasts"
      * @param query The String you want to search for
-     * @return
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
      *
      */
     QNetworkReply* searchTxt( const QString& query );
@@ -105,7 +105,7 @@ public:
      * Returns the TXT Result for the Simple API Call "Downloading podcast suggestions"
      * Requires Authentication
      * @param count The maximum number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
-     * @return
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
      *
      */
     QNetworkReply* suggestionsTxt( uint count );
@@ -179,7 +179,7 @@ public:
 
     /**
      * Uploads Data & returns the Result for the Advanced API Call "Add/remove subscriptions"
-     * Requires Authentication
+     * Requires Authentication.
      * @param username User for which this API Call should be executed
      * @param device gPodder Device for which this API Call should be executed
      * @param add URLs of Podcasts that should be added to the Subscriptions of the User
@@ -188,42 +188,189 @@ public:
      */
     AddRemoveResultPtr addRemoveSubscriptions( const QString& username, const QString& device, const QList< QUrl >& add, const QList< QUrl >& remove );
 
+    /**
+     * Retrieve settings which are attached to an account.
+     * @param username Username of the targeted account
+     * @return Received settings as key-value-pairs
+     *
+     */
     SettingsPtr accountSettings( const QString& username );
 
+    /**
+     * Retrieve settings which are attached to a device.
+     * @param username Username of the account which owns the device
+     * @param device Name of the targeted device
+     * @return Received settings as key-value-pairs
+     *
+     */
     SettingsPtr deviceSettings( const QString& username, const QString& device );
 
+    /**
+     * Retrieve settings which are attached to a podcast.
+     * @param username Username of the account which owns the podcast
+     * @param podcastUrl Url which identifies the targeted podcast
+     * @return Received settings as key-value-pairs
+     *
+     */
     SettingsPtr podcastSettings( const QString& username, const QString& podcastUrl );
 
+    /**
+     * Retrieve settings which are attached to an episode.
+     * @param username Username of the account which owns the episode
+     * @param podcastUrl Url as String which identifies the podcast to which the episode belongs to
+     * @param episodeUrl Url as String which identifies the targeted episode
+     * @return Received settings as key-value-pairs
+     *
+     */
     SettingsPtr episodeSettings( const QString& username, const QString& podcastUrl, const QString& episodeUrl );
 
+    /**
+     * Set and or remove settings which are attached to an account.
+     * @param username Username of the targeted account
+     * @param set A set of settings as key-value-pairs which shall be set
+     * @param set A set of exisiting settings as key-value-pairs which shall be removed
+     * @return All settings as key-value-pairs which are stored after the update
+     *
+     */
     SettingsPtr setAccountSettings( const QString& username, QMap<QString, QVariant >& set, const QList<QString>& remove );
 
+    /**
+     * Set and or remove settings which are attached to a device.
+     * @param username Username of the account which owns the device
+     * @param device Name of the targeted device
+     * @param set A set of settings as key-value-pairs which shall be set
+     * @param set A set of exisiting settings as key-value-pairs which shall be removed
+     * @return All settings as key-value-pairs which are stored after the update
+     *
+     */
     SettingsPtr setDeviceSettings( const QString& username, const QString& device, QMap<QString, QVariant >& set, const QList<QString>& remove );
 
+    /**
+     * Set and or remove settings which are attached to a podcast.
+     * @param username Username of the account which owns the podcast
+     * @param podcastUrl Url which identifies the targeted podcast
+     * @param set A set of settings as key-value-pairs which shall be set
+     * @param set A set of exisiting settings as key-value-pairs which shall be removed
+     * @return All settings as key-value-pairs which are stored after the update
+     *
+     */
     SettingsPtr setPodcastSettings( const QString& username, const QString& podcastUrl, QMap<QString, QVariant >& set, const QList<QString>& remove );
 
+    /**
+     * Set and or remove settings which are attached to an episode.
+     * @param username Username of the account which owns the episode
+     * @param podcastUrl Url as String which identifies the podcast to which the episode belongs to
+     * @param episodeUrl Url as String which identifies the targeted episode
+     * @param set A set of settings as key-value-pairs which shall be set
+     * @param set A set of exisiting settings as key-value-pairs which shall be removed
+     * @return All settings as key-value-pairs which are stored after the update
+     *
+     */
     SettingsPtr setEpisodeSettings( const QString& username, const QString& podcastUrl, const QString& episodeUrl, QMap<QString, QVariant >& set, const QList<QString>& remove );
 
+    /**
+     * Retrieve episode and subscription updates for a given device.
+     * @param username Username of the account which owns the device
+     * @param deviceId Id of the targeted device
+     * @param timestamp A date in milliseconds, All changes since this timestamp will be retrieved
+     * @return A DeviceUpdatesPtr which accesses:
+     *    - a list of subscriptions to be added, with URL, title and descriptions
+     *    - a list of URLs to be unsubscribed
+     *    - a list of updated episodes
+     *
+     */
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
 
+    /**
+     * Sets a new name and type for a device identified by a given ID
+     * @param username Username of the account which owns the device
+     * @param deviceId The id of the targeted device
+     * @param caption The new name of the device
+     * @param type The new type of the device
+     * @return A Pointer to a QNetworkReply which receives network signals
+     *
+     */
     QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, Device::Type type );
 
+    /**
+     * Returns the list of devices that belong to a user.
+     * @param username Username of the targeted user
+     * @return List of devices
+     *
+     */
     DeviceListPtr listDevices( const QString& username );
 
+    /**
+     * Download episode actions for a given username.
+     * @param Username of the targeted user
+     * @return List of all episode actions of the user
+     *
+     */
     EpisodeActionListPtr episodeActions( const QString& username );
 
+    /**
+     * Download episode actions for a given podcast.
+     * @param username Username of the account which owns the podcast
+     * @param podcastUrl Url which identifies the targeted podcast
+     * @return List of all episode actions for the given podcast
+     *
+     */
     EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl );
 
+    /**
+     * Download episode actions for a given device.
+     * @param username Username of the account which owns the device
+     * @param deviceId The Id of the targeted device
+     * @return List of all episode actions for the given device
+     *
+     */
     EpisodeActionListPtr episodeActionsByDevice( const QString& username, const QString& deviceId );
 
+    /**
+     * Download episode actions for a given username since a given timestamp.
+     * @param Username of the targeted user
+     * @param since Timestamp in milliseconds, Episode Actions since this time will be retrieved
+     * @return List of all new episode actions since the given timestamp
+     *
+     */
     EpisodeActionListPtr episodeActionsByTimestamp( const QString& username, const qulonglong since );
 
+    /**
+     * Download episode actions for a given podcast since a given timestamp.
+     * @param username Username of the account which owns the podcast
+     * @param podcastUrl Url which identifies the targeted podcast
+     * @param since Timestamp in milliseconds, Episode Actions since this time will be retrieved
+     * @return List of all new episode actions since the given timestamp
+     *
+     */
     EpisodeActionListPtr episodeActionsByPodcastAndTimestamp( const QString& username, const QString& podcastUrl, const qulonglong since );
 
+    /**
+     * Download episode actions for a given device since a given timestamp.
+     * @param username Username of the account which owns the device
+     * @param deviceId The Id of the targeted device
+     * @param since Timestamp in milliseconds, Episode Actions since this time will be retrieved
+     * @return List of all new episode actions since the given timestamp
+     *
+     */
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
 
+    /**
+     * Retrieve episode actions (Maybe only the latest) for a given podcast.
+     * @param username Username of the account which owns the device
+     * @param podcastUrl Url which identifies the targeted podcast
+     * @param aggregated If aggregated is true, only the latest episode action is retrieved
+     * @return List of all episode actions or a list containing only the latest episode action depending on the aggregated parameter
+     *
+     */
     EpisodeActionListPtr episodeActionsByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated );
 
+    /**
+     * Upload episode actions
+     * @param episodeActions The list of episode actions which shall be uploaded
+     * @return An AddRemoveResultPtr which contains information about the updated Urls
+     *
+     */
     AddRemoveResultPtr uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions );
 
 

@@ -21,6 +21,7 @@
 ***************************************************************************/
 
 #include "ApiRequestTest.h"
+#include <QDateTime>
 
 using namespace mygpo;
 
@@ -67,7 +68,6 @@ void ApiRequestTest::testToplist()
     loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
-    qDebug() << "OK";
     QVERIFY(m_ok);
     QCOMPARE(ret->list().size(),10);
 }
@@ -185,36 +185,90 @@ void ApiRequestTest::testTopTags()
 
 void ApiRequestTest::testAddRemoveSubscriptionsAdd()
 {
-//    QEventLoop loop;
-//    QList<QUrl> addList;
-//    QList<QUrl> removeList;
-//    addList.append(QUrl(QLatin1String("http://downloads.bbc.co.uk/podcasts/worldservice/scia/rss.xml")));
-//    AddRemoveResultPtr ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
-//    QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
-//    QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-//    QObject::connect(ret.data(),SIGNAL(finished()), this, SLOT(finished()));
-//    loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
-//    loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-//    loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
-//    loop.exec();
-//    QVERIFY(m_ok);
+    QEventLoop loop;
+    QList<QUrl> addList;
+    QList<QUrl> removeList;
+    addList.append(QUrl(QLatin1String("http://downloads.bbc.co.uk/podcasts/worldservice/scia/rss.xml")));
+    AddRemoveResultPtr ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
+    QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+    QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+    QObject::connect(ret.data(),SIGNAL(finished()), this, SLOT(finished()));
+    loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    QVERIFY(m_ok);
 }
 
 void ApiRequestTest::testAddRemoveSubscriptionsRemove()
 {
-//    QEventLoop loop;
-//    QList<QUrl> addList;
-//    QList<QUrl> removeList;
-//    removeList.append(QUrl(QLatin1String("http://downloads.bbc.co.uk/podcasts/worldservice/scia/rss.xml")));
-//    AddRemoveResultPtr ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
-//    QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
-//    QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-//    QObject::connect(ret.data(),SIGNAL(finished()), this, SLOT(finished()));
-//    loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
-//    loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
-//    loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
-//    loop.exec();
-//    QVERIFY(m_ok);
+    QEventLoop loop;
+    QList<QUrl> addList;
+    QList<QUrl> removeList;
+    removeList.append(QUrl(QLatin1String("http://downloads.bbc.co.uk/podcasts/worldservice/scia/rss.xml")));
+    AddRemoveResultPtr ret = m_req.addRemoveSubscriptions(QLatin1String("ase23"),QLatin1String("dev0"),addList, removeList);
+    QObject::connect(ret.data(),SIGNAL(parseError()), this, SLOT(error()));
+    QObject::connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+    QObject::connect(ret.data(),SIGNAL(finished()), this, SLOT(finished()));
+    loop.connect(ret.data(),SIGNAL(finished()),SLOT(quit()));
+    loop.connect(ret.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(ret.data(),SIGNAL(parseError()),SLOT(quit()));
+    loop.exec();
+    QVERIFY(m_ok);
+}
+
+void ApiRequestTest::testListDevices()
+{
+	QEventLoop loop;
+	DeviceListPtr devices = m_req.listDevices(QLatin1String("ase23"));
+	QObject::connect(devices.data(),SIGNAL(parseError()), this, SLOT(error()));
+	QObject::connect(devices.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+	QObject::connect(devices.data(),SIGNAL(finished()), this, SLOT(finished()));
+	loop.connect(devices.data(),SIGNAL(finished()),SLOT(quit()));
+	loop.connect(devices.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+	loop.connect(devices.data(),SIGNAL(parseError()),SLOT(quit()));
+	loop.exec();
+	QVERIFY(m_ok);
+
+	QVERIFY(devices->devicesList().size() == 4);
+	DevicePtr device = devices->devicesList().at(1);
+	QCOMPARE(device->id(), QLatin1String("foobar"));
+	QCOMPARE(device->type(), QLatin1String("server"));
+	QCOMPARE(device->caption(), QLatin1String("foobar"));
+	QVERIFY(device->subscriptions() == 7);
+}
+
+void ApiRequestTest::testRenameDevices()
+{
+	QEventLoop loop;
+	QNetworkReply *reply = m_req.renameDevice(QLatin1String("ase23"), QLatin1String("foobar"), QLatin1String("foobar2"), Device::OTHER);
+	QObject::connect(reply,SIGNAL(finished()), this, SLOT(finished()));
+	loop.connect(reply,SIGNAL(finished()),SLOT(quit()));
+	loop.exec();
+	QVERIFY(m_ok);
+
+	m_ok = false;
+	reply = m_req.renameDevice(QLatin1String("ase23"), QLatin1String("foobar"), QLatin1String("foobar"), Device::SERVER);
+	QObject::connect(reply,SIGNAL(finished()), this, SLOT(finished()));
+	loop.connect(reply,SIGNAL(finished()),SLOT(quit()));
+	loop.exec();
+	QVERIFY(m_ok);
+}
+
+void ApiRequestTest::testDeviceUpdates()
+{
+	QEventLoop loop;
+	QDateTime time;
+	DeviceUpdatesPtr updates = m_req.deviceUpdates(QLatin1String("ase23"), QLatin1String("foobar"), time.toTime_t());
+	QObject::connect(updates.data(),SIGNAL(parseError()), this, SLOT(error()));
+	QObject::connect(updates.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+	QObject::connect(updates.data(),SIGNAL(finished()), this, SLOT(finished()));
+	loop.connect(updates.data(),SIGNAL(finished()),SLOT(quit()));
+	loop.connect(updates.data(),SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+	loop.connect(updates.data(),SIGNAL(parseError()),SLOT(quit()));
+	loop.exec();
+	QVERIFY(m_ok);
+	QVERIFY(updates->timestamp() > 0);
 }
 
 
