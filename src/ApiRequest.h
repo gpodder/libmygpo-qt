@@ -303,28 +303,31 @@ public:
     /**
      * Download episode actions for a given username.
      * @param Username of the targeted user
+     * @param aggregated If aggregated is set to true, only the latest episode action will be returned
      * @return List of all episode actions of the user
      *
      */
-    EpisodeActionListPtr episodeActions( const QString& username );
+    EpisodeActionListPtr episodeActions( const QString& username, const bool aggregated = false );
 
     /**
      * Download episode actions for a given podcast.
      * @param username Username of the account which owns the podcast
      * @param podcastUrl Url which identifies the targeted podcast
+     * @param aggregated If aggregated is set to true, only the latest episode action will be returned
      * @return List of all episode actions for the given podcast
      *
      */
-    EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl );
+    EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl, const bool aggregated = false );
 
     /**
      * Download episode actions for a given device.
      * @param username Username of the account which owns the device
      * @param deviceId The Id of the targeted device
+     * @param aggregated If aggregated is set to true, only the latest episode action will be returned
      * @return List of all episode actions for the given device
      *
      */
-    EpisodeActionListPtr episodeActionsByDevice( const QString& username, const QString& deviceId );
+    EpisodeActionListPtr episodeActionsByDevice( const QString& username, const QString& deviceId, const bool aggregated = false );
 
     /**
      * Download episode actions for a given username since a given timestamp.
@@ -354,16 +357,6 @@ public:
      *
      */
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
-
-    /**
-     * Retrieve episode actions (Maybe only the latest) for a given podcast.
-     * @param username Username of the account which owns the device
-     * @param podcastUrl Url which identifies the targeted podcast
-     * @param aggregated If aggregated is true, only the latest episode action is retrieved
-     * @return List of all episode actions or a list containing only the latest episode action depending on the aggregated parameter
-     *
-     */
-    EpisodeActionListPtr episodeActionsByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated );
 
     /**
      * Upload episode actions

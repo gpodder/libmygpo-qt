@@ -116,11 +116,11 @@ public:
 
     static QString getDeviceUpdatesUrl( const QString& username, const QString& deviceId, qulonglong timestamp );
 
-    static QString getEpisodeActionsUrl( const QString& username );
+    static QString getEpisodeActionsUrl( const QString& username, bool aggregated );
 
-    static QString getEpisodeActionsUrlByPodcast( const QString& username, const QString& podcastUrl );
+    static QString getEpisodeActionsUrlByPodcast( const QString& username, const QString& podcastUrl, bool aggregated );
 
-    static QString getEpisodeActionsUrlByDevice( const QString& username, const QString& deviceId );
+    static QString getEpisodeActionsUrlByDevice( const QString& username, const QString& deviceId, bool aggregated );
 
     static QString getEpisodeActionsUrlByTimestamp( const QString& username, const qulonglong since );
 
@@ -128,9 +128,8 @@ public:
 
     static QString getEpisodeActionsUrlByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
 
-    static QString getEpisodeActionsUrlByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated );
-
     static QString getUploadEpisodeActionsUrl( const QString& username );
+
 private:
     UrlBuilder() {};
     UrlBuilder( const UrlBuilder& ) {};

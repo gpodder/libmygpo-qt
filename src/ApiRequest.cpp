@@ -65,13 +65,12 @@ public:
     DeviceUpdatesPtr deviceUpdates( const QString& username, const QString& deviceId, qlonglong timestamp );
     QNetworkReply* renameDevice( const QString& username, const QString& deviceId, const QString& caption, Device::Type type );
     DeviceListPtr listDevices( const QString& username );
-    EpisodeActionListPtr episodeActions( const QString& username );
-    EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl );
-    EpisodeActionListPtr episodeActionsByDevice( const QString& username, const QString& deviceId );
+    EpisodeActionListPtr episodeActions( const QString& username, const bool aggregated );
+    EpisodeActionListPtr episodeActionsByPodcast( const QString& username, const QString& podcastUrl, const bool aggregated );
+    EpisodeActionListPtr episodeActionsByDevice( const QString& username, const QString& deviceId, const bool aggregated );
     EpisodeActionListPtr episodeActionsByTimestamp( const QString& username, const qulonglong since );
     EpisodeActionListPtr episodeActionsByPodcastAndTimestamp( const QString& username, const QString& podcastUrl, const qulonglong since );
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
-    EpisodeActionListPtr episodeActionsByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated );
     AddRemoveResultPtr uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions );
 private:
     RequestHandler m_requestHandler;
@@ -299,27 +298,27 @@ DeviceUpdatesPtr ApiRequestPrivate::deviceUpdates( const QString& username, cons
     return updates;
 }
 
-EpisodeActionListPtr ApiRequestPrivate::episodeActions( const QString& username )
+EpisodeActionListPtr ApiRequestPrivate::episodeActions( const QString& username, const bool aggregated )
 {
-    QString requestUrl = UrlBuilder::getEpisodeActionsUrl( username );
+    QString requestUrl = UrlBuilder::getEpisodeActionsUrl( username, aggregated );
     QNetworkReply* reply;
     reply = m_requestHandler.authGetRequest( requestUrl );
     EpisodeActionListPtr episodeActions( new EpisodeActionList( reply ) );
     return episodeActions;
 }
 
-EpisodeActionListPtr ApiRequestPrivate::episodeActionsByPodcast( const QString& username, const QString& podcastUrl )
+EpisodeActionListPtr ApiRequestPrivate::episodeActionsByPodcast( const QString& username, const QString& podcastUrl, const bool aggregated )
 {
-    QString requestUrl = UrlBuilder::getEpisodeActionsUrlByPodcast( username, podcastUrl );
+    QString requestUrl = UrlBuilder::getEpisodeActionsUrlByPodcast( username, podcastUrl, aggregated );
     QNetworkReply* reply;
     reply = m_requestHandler.authGetRequest( requestUrl );
     EpisodeActionListPtr episodeActions( new EpisodeActionList( reply ) );
     return episodeActions;
 }
 
-EpisodeActionListPtr ApiRequestPrivate::episodeActionsByDevice( const QString& username, const QString& deviceId )
+EpisodeActionListPtr ApiRequestPrivate::episodeActionsByDevice( const QString& username, const QString& deviceId, const bool aggregated )
 {
-    QString requestUrl = UrlBuilder::getEpisodeActionsUrlByDevice( username, deviceId );
+    QString requestUrl = UrlBuilder::getEpisodeActionsUrlByDevice( username, deviceId, aggregated );
     QNetworkReply* reply;
     reply = m_requestHandler.authGetRequest( requestUrl );
     EpisodeActionListPtr episodeActions( new EpisodeActionList( reply ) );
@@ -353,18 +352,9 @@ EpisodeActionListPtr ApiRequestPrivate::episodeActionsByDeviceAndTimestamp( cons
     return episodeActions;
 }
 
-EpisodeActionListPtr ApiRequestPrivate::episodeActionsByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated )
-{
-    QString requestUrl = UrlBuilder::getEpisodeActionsUrlByPodcastAndAggregate( username, podcastUrl, aggregated );
-    QNetworkReply* reply;
-    reply = m_requestHandler.authGetRequest( requestUrl );
-    EpisodeActionListPtr episodeActions( new EpisodeActionList( reply ) );
-    return episodeActions;
-}
-
 AddRemoveResultPtr ApiRequestPrivate::uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions )
 {
-    QString requestUrl = UrlBuilder::getEpisodeActionsUrl( username );
+    QString requestUrl = UrlBuilder::getEpisodeActionsUrl( username, false );
     QNetworkReply *reply;
     QByteArray postData = JsonCreator::episodeActionListToJSON( episodeActions );
     reply = m_requestHandler.postRequest( postData, requestUrl );
@@ -542,19 +532,19 @@ DeviceUpdatesPtr ApiRequest::deviceUpdates( const QString& username, const QStri
     return d->deviceUpdates( username, deviceId, timestamp );
 }
 
-EpisodeActionListPtr ApiRequest::episodeActions( const QString& username )
+EpisodeActionListPtr ApiRequest::episodeActions( const QString& username, const bool aggregated )
 {
-    return d->episodeActions( username );
+    return d->episodeActions( username, aggregated );
 }
 
-EpisodeActionListPtr ApiRequest::episodeActionsByPodcast( const QString& username, const QString& podcastUrl )
+EpisodeActionListPtr ApiRequest::episodeActionsByPodcast( const QString& username, const QString& podcastUrl, const bool aggregated )
 {
-    return d->episodeActionsByDevice( username, podcastUrl );
+    return d->episodeActionsByDevice( username, podcastUrl, aggregated );
 }
 
-EpisodeActionListPtr ApiRequest::episodeActionsByDevice( const QString& username, const QString& deviceId )
+EpisodeActionListPtr ApiRequest::episodeActionsByDevice( const QString& username, const QString& deviceId, const bool aggregated )
 {
-    return d->episodeActionsByDevice( username, deviceId );
+    return d->episodeActionsByDevice( username, deviceId, aggregated );
 }
 
 EpisodeActionListPtr ApiRequest::episodeActionsByTimestamp( const QString& username, const qulonglong since )
@@ -570,11 +560,6 @@ EpisodeActionListPtr ApiRequest::episodeActionsByPodcastAndTimestamp( const QStr
 EpisodeActionListPtr ApiRequest::episodeActionsByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since )
 {
     return d->episodeActionsByDeviceAndTimestamp( username, deviceId, since );
-}
-
-EpisodeActionListPtr ApiRequest::episodeActionsByPodcastAndAggregate( const QString& username, const QString& podcastUrl, const bool aggregated )
-{
-    return d->episodeActionsByPodcastAndAggregate( username, podcastUrl, aggregated );
 }
 
 AddRemoveResultPtr ApiRequest::uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions )

@@ -120,19 +120,37 @@ QString UrlBuilder::getRenameDeviceUrl( const QString& username, const QString& 
     return s_server + s_api2 + QLatin1String( "/devices/" ) + username + QLatin1String( "/" ) + deviceId + QLatin1String( ".json" );
 }
 
-QString UrlBuilder::getEpisodeActionsUrl( const QString& username )
+QString UrlBuilder::getEpisodeActionsUrl( const QString& username, const bool aggregated )
 {
-    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json" );
+    QString agg;
+    if( aggregated )
+        agg = QLatin1String( "?aggregated=true" );
+    else
+        agg = QLatin1String( "" );
+
+    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json" ) + agg;
 }
 
-QString UrlBuilder::getEpisodeActionsUrlByPodcast( const QString& username, const QString& podcastUrl )
+QString UrlBuilder::getEpisodeActionsUrlByPodcast( const QString& username, const QString& podcastUrl, const bool aggregated )
 {
-    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json?podcast=" ) + podcastUrl;
+    QString agg;
+    if( aggregated )
+        agg = QLatin1String( "&aggregated=true" );
+    else
+        agg = QLatin1String( "" );
+
+    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json?podcast=" ) + podcastUrl + agg;
 }
 
-QString UrlBuilder::getEpisodeActionsUrlByDevice( const QString& username, const QString& deviceId )
+QString UrlBuilder::getEpisodeActionsUrlByDevice( const QString& username, const QString& deviceId, const bool aggregated )
 {
-    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json?device=" ) + deviceId;
+    QString agg;
+    if( aggregated )
+        agg = QLatin1String( "&aggregated=true" );
+    else
+        agg = QLatin1String( "" );
+
+    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json?device=" ) + deviceId + agg;
 }
 
 QString UrlBuilder::getEpisodeActionsUrlByTimestamp( const QString& username, const qulonglong since )
@@ -151,17 +169,6 @@ QString UrlBuilder::getEpisodeActionsUrlByDeviceAndTimestamp( const QString& use
 {
     QString numString = QString::number( since );
     return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json?device=" ) + deviceId + QLatin1String( "&since=" ) + numString;
-}
-
-QString UrlBuilder::getEpisodeActionsUrlByPodcastAndAggregate( const QString& username, const QString& deviceId, const bool aggregated )
-{
-    QString agg;
-    if( aggregated )
-        agg = QLatin1String( "true" );
-    else
-        agg = QLatin1String( "false" );
-
-    return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json?podcast=" ) + deviceId + QLatin1String( "&aggregated=" ) + agg;
 }
 
 QString UrlBuilder::getUploadEpisodeActionsUrl( const QString& username )
