@@ -230,7 +230,7 @@ void ApiRequestTest::testListDevices()
 	loop.exec();
 	QVERIFY(m_ok);
 
-	QVERIFY(devices->devicesList().size() == 4);
+	QVERIFY(devices->devicesList().size() == 5);
 	DevicePtr device = devices->devicesList().at(1);
 	QCOMPARE(device->id(), QLatin1String("foobar"));
 	QCOMPARE(device->type(), QLatin1String("server"));
@@ -287,9 +287,5 @@ void ApiRequestTest::finished()
 {
 	m_ok = true;
 }
-
-
-
-
 
 QTEST_MAIN(ApiRequestTest)
