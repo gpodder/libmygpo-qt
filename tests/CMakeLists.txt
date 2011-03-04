@@ -5,7 +5,7 @@ remove_definitions(-fvisibility=hidden)
 
 set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
-include_directories(  ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR}  )
+include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR}  )
 
 add_definitions( -Werror )
 

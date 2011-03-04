@@ -1,5 +1,5 @@
 
-include_directories( ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 set ( LIBMYGPO_QT_SRC
         Settings.cpp
@@ -57,8 +57,6 @@ QT4_GENERATE_MOC(Settings.cpp Settings.moc)
 QT4_GENERATE_MOC(DeviceUpdates.cpp DeviceUpdates.moc)
 QT4_GENERATE_MOC(DeviceList.cpp DeviceList.moc)
 QT4_GENERATE_MOC(Device.cpp Device.moc)
-
-add_definitions( -Werror )
 
 add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc EpisodeAction.moc EpisodeActionList.moc Podcast.moc AddRemoveResult.moc TagList.moc Tag.moc Settings.moc DeviceUpdates.moc DeviceList.moc Device.moc)
 

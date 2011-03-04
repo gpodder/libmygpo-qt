@@ -22,11 +22,10 @@ set( MYGPO_LIB_VERSION_SONAME "${MYGPO_LIB_MAJOR_VERSION}")
 if (CMAKE_COMPILER_IS_GNUCXX)
     ADD_DEFINITIONS( -Wall -Wundef -Wcast-align -Wchar-subscripts -Wpointer-arith
        -Wwrite-strings -Wpacked -Wformat-security -Wmissing-format-attribute
-       -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor -Werror )
+       -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor )
     if ( NOT WIN32 )
         add_definitions( -fvisibility=hidden )
     endif()
-
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
