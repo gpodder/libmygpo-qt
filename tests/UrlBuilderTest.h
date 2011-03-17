@@ -32,7 +32,7 @@ namespace mygpo {
  * This class tests all public methods of the UrlBuilder class
  */
 class UrlBuilderTest : public QObject {
-	Q_OBJECT
+  Q_OBJECT
 public:
   UrlBuilderTest();
   virtual ~UrlBuilderTest();

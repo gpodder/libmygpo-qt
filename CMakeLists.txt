@@ -14,10 +14,10 @@ include( ${QT_USE_FILE} )
 
 set( MYGPO_LIB_MAJOR_VERSION "1" )
 set( MYGPO_LIB_MINOR_VERSION "0" )
-set( MYGPO_LIB_PATCH_VERSION "0" )
+set( MYGPO_LIB_PATCH_VERSION "1" )
 set( MYGPO_LIB_VERSION "${MYGPO_LIB_MAJOR_VERSION}.${MYGPO_LIB_MINOR_VERSION}.${MYGPO_LIB_PATCH_VERSION}" )
 
-set( MYGPO_LIB_VERSION_SONAME "${MYGPO_LIB_MAJOR_VERSION}")
+set( MYGPO_LIB_VERSION_SONAME "${MYGPO_LIB_MAJOR_VERSION}.${MYGPO_LIB_MINOR_VERSION}")
 
 if (CMAKE_COMPILER_IS_GNUCXX)
     ADD_DEFINITIONS( -Wall -Wundef -Wcast-align -Wchar-subscripts -Wpointer-arith
@@ -87,4 +87,6 @@ IF (NOT WIN32)
 ENDIF (NOT WIN32)
 
 add_subdirectory( src )
-add_subdirectory( tests )
+if(MYGPO_BUILD_TESTS)
+    add_subdirectory( tests )
+endif(MYGPO_BUILD_TESTS)
