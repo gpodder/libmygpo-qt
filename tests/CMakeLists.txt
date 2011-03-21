@@ -7,8 +7,6 @@ set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
 include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR}  )
 
-add_definitions( -Werror )
-
 # RequestHandler library
 QT4_WRAP_CPP(REQUESTHANDLER_MOC_SRC ${TESTOBJECTS_SRCDIR}/RequestHandler.h)
 add_library(RequestHandler ${TESTOBJECTS_SRCDIR}/RequestHandler.cpp ${REQUESTHANDLER_MOC_SRC})
