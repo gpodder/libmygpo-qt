@@ -41,7 +41,7 @@ public:
     QString title() const;
     QString description() const;
     uint subscribers() const;
-    const uint subscribersLastWeek() const;
+    uint subscribersLastWeek() const;
     QUrl logoUrl() const;
     QUrl website() const;
     QUrl mygpoUrl() const;
@@ -111,7 +111,7 @@ uint PodcastPrivate::subscribers() const
     return m_subscribers;
 }
 
-const uint PodcastPrivate::subscribersLastWeek() const
+uint PodcastPrivate::subscribersLastWeek() const
 {
     return m_SubscribersLastWeek;
 }
