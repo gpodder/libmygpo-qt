@@ -111,7 +111,7 @@ QString UrlBuilder::getDeviceListUrl( const QString& username )
 
 QString UrlBuilder::getDeviceUpdatesUrl( const QString& username, const QString& deviceId, qulonglong timestamp )
 {
-    QString numString = QString::number( timestamp < 0 ? 0 : timestamp );
+    QString numString = QString::number( timestamp );
     return s_server + s_api2 + QLatin1String( "/updates/" ) + username + QLatin1String( "/" ) + deviceId + QLatin1String( ".json?since=" ) + numString;
 }
 
