@@ -9,67 +9,6 @@ include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_
 
 add_definitions( -Werror )
 
-
-set ( APIREQUEST_SRC
-  ${TESTOBJECTS_SRCDIR}/AddRemoveResult.cpp
-  ${TESTOBJECTS_SRCDIR}/Tag.cpp 
-  ${TESTOBJECTS_SRCDIR}/JsonCreator.cpp 
-  ${TESTOBJECTS_SRCDIR}/Podcast.cpp
-  ${TESTOBJECTS_SRCDIR}/Episode.cpp 
-  ${TESTOBJECTS_SRCDIR}/ApiRequest.cpp
-  ${TESTOBJECTS_SRCDIR}/RequestHandler.cpp
-  ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp
-  ${TESTOBJECTS_SRCDIR}/TagList.cpp
-  ${TESTOBJECTS_SRCDIR}/EpisodeList.cpp
-  ${TESTOBJECTS_SRCDIR}/PodcastList.cpp
-  ${TESTOBJECTS_SRCDIR}/Settings.cpp
-  ${TESTOBJECTS_SRCDIR}/DeviceUpdates.cpp
-  ${TESTOBJECTS_SRCDIR}/DeviceList.cpp
-  ${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp
-  ${TESTOBJECTS_SRCDIR}/EpisodeActionList.cpp
-  ${TESTOBJECTS_SRCDIR}/Device.cpp
-)
-
-
-set ( APIREQUEST_H
-  ${TESTOBJECTS_SRCDIR}/AddRemoveResult.h
-  ${TESTOBJECTS_SRCDIR}/JsonCreator.h
-  ${TESTOBJECTS_SRCDIR}/mygpo_export.h
-  ${TESTOBJECTS_SRCDIR}/Podcast.h
-  ${TESTOBJECTS_SRCDIR}/Episode.h
-  ${TESTOBJECTS_SRCDIR}/Tag.h
-  ${TESTOBJECTS_SRCDIR}/ApiRequest.h
-  ${TESTOBJECTS_SRCDIR}/RequestHandler.h
-  ${TESTOBJECTS_SRCDIR}/UrlBuilder.h
-  ${TESTOBJECTS_SRCDIR}/TagList.h
-  ${TESTOBJECTS_SRCDIR}/EpisodeList.h
-  ${TESTOBJECTS_SRCDIR}/PodcastList.h
-  ${TESTOBJECTS_SRCDIR}/Settings.h
-  ${TESTOBJECTS_SRCDIR}/DeviceUpdates.h
-  ${TESTOBJECTS_SRCDIR}/DeviceList.h
-  ${TESTOBJECTS_SRCDIR}/EpisodeAction.h 
-  ${TESTOBJECTS_SRCDIR}/EpisodeActionList.h 
-  ${TESTOBJECTS_SRCDIR}/Device.h
-)
-
-QT4_WRAP_CPP(APIREQUEST_MOC_SRC ${APIREQUEST_H} )
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/PodcastList.cpp PodcastList.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/EpisodeList.cpp EpisodeList.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Episode.cpp Episode.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Podcast.cpp Podcast.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/AddRemoveResult.cpp AddRemoveResult.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/TagList.cpp TagList.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Tag.cpp Tag.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Settings.cpp Settings.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/DeviceUpdates.cpp DeviceUpdates.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/DeviceList.cpp DeviceList.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp EpisodeAction.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/EpisodeActionList.cpp EpisodeActionList.moc)
-QT4_GENERATE_MOC(${TESTOBJECTS_SRCDIR}/Device.cpp Device.moc)
-
-# ApiRequest library
-add_library(ApiRequest ${APIREQUEST_SRC} ${APIREQUEST_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc Podcast.moc AddRemoveResult.moc TagList.moc Tag.moc Settings.moc DeviceUpdates.moc EpisodeAction.moc EpisodeActionList.moc DeviceList.moc Device.moc)
-
 # RequestHandler library
 QT4_WRAP_CPP(REQUESTHANDLER_MOC_SRC ${TESTOBJECTS_SRCDIR}/RequestHandler.h)
 add_library(RequestHandler ${TESTOBJECTS_SRCDIR}/RequestHandler.cpp ${REQUESTHANDLER_MOC_SRC})
@@ -93,6 +32,3 @@ target_link_libraries( UrlBuilderTest UrlBuilder)
 
 add_libmygpo_test( RequestHandlerTest.cpp )
 target_link_libraries(RequestHandlerTest RequestHandler)
-
-add_libmygpo_test( ApiRequestTest.cpp )
-target_link_libraries(ApiRequestTest ${QJSON_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} ApiRequest)
