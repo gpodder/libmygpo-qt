@@ -5,15 +5,13 @@ remove_definitions(-fvisibility=hidden)
 
 set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
-include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR}  )
+include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR} )
 
 # RequestHandler library
-QT4_WRAP_CPP(REQUESTHANDLER_MOC_SRC ${TESTOBJECTS_SRCDIR}/RequestHandler.h)
-add_library(RequestHandler ${TESTOBJECTS_SRCDIR}/RequestHandler.cpp ${REQUESTHANDLER_MOC_SRC})
+add_library( RequestHandler ${TESTOBJECTS_SRCDIR}/RequestHandler.cpp )
 
 # UrlBuilder library
-QT4_WRAP_CPP(URLBUILDER_MOC_SRC ${TESTOBJECTS_SRCDIR}/UrlBuilder.h)
-add_library(UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp ${URLBUILDER_MOC_SRC})
+add_library( UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp )
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
