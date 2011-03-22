@@ -71,17 +71,3 @@ QUrl RequestHandler::addAuthData( const QString& url )
     authUrl.setPassword( m_password );
     return authUrl;
 }
-
-
-//no longer used slot
-/*
-void RequestHandler::authenticate( QNetworkReply* reply, QAuthenticator* authenticator )
-{
-    if (m_loginFailed) {
-        reply->abort();
-    } else {
-        m_loginFailed = true;
-        authenticator->setUser(m_username);
-        authenticator->setPassword(m_password);
-    }
-}*/
