@@ -20,13 +20,9 @@
  * USA                                                                      *
  ***************************************************************************/
 
-#include <QApplication>
 #include <QCoreApplication>
-#include <iostream>
-#include <QTimer>
 #include <QtGui>
 #include <QEventLoop>
-
 
 #include <PodcastList.h>
 #include <EpisodeList.h>
@@ -129,7 +125,7 @@ void printAddRemoveResult(const AddRemoveResultPtr addRemoveResult) {
  */
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv, true);
+    QCoreApplication app(argc, argv);
     QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
     ApiRequest req("ase23", "csf-sepm", nam);
     QEventLoop loop;
