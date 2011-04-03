@@ -29,12 +29,14 @@ set ( LIBMYGPO_QT_MOC_H
         Tag.h
         TagList.h
         Device.h
+        Device_p.h
         DeviceList.h
         DeviceUpdates.h
         EpisodeAction.h
         EpisodeActionList.h
         Settings.h
         AddRemoveResult.h
+        AddRemoveResult_p.h
 )
 
 set ( LIBMYGPO_QT_INSTALL_H
@@ -63,15 +65,13 @@ QT4_GENERATE_MOC(Episode.cpp Episode.moc)
 QT4_GENERATE_MOC(EpisodeAction.cpp EpisodeAction.moc)
 QT4_GENERATE_MOC(EpisodeActionList.cpp EpisodeActionList.moc)
 QT4_GENERATE_MOC(Podcast.cpp Podcast.moc)
-QT4_GENERATE_MOC(AddRemoveResult.cpp AddRemoveResult.moc)
 QT4_GENERATE_MOC(TagList.cpp TagList.moc)
 QT4_GENERATE_MOC(Tag.cpp Tag.moc)
 QT4_GENERATE_MOC(Settings.cpp Settings.moc)
 QT4_GENERATE_MOC(DeviceUpdates.cpp DeviceUpdates.moc)
 QT4_GENERATE_MOC(DeviceList.cpp DeviceList.moc)
-QT4_GENERATE_MOC(Device.cpp Device.moc)
 
-add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc EpisodeAction.moc EpisodeActionList.moc Podcast.moc AddRemoveResult.moc TagList.moc Tag.moc Settings.moc DeviceUpdates.moc DeviceList.moc Device.moc)
+add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} PodcastList.moc EpisodeList.moc Episode.moc EpisodeAction.moc EpisodeActionList.moc Podcast.moc TagList.moc Tag.moc Settings.moc DeviceUpdates.moc DeviceList.moc )
 
 target_link_libraries( mygpo-qt ${QJSON_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
 set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_LIB_VERSION} SOVERSION ${MYGPO_LIB_VERSION_SONAME} DEFINE_SYMBOL MYGPO_MAKEDLL)

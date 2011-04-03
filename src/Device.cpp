@@ -20,32 +20,9 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include <QVariant>
 #include "Device.h"
 
-
-namespace mygpo
-{
-
-class DevicePrivate : public QObject
-{
-    Q_OBJECT
-
-public:
-    DevicePrivate( const QVariant& var );
-    QString id() const;
-    QString caption() const;
-    QString type() const;
-    qulonglong subscriptions() const;
-private:
-    QString m_id;
-    QString m_caption;
-    QString m_type;
-    qulonglong m_subscriptions;
-    bool parse( const QVariant& var );
-};
-
-}
+#include "Device_p.h"
 
 using namespace mygpo;
 
@@ -131,6 +108,3 @@ QString DevicePrivate::type() const
 {
     return this->m_type;
 }
-
-
-#include "Device.moc"

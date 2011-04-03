@@ -23,36 +23,9 @@
 #include <parser.h>
 
 #include "AddRemoveResult.h"
+#include "AddRemoveResult_p.h"
 
-#include <QUrl>
-
-namespace mygpo
-{
-
-class AddRemoveResultPrivate : public QObject
-{
-    Q_OBJECT
-public:
-    AddRemoveResultPrivate( AddRemoveResult* qq, QNetworkReply* reply );
-    virtual ~AddRemoveResultPrivate( );
-    QVariant updateUrls() const;
-    qulonglong timestamp() const;
-    QList<QPair<QUrl, QUrl> > updateUrlsList() const;
-private:
-    AddRemoveResult* const q;
-    qulonglong m_timestamp;
-    QVariant m_updateUrls;
-
-    QNetworkReply* m_reply;
-    QNetworkReply::NetworkError m_error;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-};
-
+using namespace mygpo;
 
 AddRemoveResultPrivate::AddRemoveResultPrivate( AddRemoveResult* qq, QNetworkReply* reply ) : q( qq ), m_reply( reply ), m_error( QNetworkReply::NoError )
 {
@@ -163,7 +136,3 @@ QList<QPair<QUrl, QUrl> > AddRemoveResult::updateUrlsList() const
 {
     return d->updateUrlsList();
 }
-
-}
-
-#include "AddRemoveResult.moc"
