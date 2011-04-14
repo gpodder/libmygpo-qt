@@ -5,6 +5,7 @@ includedir=@INCLUDE_INSTALL_DIR@
 
 Name: libmygpo-qt
 Description: libmygpo-qt is a C++/Qt Library that wraps the gpodder.net WebAPI
+URL: http://wiki.gpodder.org/wiki/Libmygpo-qt
 Version: @MYGPO_LIB_VERSION@
 Requires: QtCore QtNetwork
 Requires.private: QJson
