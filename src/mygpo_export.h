@@ -37,7 +37,7 @@
 
 /*
 #ifdef _WIN32
-  #define MYGO_EXPORT __declspec(dllexport)
+  #define MYGPO_EXPORT __declspec(dllexport)
 #elif __GNUC__ >= 4
   #define MYGPO_EXPORT __attribute__ ((visibility("default")))
 #else
