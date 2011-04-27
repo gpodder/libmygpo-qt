@@ -7,9 +7,6 @@ set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
 include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR} )
 
-# RequestHandler library
-add_library( RequestHandler ${TESTOBJECTS_SRCDIR}/RequestHandler.cpp )
-
 # UrlBuilder library
 add_library( UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp )
 
@@ -25,6 +22,3 @@ endmacro(add_libmygpo_test)
 
 add_libmygpo_test( UrlBuilderTest.cpp )
 target_link_libraries( UrlBuilderTest UrlBuilder)
-
-add_libmygpo_test( RequestHandlerTest.cpp )
-target_link_libraries(RequestHandlerTest RequestHandler)
