@@ -33,11 +33,28 @@ const QString UrlBuilder::s_server = QLatin1String( "http://gpodder.net" );
 const QString UrlBuilder::s_api2 = QLatin1String( "/api/2" );
 const QString UrlBuilder::s_api1 = QLatin1String( "/api/1" );
 
+static QString getFormatExtension( UrlBuilder::Format f )
+{
+    QString ret;
+    switch( f )
+    {
+    case UrlBuilder::JSON:
+        ret =  QString( QLatin1String( ".json" ) );
+        break;
+    case UrlBuilder::OPML:
+        ret =  QString( QLatin1String( ".opml" ) );
+        break;
+    case UrlBuilder::TEXT:
+        ret =  QString( QLatin1String( ".txt" ) );
+        break;
+    }
+    return ret;
+}
 
 QString UrlBuilder::getToplistUrl( uint i, Format f )
 {
     QString numString = QString::number(( i == 0 ) ? 1 : i );
-    return s_server + QLatin1String( "/toplist/" ) + numString + UrlBuilder::getFormatExtension( f );
+    return s_server + QLatin1String( "/toplist/" ) + numString + getFormatExtension( f );
 }
 
 QString UrlBuilder::getSuggestionsUrl( uint i, Format f )
@@ -174,22 +191,4 @@ QString UrlBuilder::getEpisodeActionsUrlByDeviceAndTimestamp( const QString& use
 QString UrlBuilder::getUploadEpisodeActionsUrl( const QString& username )
 {
     return s_server + s_api2 + QLatin1String( "/episodes/" ) + username + QLatin1String( ".json" );
-}
-
-QString UrlBuilder::getFormatExtension( Format f )
-{
-    QString ret;
-    switch( f )
-    {
-    case JSON:
-        ret =  QString( QLatin1String( ".json" ) );
-        break;
-    case OPML:
-        ret =  QString( QLatin1String( ".opml" ) );
-        break;
-    case TEXT:
-        ret =  QString( QLatin1String( ".txt" ) );
-        break;
-    }
-    return ret;
 }
