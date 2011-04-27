@@ -37,8 +37,8 @@
 #include "DeviceUpdates.h"
 #include "DeviceList.h"
 
-#include <QByteArray>
-#include <QString>
+class QByteArray;
+class QString;
 
 namespace mygpo
 {

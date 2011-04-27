@@ -23,10 +23,10 @@
 #ifndef DEVICE_H
 #define DEVICE_H
 
+#include "mygpo_export.h"
+
 #include <QSharedPointer>
 #include <QVariant>
-
-#include "mygpo_export.h"
 
 namespace mygpo
 {

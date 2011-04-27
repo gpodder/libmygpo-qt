@@ -28,6 +28,8 @@
 #include "UrlBuilder.h"
 #include "JsonCreator.h"
 
+#include <QString>
+#include <QByteArray>
 #include <QLatin1String>
 
 using namespace mygpo;
