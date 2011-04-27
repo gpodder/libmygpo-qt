@@ -122,11 +122,11 @@ public:
 
     static QString getEpisodeActionsUrlByDevice( const QString& username, const QString& deviceId, bool aggregated );
 
-    static QString getEpisodeActionsUrlByTimestamp( const QString& username, const qulonglong since );
+    static QString getEpisodeActionsUrlByTimestamp( const QString& username, qulonglong since );
 
-    static QString getEpisodeActionsUrlByPodcastAndTimestamp( const QString& username, const QString& podcastUrl, const qulonglong since );
+    static QString getEpisodeActionsUrlByPodcastAndTimestamp( const QString& username, const QString& podcastUrl, qulonglong since );
 
-    static QString getEpisodeActionsUrlByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
+    static QString getEpisodeActionsUrlByDeviceAndTimestamp( const QString& username, const QString& deviceId, qulonglong since );
 
     static QString getUploadEpisodeActionsUrl( const QString& username );
 
