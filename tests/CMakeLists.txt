@@ -16,7 +16,7 @@ macro(add_libmygpo_test _source)
     get_filename_component(_name ${_source} NAME_WE)
     QT4_WRAP_CPP(${_name}_MOC_SRC ${_name}.h)
     add_executable(${_name} ${_source} ${${_name}_MOC_SRC})
-    target_link_libraries(${_name} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QTCORE_QTNETWORK_LIBRARY})
+    target_link_libraries(${_name} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTNETWORK_LIBRARY})
     add_test(${_name}-test ${EXECUTABLE_OUTPUT_PATH}/${_name})
 endmacro(add_libmygpo_test)
 
