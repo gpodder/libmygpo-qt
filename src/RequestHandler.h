@@ -43,8 +43,8 @@ public:
      * @param username The username that should be used for authentication if required.
      * @param password The password that should be used for authentication if required
      */
-    RequestHandler( const QString& username, const QString& password, QNetworkAccessManager* nam );
-    RequestHandler( QNetworkAccessManager* nam );
+    RequestHandler( const QString& username, const QString& password, QNetworkAccessManager* nam, bool ssl );
+    RequestHandler( QNetworkAccessManager* nam, bool ssl );
 
     virtual ~RequestHandler();
 
@@ -76,6 +76,8 @@ private:
     QString m_username;
     QString m_password;
     QNetworkAccessManager* m_nam;
+    
+    bool m_ssl;
 
     QUrl addAuthData( const QString& url );
 };

@@ -34,12 +34,22 @@
 
 using namespace mygpo;
 
-ApiRequestPrivate::ApiRequestPrivate( const QString& username, const QString& password, QNetworkAccessManager* nam ) : m_requestHandler( username, password, nam )
+ApiRequestPrivate::ApiRequestPrivate( const QString& username, const QString& password, QNetworkAccessManager* nam ) : m_requestHandler( username, password, nam, false )
 {
 
 }
 
-ApiRequestPrivate::ApiRequestPrivate( QNetworkAccessManager* nam ) : m_requestHandler( nam )
+ApiRequestPrivate::ApiRequestPrivate( QNetworkAccessManager* nam ) : m_requestHandler( nam, false )
+{
+
+}
+
+ApiRequestPrivate::ApiRequestPrivate( const QString& username, const QString& password, QNetworkAccessManager* nam, bool ssl ) : m_requestHandler( username, password, nam, ssl )
+{
+
+}
+
+ApiRequestPrivate::ApiRequestPrivate( QNetworkAccessManager* nam, bool ssl ) : m_requestHandler( nam, ssl )
 {
 
 }
@@ -358,6 +368,14 @@ ApiRequest::ApiRequest( const QString& username, const QString& password, QNetwo
 }
 
 ApiRequest::ApiRequest( QNetworkAccessManager* nam ) : d( new ApiRequestPrivate( nam ) )
+{
+}
+
+ApiRequest::ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam, bool ssl ) : d( new ApiRequestPrivate( username, password, nam, ssl ) )
+{
+}
+
+ApiRequest::ApiRequest( QNetworkAccessManager* nam, bool ssl ) : d( new ApiRequestPrivate( nam, ssl ) )
 {
 }
 

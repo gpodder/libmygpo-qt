@@ -23,15 +23,17 @@
 #include <QAuthenticator>
 #include <QCoreApplication>
 
+#include <QDebug>
+
 #include "RequestHandler.h"
 
 using namespace mygpo;
 
-RequestHandler::RequestHandler( const QString& username, const QString& password, QNetworkAccessManager* nam ) : m_username( username ), m_password( password ), m_nam( nam )
+RequestHandler::RequestHandler( const QString& username, const QString& password, QNetworkAccessManager* nam, bool ssl ) : m_username( username ), m_password( password ), m_nam( nam ), m_ssl( ssl )
 {
 }
 
-RequestHandler::RequestHandler( QNetworkAccessManager* nam ) : m_username(), m_password(), m_nam( nam )
+RequestHandler::RequestHandler( QNetworkAccessManager* nam, bool ssl ) : m_username(), m_password(), m_nam( nam ), m_ssl( ssl )
 {
 }
 
@@ -42,6 +44,9 @@ RequestHandler::~RequestHandler()
 QNetworkReply* RequestHandler::getRequest( const QString& url )
 {
     QUrl reqUrl( url );
+    if (m_ssl)
+        reqUrl.setScheme(QLatin1String("https"));
+    qDebug() << reqUrl;
     QNetworkRequest request( reqUrl );
     QNetworkReply* reply = m_nam->get( request );
     return reply;
@@ -50,6 +55,8 @@ QNetworkReply* RequestHandler::getRequest( const QString& url )
 QNetworkReply* RequestHandler::authGetRequest( const QString& url )
 {
     QUrl authUrl = addAuthData( url );
+    if (m_ssl)
+        authUrl.setScheme(QLatin1String("https"));
     QNetworkRequest request( authUrl );
     QNetworkReply* reply = m_nam->get( request );
     return reply;
@@ -59,6 +66,8 @@ QNetworkReply* RequestHandler::authGetRequest( const QString& url )
 QNetworkReply* RequestHandler::postRequest( const QByteArray data, const QString& url )
 {
     QUrl authUrl = addAuthData( url );
+    if (m_ssl)
+        authUrl.setScheme(QLatin1String("https"));
     QNetworkRequest request( authUrl );
     QNetworkReply* reply = m_nam->post( request, data );
     return reply;

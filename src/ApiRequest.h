@@ -58,6 +58,9 @@ public:
 
     ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam );
     ApiRequest( QNetworkAccessManager* nam );
+    
+    ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam, bool ssl );
+    ApiRequest( QNetworkAccessManager* nam, bool ssl );
     ~ApiRequest( );
     
 	/**

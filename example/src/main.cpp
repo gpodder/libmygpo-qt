@@ -127,7 +127,7 @@ int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
     QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
-    ApiRequest req("ase23", "csf-sepm", nam);
+    ApiRequest req("ase23", "csf-sepm", nam, true );
     QEventLoop loop;
     QNetworkReply* reply;
 

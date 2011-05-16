@@ -36,6 +36,8 @@ public:
     //Constructors
     ApiRequestPrivate( const QString& username, const QString& password, QNetworkAccessManager* nam );
     ApiRequestPrivate( QNetworkAccessManager* nam );
+    ApiRequestPrivate( const QString& username, const QString& password, QNetworkAccessManager* nam, bool ssl );
+    ApiRequestPrivate( QNetworkAccessManager* nam, bool ssl );
     //Member Functions
     QNetworkReply* toplistOpml( uint count );
     QNetworkReply* searchOpml( const QString& query );
