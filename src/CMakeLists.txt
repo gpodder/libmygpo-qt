@@ -29,9 +29,11 @@ set ( LIBMYGPO_QT_MOC_H
         Episode.h
         Episode_p.h
         EpisodeList.h
+        EpisodeList_p.h
         Tag.h
         Tag_p.h
         TagList.h
+        TagList_p.h
         Device.h
         Device_p.h
         DeviceList.h
@@ -39,6 +41,7 @@ set ( LIBMYGPO_QT_MOC_H
         DeviceUpdates.h
         DeviceUpdates_p.h
         EpisodeAction.h
+        EpisodeAction_p.h
         EpisodeActionList.h
         EpisodeActionList_p.h
         Settings.h
