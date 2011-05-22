@@ -20,15 +20,15 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef EPISODELIST_H_
-#define EPISODELIST_H_
+#ifndef EPISODELIST_H
+#define EPISODELIST_H
+
+#include "mygpo_export.h"
+#include "Episode.h"
 
 #include <QNetworkReply>
 #include <QList>
-#include <QObject>
 #include <QVariant>
-#include "Episode.h"
-#include "mygpo_export.h"
 
 namespace mygpo
 {
@@ -63,4 +63,4 @@ typedef QSharedPointer<EpisodeList> EpisodeListPtr;
 
 }
 
-#endif /* EPISODELIST_H_ */
+#endif // EPISODELIST_H

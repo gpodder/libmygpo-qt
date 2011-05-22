@@ -20,43 +20,11 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "EpisodeList.h"
+#include "EpisodeList_p.h"
+
 #include <parser.h>
 
-#include <QDebug>
-#include <QSharedPointer>
-
-namespace mygpo
-{
-
-class EpisodeListPrivate : QObject
-{
-    Q_OBJECT
-
-public:
-    EpisodeListPrivate( EpisodeList* qq, QNetworkReply* reply );
-    virtual ~EpisodeListPrivate();
-    QList<EpisodePtr> list() const;
-    QVariant episodes() const;
-
-private:
-    QNetworkReply* m_reply;
-    EpisodeList* const q;
-    QVariant m_episodes;
-    QNetworkReply::NetworkError m_error;
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-
-};
-
-};
-
 using namespace mygpo;
-
 
 EpisodeListPrivate::EpisodeListPrivate( EpisodeList* qq, QNetworkReply* reply ): m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
@@ -158,5 +126,3 @@ EpisodeList::~EpisodeList()
 {
     delete d;
 }
-
-#include "EpisodeList.moc"

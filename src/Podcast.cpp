@@ -20,57 +20,9 @@
 * USA                                                                      *
 ***************************************************************************/
 
-
-#include "Podcast.h"
+#include "Podcast_p.h"
 
 #include <parser.h>
-#include <QDebug>
-
-namespace mygpo
-{
-
-class PodcastPrivate : QObject
-{
-    Q_OBJECT
-public:
-    PodcastPrivate( Podcast* qq, QNetworkReply* reply );
-    PodcastPrivate( Podcast* qq, const QVariant& variant );
-    virtual ~PodcastPrivate();
-    //Getters
-    QUrl url() const;
-    QString title() const;
-    QString description() const;
-    uint subscribers() const;
-    uint subscribersLastWeek() const;
-    QUrl logoUrl() const;
-    QUrl website() const;
-    QUrl mygpoUrl() const;
-
-private:
-    QNetworkReply* m_reply;
-    Podcast* const q;
-    QUrl m_url;
-    QString m_title;
-    QString m_description;
-    uint m_subscribers;
-    uint m_SubscribersLastWeek;
-    QUrl m_logoUrl;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
-    QNetworkReply::NetworkError m_error;
-
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-
-
-};
-
-};
-
 
 using namespace mygpo;
 
@@ -263,6 +215,3 @@ void PodcastPrivate::error( QNetworkReply::NetworkError error )
     this->m_error = error;
     emit q->requestError( error );
 }
-
-
-#include "Podcast.moc"

@@ -26,7 +26,6 @@
 #include <QString>
 
 #include <serializer.h>
-#include <parser.h>
 
 #include "JsonCreator.h"
 
@@ -68,6 +67,19 @@ QByteArray JsonCreator::episodeActionListToJSON( const QList<EpisodeActionPtr>& 
 
     QByteArray jsonByteArray = serializer.serialize( QVariant( jsonData ) );
     return jsonByteArray;
+}
+
+QByteArray mygpo::JsonCreator::renameDeviceStringToJSON( const QString& caption, const QString& type )
+{
+    QJson::Serializer serializer;
+    QVariantMap jsonData;
+    QVariant captionVar( caption );
+    QVariant typeVar( type );
+    jsonData.insert( QString( QLatin1String( "caption" ) ), captionVar );
+    jsonData.insert( QString( QLatin1String( "type" ) ), typeVar );
+    QByteArray jsonByteArray = serializer.serialize( QVariant( jsonData ) );
+    return jsonByteArray;
+
 }
 
 QVariantList JsonCreator::urlListToQVariantList( const QList< QUrl >& urls )
@@ -131,17 +143,4 @@ QVariantMap JsonCreator::episodeActionToQVariantMap( const EpisodeActionPtr epis
         map.insert( QLatin1String( "total" ), episodeAction->total() );
 
     return map;
-}
-
-QByteArray mygpo::JsonCreator::renameDeviceStringToJSON( const QString& caption, const QString& type )
-{
-    QJson::Serializer serializer;
-    QVariantMap jsonData;
-    QVariant captionVar( caption );
-    QVariant typeVar( type );
-    jsonData.insert( QString( QLatin1String( "caption" ) ), captionVar );
-    jsonData.insert( QString( QLatin1String( "type" ) ), typeVar );
-    QByteArray jsonByteArray = serializer.serialize( QVariant( jsonData ) );
-    return jsonByteArray;
-
 }

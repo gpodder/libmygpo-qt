@@ -20,46 +20,11 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "EpisodeAction.h"
+#include "EpisodeAction_p.h"
 
 #include <parser.h>
 
-namespace mygpo
-{
-
-class EpisodeActionPrivate : QObject
-{
-    Q_OBJECT
-
-public:
-    EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent = 0 );
-    EpisodeActionPrivate( EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
-    virtual ~EpisodeActionPrivate();
-
-    QUrl podcastUrl() const;
-    QUrl episodeUrl() const;
-    QString deviceName() const;
-    EpisodeAction::ActionType action() const;
-    qulonglong timestamp() const;
-    qulonglong started() const;
-    qulonglong position() const;
-    qulonglong total() const;
-private:
-    EpisodeAction* const q;
-
-    QUrl m_podcastUrl;
-    QUrl m_episodeUrl;
-    QString m_deviceName;
-    EpisodeAction::ActionType m_action;
-    qulonglong m_timestamp;
-    qulonglong m_started;
-    qulonglong m_position;
-    qulonglong m_total;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-    bool parseActionType( const QString& data );
-};
+using namespace mygpo;
 
 EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent ) : QObject( parent ), q( qq )
 {
@@ -300,8 +265,4 @@ qulonglong EpisodeAction::position() const
 qulonglong EpisodeAction::total() const
 {
     return d->total();
-}
-
-#include "EpisodeAction.moc"
-
 }

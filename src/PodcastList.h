@@ -20,15 +20,15 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef PODCASTLIST_H_
-#define PODCASTLIST_H_
+#ifndef PODCASTLIST_H
+#define PODCASTLIST_H
+
+#include "Podcast.h"
+#include "mygpo_export.h"
 
 #include <QNetworkReply>
 #include <QSharedPointer>
 #include <QList>
-
-#include "Podcast.h"
-#include "mygpo_export.h"
 
 namespace mygpo
 {
@@ -64,4 +64,4 @@ typedef QSharedPointer<PodcastList> PodcastListPtr;
 
 }
 
-#endif /* PODCASTLIST_H_ */
+#endif // PODCASTLIST_H

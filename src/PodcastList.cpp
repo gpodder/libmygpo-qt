@@ -20,40 +20,11 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "PodcastList.h"
+#include "PodcastList_p.h"
 
 #include <parser.h>
-#include <QSharedPointer>
-
-namespace mygpo
-{
-
-class PodcastListPrivate : QObject
-{
-    Q_OBJECT
-public:
-    PodcastListPrivate( PodcastList* qq, QNetworkReply* reply, QObject* parent = 0 );
-    virtual ~PodcastListPrivate();
-    QList<PodcastPtr> list() const;
-    QVariant podcasts() const;
-
-private:
-    QNetworkReply* m_reply;
-    PodcastList* const q;
-    QVariant m_podcasts;
-    QNetworkReply::NetworkError m_error;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-};
-
-}
 
 using namespace mygpo;
-
 
 PodcastListPrivate::PodcastListPrivate( PodcastList* qq, QNetworkReply* reply, QObject* parent ) : QObject( parent ), m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
@@ -151,5 +122,3 @@ QVariant PodcastList::podcasts() const
 {
     return d->podcasts();
 }
-
-#include "PodcastList.moc"

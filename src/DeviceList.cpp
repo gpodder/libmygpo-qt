@@ -20,39 +20,9 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "DeviceList.h"
+#include "DeviceList_p.h"
 
 #include <parser.h>
-
-namespace mygpo
-{
-
-class DeviceListPrivate : public QObject
-{
-    Q_OBJECT
-public:
-    DeviceListPrivate( DeviceList* qq, QNetworkReply* reply );
-    virtual ~DeviceListPrivate();
-    QVariant devices() const;
-    QList< DevicePtr > devicesList() const;
-
-private:
-    DeviceList* q;
-    QNetworkReply* m_reply;
-    QVariant m_devices;
-    QList<DevicePtr> m_devicesList;
-    QNetworkReply::NetworkError m_error;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-};
-
-}
-
 
 using namespace mygpo;
 
@@ -149,6 +119,3 @@ QList< DevicePtr > DeviceList::devicesList() const
 {
     return d->devicesList();
 }
-
-
-#include "DeviceList.moc"

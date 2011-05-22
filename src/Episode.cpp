@@ -20,54 +20,9 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "Episode.h"
+#include "Episode_p.h"
 
 #include <parser.h>
-
-#include <qdebug.h>
-
-namespace mygpo
-{
-
-class EpisodePrivate : QObject
-{
-    Q_OBJECT
-
-public:
-    EpisodePrivate ( Episode* qq, QNetworkReply* reply, QObject* parent = 0 );
-    EpisodePrivate ( Episode* qq, const QVariant& variant, QObject* parent = 0 );
-    virtual ~EpisodePrivate();
-    QUrl url() const;
-    QString title() const;
-    QUrl podcastUrl() const;
-    QString podcastTitle() const;
-    QString description() const;
-    QUrl website() const;
-    QUrl mygpoUrl() const;
-    QDateTime releaded() const;
-    Episode::Status status() const;
-private:
-    QNetworkReply* m_reply;
-    Episode* const q;
-    QUrl m_url;
-    QString m_title;
-    QUrl m_podcastUrl;
-    QString m_podcastTitle;
-    QString m_description;
-    QUrl m_website;
-    QUrl m_mygpoUrl;
-    QDateTime m_released;
-    Episode::Status m_status;
-    QNetworkReply::NetworkError m_error;
-    bool parse ( const QVariant& data );
-    bool parse ( const QByteArray& data );
-private slots:
-    void parseData();
-    void error ( QNetworkReply::NetworkError error );
-
-};
-
-};
 
 using namespace mygpo;
 
@@ -301,5 +256,3 @@ QDateTime Episode::released() const
 {
     return d->releaded();
 }
-
-#include "Episode.moc"

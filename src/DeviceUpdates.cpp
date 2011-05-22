@@ -20,50 +20,11 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include <QObject>
+#include "DeviceUpdates_p.h"
+
 #include <parser.h>
-#include "DeviceUpdates.h"
-
-namespace mygpo
-{
-
-class DeviceUpdatesPrivate : public QObject
-{
-    Q_OBJECT
-public:
-    DeviceUpdatesPrivate( DeviceUpdates* qq, QNetworkReply* reply );
-    virtual ~DeviceUpdatesPrivate();
-    QList<PodcastPtr> addList() const;
-    QList<EpisodePtr> updateList() const;
-    QList<QUrl> removeList() const;
-    QVariant add() const;
-    QVariant update() const;
-    QVariant remove() const;
-    qulonglong timestamp() const;
-
-private:
-    DeviceUpdates* q;
-    QVariant m_add;
-    QVariant m_update;
-    QVariant m_remove;
-    qlonglong m_timestamp;
-
-    QNetworkReply* m_reply;
-    QNetworkReply::NetworkError m_error;
-
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-
-};
-}
 
 using namespace mygpo;
-
 
 DeviceUpdatesPrivate::DeviceUpdatesPrivate( DeviceUpdates* qq, QNetworkReply* reply ): q( qq ), m_timestamp( 0 ), m_reply( reply ), m_error( QNetworkReply::NoError )
 {
@@ -224,6 +185,3 @@ qulonglong DeviceUpdates::timestamp() const
 {
     return d->timestamp();
 }
-
-
-#include "DeviceUpdates.moc"

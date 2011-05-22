@@ -20,16 +20,15 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef EPISODEACTIONLIST_H_
-#define EPISODEACTIONLIST_H_
-
-#include <QNetworkReply>
-#include <QList>
-#include <QObject>
-#include <QVariant>
+#ifndef EPISODEACTIONLIST_H
+#define EPISODEACTIONLIST_H
 
 #include "EpisodeAction.h"
 #include "mygpo_export.h"
+
+#include <QNetworkReply>
+#include <QList>
+#include <QVariant>
 
 namespace mygpo
 {
@@ -69,4 +68,4 @@ typedef QSharedPointer<EpisodeActionList> EpisodeActionListPtr;
 
 Q_DECLARE_METATYPE( mygpo::EpisodeActionListPtr );
 
-#endif /* EPISODEACTIONLIST_H_ */
+#endif // EPISODEACTIONLIST_H

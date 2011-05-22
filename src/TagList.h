@@ -20,15 +20,15 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#ifndef TAGLIST_H_
-#define TAGLIST_H_
+#ifndef TAGLIST_H
+#define TAGLIST_H
+
+#include "Tag.h"
+#include "mygpo_export.h"
 
 #include <QNetworkReply>
 #include <QSharedPointer>
 #include <QList>
-
-#include "Tag.h"
-#include "mygpo_export.h"
 
 namespace mygpo
 {
@@ -63,4 +63,4 @@ typedef QSharedPointer<TagList> TagListPtr;
 
 Q_DECLARE_METATYPE( mygpo::TagListPtr );
 
-#endif /* TAGLIST_H_ */
+#endif // TAGLIST_H

@@ -20,28 +20,7 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "Tag.h"
-
-namespace mygpo
-{
-
-class TagPrivate : public QObject
-{
-    Q_OBJECT
-
-public:
-    TagPrivate( Tag* qq, const QVariant& variant );
-    QString tag() const;
-    uint usage() const;
-private:
-    Tag* const q;
-    QString m_tag;
-    uint m_usage;
-
-    bool parse( const QVariant& data );
-};
-
-}
+#include "Tag_p.h"
 
 using namespace mygpo;
 
@@ -95,5 +74,3 @@ uint Tag::usage() const
 {
     return d->usage();
 }
-
-#include "Tag.moc"

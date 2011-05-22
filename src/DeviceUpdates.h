@@ -23,7 +23,6 @@
 #ifndef DEVICEUPDATES_H
 #define DEVICEUPDATES_H
 
-#include <QObject>
 #include <QNetworkReply>
 #include <QUrl>
 

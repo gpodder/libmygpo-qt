@@ -20,38 +20,9 @@
 * USA                                                                      *
 ***************************************************************************/
 
+#include "TagList_p.h"
+
 #include <parser.h>
-#include <QSharedPointer>
-
-#include "TagList.h"
-
-namespace mygpo
-{
-
-class TagListPrivate : public QObject
-{
-    Q_OBJECT
-
-public:
-    TagListPrivate( TagList* qq, QNetworkReply* reply );
-    virtual ~TagListPrivate();
-    QList<TagPtr> list() const;
-    QVariant tags() const;
-private:
-    TagList* const q;
-    QNetworkReply* m_reply;
-    QVariant m_tags;
-
-    QNetworkReply::NetworkError m_error;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-};
-
-}
 
 using namespace mygpo;
 
@@ -151,5 +122,3 @@ QVariant TagList::tags() const
 {
     return d->tags();
 }
-
-#include "TagList.moc"

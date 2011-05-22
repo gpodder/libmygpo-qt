@@ -20,40 +20,11 @@
 * USA                                                                      *
 ***************************************************************************/
 
-
-#include <QVariant>
+#include "Settings_p.h"
 
 #include <parser.h>
 
-#include "Settings.h"
-
-namespace mygpo
-{
-
-class SettingsPrivate : public QObject
-{
-    Q_OBJECT
-
-public:
-    SettingsPrivate( Settings* qq, QNetworkReply* reply );
-    virtual ~SettingsPrivate();
-    QVariant settings() const;
-
-private:
-    Settings* const q;
-    QVariant m_settings;
-
-    QNetworkReply* m_reply;
-    QNetworkReply::NetworkError m_error;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-
-};
+using namespace mygpo;
 
 SettingsPrivate::SettingsPrivate( Settings* qq, QNetworkReply* reply ): q( qq ), m_reply( reply ), m_error( QNetworkReply::NoError )
 {
@@ -112,11 +83,6 @@ void SettingsPrivate::error( QNetworkReply::NetworkError error )
     emit q->requestError( error );
 }
 
-}
-
-
-using namespace mygpo;
-
 Settings::Settings( QNetworkReply* reply, QObject* parent ): QObject( parent ), d( new SettingsPrivate( this, reply ) )
 {
 
@@ -131,6 +97,3 @@ QVariant Settings::settings() const
 {
     return d->settings();
 }
-
-#include "Settings.moc"
-

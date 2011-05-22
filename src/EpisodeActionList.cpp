@@ -20,43 +20,11 @@
 * USA                                                                      *
 ***************************************************************************/
 
-#include "EpisodeActionList.h"
+#include "EpisodeActionList_p.h"
 
 #include <parser.h>
 
-#include <QSharedPointer>
-#include <QDebug>
-
-namespace mygpo
-{
-
-class EpisodeActionListPrivate : public QObject
-{
-    Q_OBJECT
-
-public:
-    EpisodeActionListPrivate( EpisodeActionList* qq, QNetworkReply* reply );
-    virtual ~EpisodeActionListPrivate();
-    QList<EpisodeActionPtr> list() const;
-    QVariant episodeActions() const;
-
-    qulonglong timestamp() const;
-
-private:
-    QNetworkReply* m_reply;
-    EpisodeActionList* const q;
-    QVariant m_episodeActions;
-    QNetworkReply::NetworkError m_error;
-    qulonglong m_timestamp;
-
-    bool parse( const QVariant& data );
-    bool parse( const QByteArray& data );
-
-private slots:
-    void parseData();
-    void error( QNetworkReply::NetworkError error );
-
-};
+using namespace mygpo;
 
 EpisodeActionListPrivate::EpisodeActionListPrivate( EpisodeActionList* qq, QNetworkReply* reply ): m_reply( reply ), q( qq ), m_error( QNetworkReply::NoError )
 {
@@ -177,9 +145,4 @@ qulonglong EpisodeActionList::timestamp() const
 EpisodeActionList::~EpisodeActionList()
 {
     delete d;
-}
-
-#include "EpisodeActionList.moc"
-
-
 }

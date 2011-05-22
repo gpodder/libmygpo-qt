@@ -23,10 +23,10 @@
 #ifndef TAG_H
 #define TAG_H
 
+#include "mygpo_export.h"
+
 #include <QSharedPointer>
 #include <QVariant>
-
-#include "mygpo_export.h"
 
 namespace mygpo
 {
