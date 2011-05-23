@@ -62,6 +62,12 @@ QNetworkReply* ApiRequestPrivate::suggestionsOpml( uint count )
     return m_requestHandler.authGetRequest( requestUrl );
 }
 
+QNetworkReply* ApiRequestPrivate::downloadSubscriptionsOpml( const QString& username, const QString& device )
+{
+    QString requestUrl = UrlBuilder::getSubscriptionsUrl( username, device, UrlBuilder::OPML );
+    return m_requestHandler.authGetRequest( requestUrl );
+}
+
 QNetworkReply* ApiRequestPrivate::toplistTxt( uint count )
 {
     QString requestUrl = UrlBuilder::getToplistUrl( count, UrlBuilder::TEXT );
@@ -77,6 +83,12 @@ QNetworkReply* ApiRequestPrivate::searchTxt( const QString& query )
 QNetworkReply* ApiRequestPrivate::suggestionsTxt( uint count )
 {
     QString requestUrl = UrlBuilder::getSuggestionsUrl( count , UrlBuilder::TEXT );
+    return m_requestHandler.authGetRequest( requestUrl );
+}
+
+QNetworkReply* ApiRequestPrivate::downloadSubscriptionsTxt(const QString& username, const QString& device)
+{
+    QString requestUrl = UrlBuilder::getSubscriptionsUrl( username, device, UrlBuilder::TEXT );
     return m_requestHandler.authGetRequest( requestUrl );
 }
 
@@ -106,6 +118,12 @@ PodcastListPtr ApiRequestPrivate::suggestions( uint count )
     reply = m_requestHandler.authGetRequest( requestUrl );
     PodcastListPtr podcastList( new PodcastList( reply ) );
     return podcastList;
+}
+
+QNetworkReply* ApiRequestPrivate::downloadSubscriptionsJson(const QString& username, const QString& device)
+{
+    QString requestUrl = UrlBuilder::getSubscriptionsUrl( username, device );
+    return m_requestHandler.getRequest( requestUrl );
 }
 
 EpisodePtr ApiRequestPrivate::episodeData( const QUrl& podcasturl, const QUrl& episodeurl )
@@ -381,6 +399,11 @@ QNetworkReply* ApiRequest::suggestionsOpml( uint count )
     return d->suggestionsOpml( count );
 }
 
+QNetworkReply* ApiRequest::downloadSubscriptionsOpml( const QString& username, const QString& device )
+{
+    return d->downloadSubscriptionsOpml( username, device );
+}
+
 QNetworkReply* ApiRequest::toplistTxt( uint count )
 {
     return d->toplistTxt( count );
@@ -396,6 +419,11 @@ QNetworkReply* ApiRequest::suggestionsTxt( uint count )
     return d->suggestionsTxt( count );
 }
 
+QNetworkReply* ApiRequest::downloadSubscriptionsTxt(const QString& username, const QString& device)
+{
+    return d->downloadSubscriptionsTxt( username, device );
+}
+
 PodcastListPtr ApiRequest::toplist( uint count )
 {
     return d->toplist( count );
@@ -409,6 +437,11 @@ PodcastListPtr ApiRequest::search( const QString& query )
 PodcastListPtr ApiRequest::suggestions( uint count )
 {
     return d->suggestions( count );
+}
+
+QNetworkReply* ApiRequest::downloadSubscriptionsJson(const QString& username, const QString& device)
+{
+    return d->downloadSubscriptionsJson( username, device );
 }
 
 PodcastListPtr ApiRequest::podcastsOfTag( uint count, const QString& tag )

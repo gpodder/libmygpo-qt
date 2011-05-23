@@ -144,6 +144,25 @@ int main(int argc, char **argv)
     qDebug() << reply->readAll();
     qDebug() << "";
 
+    reply = req.downloadSubscriptionsTxt( "ase23", "dev0" );
+    
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Downloading podcast subscriptions (Txt) [subscriptionsTxt(\"ase23\",\"dev0\"]"));
+    qDebug() << reply->readAll();
+    qDebug() << "";
+    
+    reply = req.downloadSubscriptionsOpml( "ase23", "dev0" );
+    
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Downloading podcast subscriptions (OPML) [subscriptionsOpml(\"ase23\",\"dev0\"]"));
+    qDebug() << reply->readAll();
+    qDebug() << "";
     //
     // QNetworkReply* searchOpml(const QString& query);
     //
@@ -223,6 +242,15 @@ int main(int argc, char **argv)
     printTitle(QLatin1String("Downloading podcast toplists [toplist(1)]"));
     printPodcastList(topList);
 
+    reply = req.downloadSubscriptionsJson( "ase23", "dev0" );
+
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Downloading subscriptions (JSON) [subscriptionsJson(\"ase23\",\"dev0\")]"));
+    qDebug() << reply->readAll();
+    qDebug();
     //
     // PodcastListPtr search(const QString& query);
     //

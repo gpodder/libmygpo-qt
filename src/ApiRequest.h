@@ -60,6 +60,8 @@ public:
     ApiRequest( QNetworkAccessManager* nam );
     ~ApiRequest( );
     
+    //SIMPLE API
+    
 	/**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
@@ -84,6 +86,8 @@ public:
      *
      */
     QNetworkReply* suggestionsOpml( uint count );
+    
+    QNetworkReply* downloadSubscriptionsOpml( const QString& username, const QString& device );
 
 	/**
      * Returns the TXT Result for the Simple API Call "Downloading Podcast Toplists"
@@ -109,6 +113,8 @@ public:
      *
      */
     QNetworkReply* suggestionsTxt( uint count );
+    
+    QNetworkReply* downloadSubscriptionsTxt( const QString& username, const QString& device );
 	
     /**
      * Returns the Result for the Simple API Call "Downloading Podcast Toplists"
@@ -134,6 +140,10 @@ public:
      *
      */
     PodcastListPtr suggestions( uint count );
+    
+    QNetworkReply* downloadSubscriptionsJson( const QString& username, const QString& device );
+    
+    //ADVANCED API
 
     /**
      * Returns the Result for the Advanced API Call "Retrieving Podcasts of a Tag"

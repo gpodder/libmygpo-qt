@@ -68,6 +68,11 @@ QString UrlBuilder::getPodcastSearchUrl( const QString& query, Format f )
     return s_server % QLatin1String( "/search" ) % getFormatExtension( f ) % QLatin1String( "?q=" ) % query;
 }
 
+QString UrlBuilder::getSubscriptionsUrl( const QString& username, const QString& device, UrlBuilder::Format f)
+{
+    return s_server % QLatin1String( "/subscriptions/" ) % username % QLatin1String( "/" ) % device % getFormatExtension( f );
+}
+
 QString UrlBuilder::getTopTagsUrl( uint i )
 {
     QString numString = QString::number(( i == 0 ) ? 1 : i );

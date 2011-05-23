@@ -64,6 +64,7 @@ public:
      */
     static QString getPodcastSearchUrl( const QString& query, Format f = JSON );
 
+    static QString getSubscriptionsUrl( const QString& username, const QString& device, Format f = JSON );
     /**
      * @param i Amount of tags. If i == 0 it will be set to 1.
      * @return Request URL to retrieve the 'i' most used tags.

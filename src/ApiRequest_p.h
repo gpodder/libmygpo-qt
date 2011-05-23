@@ -40,12 +40,15 @@ public:
     QNetworkReply* toplistOpml( uint count );
     QNetworkReply* searchOpml( const QString& query );
     QNetworkReply* suggestionsOpml( uint count );
+    QNetworkReply* downloadSubscriptionsOpml( const QString& username, const QString& device );
     QNetworkReply* toplistTxt( uint count );
     QNetworkReply* searchTxt( const QString& query );
     QNetworkReply* suggestionsTxt( uint count );
+    QNetworkReply* downloadSubscriptionsTxt ( const QString& username, const QString& device );
     PodcastListPtr toplist( uint count );
     PodcastListPtr search( const QString& query );
     PodcastListPtr suggestions( uint count );
+    QNetworkReply* downloadSubscriptionsJson( const QString& username, const QString& device );
     PodcastListPtr podcastsOfTag( uint count, const QString& tag );
     PodcastPtr podcastData( const QUrl& podcasturl );
     EpisodePtr episodeData( const QUrl& podcasturl, const QUrl& episodeurl );
