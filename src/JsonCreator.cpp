@@ -24,6 +24,7 @@
 #include <QList>
 #include <QUrl>
 #include <QString>
+#include <QDateTime>
 
 #include <serializer.h>
 
@@ -133,8 +134,10 @@ QVariantMap JsonCreator::episodeActionToQVariantMap( const EpisodeActionPtr epis
     else if( actionType == EpisodeAction::Download )
         map.insert( QLatin1String( "action" ), QLatin1String( "download" ) );
 
-    if( episodeAction->timestamp() != 0 )
-        map.insert( QLatin1String( "timestamp" ), episodeAction->timestamp() );
+    if( episodeAction->timestamp() != 0 ) {
+    	QDateTime dateTime = QDateTime::fromMSecsSinceEpoch(episodeAction->timestamp() );
+        map.insert( QLatin1String( "timestamp" ), dateTime.toString(Qt::ISODate) );
+    }
     if( episodeAction->started() != 0 )
         map.insert( QLatin1String( "started" ), episodeAction->started() );
     if( episodeAction->position() != 0 )
