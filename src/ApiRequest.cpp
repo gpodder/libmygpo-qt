@@ -526,7 +526,7 @@ EpisodeActionListPtr ApiRequest::episodeActions( const QString& username, const 
 
 EpisodeActionListPtr ApiRequest::episodeActionsByPodcast( const QString& username, const QString& podcastUrl, const bool aggregated )
 {
-    return d->episodeActionsByDevice( username, podcastUrl, aggregated );
+    return d->episodeActionsByPodcast( username, podcastUrl, aggregated );
 }
 
 EpisodeActionListPtr ApiRequest::episodeActionsByDevice( const QString& username, const QString& deviceId, const bool aggregated )
