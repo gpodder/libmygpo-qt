@@ -2,8 +2,8 @@
 # - Find libmygpo-qt
 # Find the libmygpo-qt includes and the libmygpo-qt libraries
 # This module defines
-# LIBMYGPO_QT_INCLUDE_DIR, root mygpo-qt include dir
-# LIBMYGPO_QT_LIBRARY, the path to libmygpo-qt
+# LIBMYGPO_QT_INCLUDE_DIRS, root mygpo-qt include dir
+# LIBMYGPO_QT_LIBRARIES, the path to libmygpo-qt
 # LIBMYGPO_QT_FOUND, whether libmygpo-qt was found
 
 
@@ -18,7 +18,7 @@ find_path(LIBMYGPO_QT_INCLUDE_DIR NAMES ApiRequest.h
   PATH_SUFFIXES mygpo-qt
 )
 
-find_library( LIBMYGPO_QT_LIBRARY NAMES mygpo-qt
+find_library(LIBMYGPO_QT_LIBRARY NAMES mygpo-qt
     PATHS
     ~/usr/lib
     ~/usr/lib64
@@ -34,10 +34,12 @@ find_library( LIBMYGPO_QT_LIBRARY NAMES mygpo-qt
     ~/kde/lib64
 )
 
+set(LIBMYGPO_QT_INCLUDE_DIRS ${LIBMYGPO_QT_INCLUDE_DIR})
+set(LIBMYGPO_QT_LIBRARIES ${LIBMYGPO_QT_LIBRARY})
 
 if(LIBMYGPO_QT_INCLUDE_DIR AND LIBMYGPO_QT_LIBRARY)
    set(LIBMYGPO_QT_FOUND TRUE)
-   message(STATUS "Found libmygpo-qt: ${LIBMYGPO_QT_INCLUDE_DIR}, ${LIBMYGPO_QT_LIBRARY}")
+   message(STATUS "Found libmygpo-qt: ${LIBMYGPO_QT_INCLUDE_DIRS}, ${LIBMYGPO_QT_LIBRARIES}")
 else(LIBMYGPO_QT_INCLUDE_DIR AND LIBMYGPO_QT_LIBRARY)
    set(LIBMYGPO_QT_FOUND FALSE)   
    if (LIBMYGPO_QT_FIND_REQUIRED)
@@ -45,4 +47,4 @@ else(LIBMYGPO_QT_INCLUDE_DIR AND LIBMYGPO_QT_LIBRARY)
    endif(LIBMYGPO_QT_FIND_REQUIRED)
 endif(LIBMYGPO_QT_INCLUDE_DIR AND LIBMYGPO_QT_LIBRARY)
 
-mark_as_advanced(LIBMYGPO_QT_INCLUDE_DIR LIBMYGPO_QT_LIBRARY)
+mark_as_advanced(LIBMYGPO_QT_INCLUDE_DIRS LIBMYGPO_QT_LIBRARIES)

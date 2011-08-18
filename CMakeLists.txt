@@ -1,6 +1,6 @@
-project( libmygpo-qt )
+cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
 
-cmake_minimum_required( VERSION 2.6 )
+project( libmygpo-qt )
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
@@ -33,7 +33,8 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
 
 if(MYGPO_BUILD_TESTS)
-  enable_testing()
+    INCLUDE(CTest)
+    enable_testing()
 endif(MYGPO_BUILD_TESTS)
 
 set( CPACK_GENERATOR "TBZ2" "DEB" )
