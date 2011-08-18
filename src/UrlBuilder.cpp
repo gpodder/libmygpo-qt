@@ -47,6 +47,9 @@ static QString getFormatExtension( UrlBuilder::Format f )
     case UrlBuilder::TEXT:
         ret =  QString( QLatin1String( ".txt" ) );
         break;
+    case UrlBuilder::XML:
+        ret = QString( QLatin1String( ".xml" ) );
+        break;
     }
     return ret;
 }

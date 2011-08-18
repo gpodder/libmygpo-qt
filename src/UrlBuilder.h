@@ -43,7 +43,8 @@ public:
     {
         JSON,
         OPML,
-        TEXT
+        TEXT,
+        XML
     };
 
     /**
