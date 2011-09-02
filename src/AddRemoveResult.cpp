@@ -35,7 +35,6 @@ AddRemoveResultPrivate::AddRemoveResultPrivate( AddRemoveResult* qq, QNetworkRep
 
 AddRemoveResultPrivate::~AddRemoveResultPrivate()
 {
-    delete m_reply;
 }
 
 

@@ -34,7 +34,6 @@ PodcastListPrivate::PodcastListPrivate( PodcastList* qq, QNetworkReply* reply, Q
 
 PodcastListPrivate::~PodcastListPrivate()
 {
-    delete m_reply;
 }
 
 
@@ -95,6 +94,7 @@ void PodcastListPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 void PodcastListPrivate::error( QNetworkReply::NetworkError error )

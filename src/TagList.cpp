@@ -34,7 +34,6 @@ TagListPrivate::TagListPrivate( TagList* qq, QNetworkReply* reply ) : q( qq ), m
 
 TagListPrivate::~TagListPrivate()
 {
-    delete m_reply;
 }
 
 QList<TagPtr> TagListPrivate::list() const
@@ -95,6 +94,7 @@ void TagListPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 void TagListPrivate::error( QNetworkReply::NetworkError error )

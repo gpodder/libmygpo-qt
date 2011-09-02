@@ -34,7 +34,6 @@ EpisodeActionListPrivate::EpisodeActionListPrivate( EpisodeActionList* qq, QNetw
 
 EpisodeActionListPrivate::~EpisodeActionListPrivate()
 {
-    delete m_reply;
 }
 
 QList<EpisodeActionPtr> EpisodeActionListPrivate::list() const
@@ -106,6 +105,7 @@ void EpisodeActionListPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 qulonglong EpisodeActionListPrivate::timestamp() const

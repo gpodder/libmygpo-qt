@@ -23,9 +23,7 @@
 #ifndef APIREQUEST_H
 #define APIREQUEST_H
 
-#define MYGPO_MAJOR_VERSION 1
-#define MYGPO_MINOR_VERSION 0
-#define MYGPO_PATCH_VERSION 0
+#define MYGPO_VERSION 1.0.3
 
 #include "mygpo_export.h"
 #include "AddRemoveResult.h"
@@ -115,6 +113,14 @@ public:
     QNetworkReply* suggestionsTxt( uint count );
     
     QNetworkReply* downloadSubscriptionsTxt( const QString& username, const QString& device );
+    
+    QNetworkReply* toplistXml( uint count );
+    
+    QNetworkReply* searchXml( const QString& query );
+    
+    QNetworkReply* suggestionsXml( uint count );
+    
+    QNetworkReply* downloadSubscriptionsXml( const QString& username, const QString& device );
 	
     /**
      * Returns the Result for the Simple API Call "Downloading Podcast Toplists"

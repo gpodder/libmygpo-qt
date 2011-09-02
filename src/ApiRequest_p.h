@@ -45,6 +45,10 @@ public:
     QNetworkReply* searchTxt( const QString& query );
     QNetworkReply* suggestionsTxt( uint count );
     QNetworkReply* downloadSubscriptionsTxt ( const QString& username, const QString& device );
+    QNetworkReply* toplistXml( uint count );
+    QNetworkReply* searchXml( const QString& query );
+    QNetworkReply* suggestionsXml( uint count );
+    QNetworkReply* downloadSubscriptionsXml( const QString& username, const QString& device );
     PodcastListPtr toplist( uint count );
     PodcastListPtr search( const QString& query );
     PodcastListPtr suggestions( uint count );
