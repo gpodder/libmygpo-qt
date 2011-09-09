@@ -28,6 +28,7 @@ using namespace mygpo;
 
 EpisodePrivate::~EpisodePrivate()
 {
+    delete m_reply;
 }
 
 EpisodePrivate::EpisodePrivate ( Episode* qq, QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply ), q ( qq ), m_error ( QNetworkReply::NoError )
@@ -143,7 +144,6 @@ void EpisodePrivate::parseData()
             emit q->parseError();
         }
     }
-    m_reply->deleteLater();
 }
 
 void EpisodePrivate::error ( QNetworkReply::NetworkError error )

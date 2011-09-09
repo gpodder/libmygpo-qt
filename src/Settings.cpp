@@ -34,6 +34,7 @@ SettingsPrivate::SettingsPrivate( Settings* qq, QNetworkReply* reply ): q( qq ),
 
 SettingsPrivate::~SettingsPrivate()
 {
+    delete m_reply;
 }
 
 QVariant SettingsPrivate::settings() const
@@ -73,7 +74,6 @@ void SettingsPrivate::parseData()
             emit q->parseError();
         }
     }
-    m_reply->deleteLater();
 }
 
 

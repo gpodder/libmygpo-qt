@@ -92,30 +92,6 @@ QNetworkReply* ApiRequestPrivate::downloadSubscriptionsTxt(const QString& userna
     return m_requestHandler.authGetRequest( requestUrl );
 }
 
-QNetworkReply* ApiRequestPrivate::toplistXml( uint count )
-{
-    QString requestUrl = UrlBuilder::getToplistUrl( count, UrlBuilder::XML );
-    return m_requestHandler.getRequest( requestUrl );
-}
-    
-QNetworkReply* ApiRequestPrivate::searchXml( const QString& query )
-{
-    QString requestUrl = UrlBuilder::getPodcastSearchUrl( query, UrlBuilder::XML );
-    return m_requestHandler.getRequest( requestUrl );
-}
-    
-QNetworkReply* ApiRequestPrivate::suggestionsXml( uint count )
-{
-    QString requestUrl = UrlBuilder::getSuggestionsUrl( count , UrlBuilder::XML );
-    return m_requestHandler.authGetRequest( requestUrl );
-}
-    
-QNetworkReply* ApiRequestPrivate::downloadSubscriptionsXml( const QString& username, const QString& device )
-{
-    QString requestUrl = UrlBuilder::getSubscriptionsUrl( username, device, UrlBuilder::XML );
-    return m_requestHandler.authGetRequest( requestUrl );
-}
-
 PodcastListPtr ApiRequestPrivate::toplist( uint count )
 {
     QString requestUrl = UrlBuilder::getToplistUrl( count );
@@ -466,26 +442,6 @@ PodcastListPtr ApiRequest::suggestions( uint count )
 QNetworkReply* ApiRequest::downloadSubscriptionsJson(const QString& username, const QString& device)
 {
     return d->downloadSubscriptionsJson( username, device );
-}
-
-QNetworkReply* ApiRequest::toplistXml ( uint count )
-{
-    return d->toplistXml( count );
-}
-
-QNetworkReply* ApiRequest::searchXml ( const QString& query )
-{
-    return d->searchXml( query );
-}
-
-QNetworkReply* ApiRequest::suggestionsXml ( uint count )
-{
-    return d->suggestionsXml( count );
-}
-
-QNetworkReply* ApiRequest::downloadSubscriptionsXml ( const QString& username, const QString& device )
-{
-    return d->downloadSubscriptionsXml( username, device );
 }
 
 PodcastListPtr ApiRequest::podcastsOfTag( uint count, const QString& tag )

@@ -39,6 +39,7 @@ PodcastPrivate::PodcastPrivate( Podcast* qq, const QVariant& variant ): m_reply(
 
 PodcastPrivate::~PodcastPrivate()
 {
+    delete m_reply;
 }
 
 
@@ -207,7 +208,6 @@ void PodcastPrivate::parseData()
     {
         emit q->parseError();
     }
-    m_reply->deleteLater();
 }
 
 void PodcastPrivate::error( QNetworkReply::NetworkError error )
