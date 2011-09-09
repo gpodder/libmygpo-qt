@@ -34,7 +34,6 @@ EpisodeListPrivate::EpisodeListPrivate( EpisodeList* qq, QNetworkReply* reply ):
 
 EpisodeListPrivate::~EpisodeListPrivate()
 {
-    delete m_reply;
 }
 
 QList<EpisodePtr> EpisodeListPrivate::list() const
@@ -95,6 +94,7 @@ void EpisodeListPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 void EpisodeListPrivate::error( QNetworkReply::NetworkError error )

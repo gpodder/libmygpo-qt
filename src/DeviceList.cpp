@@ -34,7 +34,6 @@ DeviceListPrivate::DeviceListPrivate( DeviceList* qq, QNetworkReply* reply ) : q
 
 DeviceListPrivate::~DeviceListPrivate()
 {
-    delete m_reply;
 }
 
 QVariant DeviceListPrivate::devices() const
@@ -98,6 +97,7 @@ void DeviceListPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 DeviceList::DeviceList( QNetworkReply* reply, QObject* parent ) : QObject( parent ), d( new DeviceListPrivate( this, reply ) )

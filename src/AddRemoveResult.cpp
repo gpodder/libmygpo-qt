@@ -35,7 +35,6 @@ AddRemoveResultPrivate::AddRemoveResultPrivate( AddRemoveResult* qq, QNetworkRep
 
 AddRemoveResultPrivate::~AddRemoveResultPrivate()
 {
-    delete m_reply;
 }
 
 
@@ -104,6 +103,7 @@ void AddRemoveResultPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 void AddRemoveResultPrivate::error( QNetworkReply::NetworkError error )

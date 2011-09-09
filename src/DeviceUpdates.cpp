@@ -35,7 +35,6 @@ DeviceUpdatesPrivate::DeviceUpdatesPrivate( DeviceUpdates* qq, QNetworkReply* re
 
 DeviceUpdatesPrivate::~DeviceUpdatesPrivate()
 {
-    delete m_reply;
 }
 
 
@@ -126,6 +125,7 @@ void DeviceUpdatesPrivate::parseData()
             emit q->parseError();
         }
     }
+    m_reply->deleteLater();
 }
 
 void DeviceUpdatesPrivate::error( QNetworkReply::NetworkError error )
