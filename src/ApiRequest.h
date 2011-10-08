@@ -62,7 +62,7 @@ public:
     
     //SIMPLE API
     
-	/**
+    /**
      * Returns the OPML Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
@@ -89,7 +89,7 @@ public:
     
     QNetworkReply* downloadSubscriptionsOpml( const QString& username, const QString& device );
 
-	/**
+    /**
      * Returns the TXT Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
      * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
@@ -115,7 +115,23 @@ public:
     QNetworkReply* suggestionsTxt( uint count );
     
     QNetworkReply* downloadSubscriptionsTxt( const QString& username, const QString& device );
-	
+
+    /**
+     * Returns the TXT Result for the Simple API Call "Downloading Podcast Toplists"
+     * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
+     *
+     */
+    QNetworkReply* toplistXml( uint count );
+
+    /**
+     * Returns the XML Result for the Simple API Call "Searching for Podcasts"
+     * @param query The String you want to search for
+     * @return A Pointer to a QNetworkReply which receives network signals and will contain the data
+     *
+     */
+    QNetworkReply* searchXml( const QString& query );
+
     /**
      * Returns the Result for the Simple API Call "Downloading Podcast Toplists"
      * @param count The number of Podcasts that should be returned - will be set to to 100 if > 100 or < 1

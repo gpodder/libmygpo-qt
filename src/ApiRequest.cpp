@@ -92,6 +92,18 @@ QNetworkReply* ApiRequestPrivate::downloadSubscriptionsTxt(const QString& userna
     return m_requestHandler.authGetRequest( requestUrl );
 }
 
+QNetworkReply* ApiRequestPrivate::toplistXml ( uint count )
+{
+    QString requestUrl = UrlBuilder::getToplistUrl( count, UrlBuilder::XML );
+    return m_requestHandler.getRequest( requestUrl );
+}
+
+QNetworkReply* ApiRequestPrivate::searchXml( const QString& query )
+{
+    QString requestUrl = UrlBuilder::getPodcastSearchUrl( query, UrlBuilder::XML );
+    return m_requestHandler.getRequest( requestUrl );
+}
+
 PodcastListPtr ApiRequestPrivate::toplist( uint count )
 {
     QString requestUrl = UrlBuilder::getToplistUrl( count );
@@ -422,6 +434,16 @@ QNetworkReply* ApiRequest::suggestionsTxt( uint count )
 QNetworkReply* ApiRequest::downloadSubscriptionsTxt(const QString& username, const QString& device)
 {
     return d->downloadSubscriptionsTxt( username, device );
+}
+
+QNetworkReply* ApiRequest::toplistXml ( uint count )
+{
+    return d->toplistXml( count );
+}
+
+QNetworkReply* ApiRequest::searchXml ( const QString& query )
+{
+    return d->searchXml( query );
 }
 
 PodcastListPtr ApiRequest::toplist( uint count )
