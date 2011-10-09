@@ -2,6 +2,7 @@
 include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 set ( LIBMYGPO_QT_SRC
+        DeviceSyncResult.cpp
         Settings.cpp
         AddRemoveResult.cpp
         Tag.cpp 
@@ -38,6 +39,8 @@ set ( LIBMYGPO_QT_MOC_H
         Device_p.h
         DeviceList.h
         DeviceList_p.h
+        DeviceSyncResult.h
+        DeviceSyncResult_p.h
         DeviceUpdates.h
         DeviceUpdates_p.h
         EpisodeAction.h
@@ -61,6 +64,7 @@ set ( LIBMYGPO_QT_INSTALL_H
         TagList.h
         Device.h
         DeviceList.h
+        DeviceSyncResult.h
         DeviceUpdates.h
         EpisodeAction.h
         EpisodeActionList.h

@@ -36,6 +36,7 @@
 #include "Settings.h"
 #include "DeviceUpdates.h"
 #include "DeviceList.h"
+#include "DeviceSyncResult.h"
 
 class QByteArray;
 class QString;
@@ -392,7 +393,7 @@ public:
      */
     AddRemoveResultPtr uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions );
 
-
+    DeviceSyncResultPtr deviceSynchronizationStatus( const QString& username );
 
 private:
     ApiRequestPrivate* const d;

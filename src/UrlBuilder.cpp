@@ -200,3 +200,8 @@ QString UrlBuilder::getUploadEpisodeActionsUrl( const QString& username )
 {
     return s_server % s_api2 % QLatin1String( "/episodes/" ) % username % QLatin1String( ".json" );
 }
+
+QString UrlBuilder::getDeviceSynchronizationStatusUrl ( const QString& username )
+{
+    return s_server % s_api2 % QLatin1String( "/sync-devices/" ) % username % QLatin1String( ".json" );
+}

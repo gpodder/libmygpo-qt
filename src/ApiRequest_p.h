@@ -75,6 +75,7 @@ public:
     EpisodeActionListPtr episodeActionsByPodcastAndTimestamp( const QString& username, const QString& podcastUrl, const qulonglong since );
     EpisodeActionListPtr episodeActionsByDeviceAndTimestamp( const QString& username, const QString& deviceId, const qulonglong since );
     AddRemoveResultPtr uploadEpisodeActions( const QString& username, const QList<EpisodeActionPtr>& episodeActions );
+    DeviceSyncResultPtr deviceSynchronizationStatus( const QString& username );
 private:
     RequestHandler m_requestHandler;
 };

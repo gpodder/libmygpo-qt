@@ -132,6 +132,8 @@ public:
 
     static QString getUploadEpisodeActionsUrl( const QString& username );
 
+    static QString getDeviceSynchronizationStatusUrl( const QString& username );
+
 private:
     UrlBuilder() {};
     UrlBuilder( const UrlBuilder& ) {};

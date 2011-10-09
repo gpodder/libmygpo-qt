@@ -376,12 +376,20 @@ QNetworkReply* ApiRequestPrivate::renameDevice( const QString& username , const 
 DeviceListPtr ApiRequestPrivate::listDevices( const QString& username )
 {
     QString requestUrl = UrlBuilder::getDeviceListUrl( username );
-    QNetworkReply *reply;
+    QNetworkReply* reply;
     reply = m_requestHandler.authGetRequest( requestUrl );
     DeviceListPtr list( new DeviceList( reply ) );
     return list;
 }
 
+DeviceSyncResultPtr ApiRequestPrivate::deviceSynchronizationStatus ( const QString& username )
+{
+    QString requestUrl = UrlBuilder::getDeviceSynchronizationStatusUrl( username );
+    QNetworkReply* reply;
+    reply = m_requestHandler.authGetRequest( requestUrl );
+    DeviceSyncResultPtr result( new DeviceSyncResult( reply ) );
+    return result;
+}
 
 ApiRequest::ApiRequest( const QString& username, const QString& password, QNetworkAccessManager* nam ) : d( new ApiRequestPrivate( username, password, nam ) )
 {
@@ -584,4 +592,9 @@ QNetworkReply* ApiRequest::renameDevice( const QString& username , const QString
 DeviceListPtr ApiRequest::listDevices( const QString& username )
 {
     return d->listDevices( username );
+}
+
+DeviceSyncResultPtr ApiRequest::deviceSynchronizationStatus ( const QString& username )
+{
+    return d->deviceSynchronizationStatus( username );
 }
