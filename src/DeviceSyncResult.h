@@ -24,6 +24,7 @@
 #include <QNetworkReply>
 #include <QObject>
 #include <QSharedPointer>
+#include <QStringList>
 
 #include "mygpo_export.h"
 
@@ -43,8 +44,8 @@ public:
     QVariant synchronized() const;
     QVariant notSynchronized() const;
     
-    //QList<QList<QString> > synchronizedList() const;
-    //QList<QString> notSynchronizedList() const;
+    QList<QStringList> synchronizedList() const;
+    QList<QString> notSynchronizedList() const;
 private:
     Q_DISABLE_COPY( DeviceSyncResult )
     DeviceSyncResultPrivate* const d;

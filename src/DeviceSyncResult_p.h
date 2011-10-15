@@ -35,8 +35,8 @@ public:
     QVariant synchronized() const;
     QVariant notSynchronized() const;
     
-    //QList<QList<QString> > synchronizedList() const;
-    //QList<QString> notSynchronizedList() const;
+    QList<QStringList> synchronizedList() const;
+    QList<QString> notSynchronizedList() const;
 private:
     DeviceSyncResult* q;
     QVariant m_synchronized;

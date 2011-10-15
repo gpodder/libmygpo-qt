@@ -44,17 +44,35 @@ QVariant DeviceSyncResultPrivate::notSynchronized() const
 {
     return m_notSynchronized;
 }
-/*
-QList<QList<QString> > DeviceSyncResultPrivate::synchronizedList() const
-{
 
+QList<QStringList> DeviceSyncResultPrivate::synchronizedList() const
+{
+    QVariantList synchronizedVarList = synchronized().toList();
+    QList<QStringList> synchronizedList;
+    foreach( const QVariant & list, synchronizedVarList )
+    {
+        QVariantList innerVarList = list.toList();
+        QStringList innerList;
+        foreach( const QVariant& device, innerVarList )
+        {
+            innerList.append(device.toString());
+        }
+        synchronizedList.append(innerList);
+    }
+    return synchronizedList;
 }
 
-QList< QString> DeviceSyncResultPrivate::notSynchronizedList() const
+QList<QString> DeviceSyncResultPrivate::notSynchronizedList() const
 {
-
+    QVariantList notSynchronizedVarList = notSynchronized().toList();
+    QList<QString> notSynchronizedList;
+    foreach ( const QVariant& device, notSynchronizedVarList )
+    {
+        notSynchronizedList.append(device.toString());
+    }
+    return notSynchronizedList;
 }
-*/
+
 bool DeviceSyncResultPrivate::parse( const QVariant& data )
 {
     if( !data.canConvert( QVariant::Map ) )
@@ -118,8 +136,8 @@ QVariant DeviceSyncResult::notSynchronized() const
 {
     return d->notSynchronized();
 }
-/*
-QList< QList< QString > > DeviceSyncResult::synchronizedList() const
+
+QList<QStringList> DeviceSyncResult::synchronizedList() const
 {
     return d->synchronizedList();
 }
@@ -128,4 +146,3 @@ QList< QString > DeviceSyncResult::notSynchronizedList() const
 {
     return d->notSynchronizedList();
 }
-*/
