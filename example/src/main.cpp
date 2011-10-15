@@ -35,8 +35,10 @@
 #include <QDateTime>
 #include <DeviceList.h>
 #include <Device.h>
+#include <DeviceSyncResult.h>
 
-
+#include <QList>
+#include <QString>
 
 using namespace mygpo;
 
@@ -129,8 +131,46 @@ int main(int argc, char **argv)
     QNetworkAccessManager* nam = new QNetworkAccessManager(qApp);
     ApiRequest req("ase23", "csf-sepm", nam);
     QEventLoop loop;
+    
     QNetworkReply* reply;
+    
+    DeviceSyncResultPtr syncPtr = req.deviceSynchronizationStatus( "ase23" );
+    
+    loop.connect(syncPtr.data(), SIGNAL(finished()), SLOT(quit()));
+    loop.connect(syncPtr.data(), SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << "synced: ";
+    QVariant synced = syncPtr->synchronized();
+    foreach (QVariant list, synced.toList() ) {
+        qDebug() << "syncgroup: " << list.toList();
+    }
+    qDebug() << "non-synced: " << syncPtr->notSynchronized();
+    
+    qDebug() << "synced (parsed):";
+    QList<QStringList> parsed = syncPtr->synchronizedList();
+    foreach (QStringList innerList, parsed) {
+        qDebug() << "syncgroup (parsed): " << innerList;
+    }
+    qDebug() << "parsed: " << parsed;
+    
+    qDebug() << "non-synced (parsed): " << syncPtr->notSynchronizedList();
 
+    reply = req.toplistXml(23);
+    
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << reply->readAll();
+    
+    reply = req.searchXml("linux");
+    
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),SLOT(quit()));
+    loop.exec();
+    
+    qDebug() << reply->readAll();
     //
     // QNetworkReply* toplistOpml(uint count);
     //
@@ -461,7 +501,7 @@ int main(int argc, char **argv)
     //
     // Test QSharedPointers
     //
-    printTitle("Test QSharedPointers");
+    /*printTitle("Test QSharedPointers");
     qDebug() << "EpisodePtr";
     EpisodePtr episodePtr = req.episodeData(QUrl(QLatin1String("http://leo.am/podcasts/twit")),QUrl(QLatin1String("http://www.podtrac.com/pts/redirect.mp3/aolradio.podcast.aol.com/twit/twit0245.mp3")));
     loop.connect( &(*episodePtr), SIGNAL(finished()), SLOT(quit()));
@@ -622,9 +662,9 @@ int main(int argc, char **argv)
     loop.connect(top.data(),SIGNAL(parseError()),SLOT(quit()));
     loop.exec();
 
-    printPodcastList(top);
+    printPodcastList(top);*/
 
-    reply->deleteLater();
+    //reply->deleteLater();
     nam->deleteLater();
 
     return 0;
