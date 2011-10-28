@@ -135,7 +135,7 @@ PodcastListPtr ApiRequestPrivate::suggestions( uint count )
 QNetworkReply* ApiRequestPrivate::downloadSubscriptionsJson(const QString& username, const QString& device)
 {
     QString requestUrl = UrlBuilder::getSubscriptionsUrl( username, device );
-    return m_requestHandler.getRequest( requestUrl );
+    return m_requestHandler.authGetRequest( requestUrl );
 }
 
 EpisodePtr ApiRequestPrivate::episodeData( const QUrl& podcasturl, const QUrl& episodeurl )
