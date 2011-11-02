@@ -285,7 +285,7 @@ int main(int argc, char **argv)
     reply = req.downloadSubscriptionsJson( "ase23", "dev0" );
 
     loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
-    loop.connect(reply, SIGNAL(requestError(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(quit()));
     loop.exec();
 
     printTitle(QLatin1String("Downloading subscriptions (JSON) [subscriptionsJson(\"ase23\",\"dev0\")]"));

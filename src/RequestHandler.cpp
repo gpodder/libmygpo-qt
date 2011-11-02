@@ -49,8 +49,8 @@ QNetworkReply* RequestHandler::getRequest( const QString& url )
 
 QNetworkReply* RequestHandler::authGetRequest( const QString& url )
 {
-    QUrl authUrl = addAuthData( url );
-    QNetworkRequest request( authUrl );
+    QNetworkRequest request( url );
+    addAuthData( request );
     QNetworkReply* reply = m_nam->get( request );
     return reply;
 }
@@ -58,16 +58,14 @@ QNetworkReply* RequestHandler::authGetRequest( const QString& url )
 
 QNetworkReply* RequestHandler::postRequest( const QByteArray data, const QString& url )
 {
-    QUrl authUrl = addAuthData( url );
-    QNetworkRequest request( authUrl );
+    QNetworkRequest request( url );
+    addAuthData( request );
     QNetworkReply* reply = m_nam->post( request, data );
     return reply;
 }
 
-QUrl RequestHandler::addAuthData( const QString& url )
+void RequestHandler::addAuthData( QNetworkRequest& request )
 {
-    QUrl authUrl( url );
-    authUrl.setUserName( m_username );
-    authUrl.setPassword( m_password );
-    return authUrl;
+    QByteArray headerData = "Basic " + QString(m_username + QLatin1String(":") + m_password).toLocal8Bit().toBase64();
+    request.setRawHeader("Authorization", headerData );
 }

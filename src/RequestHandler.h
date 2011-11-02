@@ -77,7 +77,7 @@ private:
     QString m_password;
     QNetworkAccessManager* m_nam;
 
-    QUrl addAuthData( const QString& url );
+    void addAuthData( QNetworkRequest& url );
 };
 
 }
