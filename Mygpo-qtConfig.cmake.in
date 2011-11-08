@@ -14,4 +14,5 @@ set(LIBMYGPO_QT_INCLUDE_DIRS "${rootDir}/@INCLUDE_INSTALL_DIR@")
 include(${myDir}/Mygpo-qtTargets.cmake)
 
 # set the expected library variable
-set(LIBMYGPO_QT_LIBRARIES bar )
+set(LIBMYGPO_QT_LIBRARIES mygpo-qt )
+set(LIBMYGPO_QT_FOUND "True")
