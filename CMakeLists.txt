@@ -47,7 +47,9 @@ set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "A c++/qt library to access the APIs prov
 
 set(LIB_INSTALL_DIR_SUFFIX "" CACHE STRING "The directories where to install libraries to")
 set(LIB_INSTALL_DIR lib${LIB_INSTALL_DIR_SUFFIX} )
+set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "The directory the headers are installed in")
 set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt ) 
+# SET (CMAKE_MODULES_INSTALL_DIR "${CMAKE_ROOT}/Modules" CACHE PATH "The directory to install FindLibmygpo-qt.cmake to")
 
 if( APPLE )
     set( CPACK_GENERATOR "DragNDrop" )
@@ -75,12 +77,6 @@ CONFIGURE_FILE(
 
 ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-
-#add extra search paths for libraries and includes
-SET (LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)" )
-SET (LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}" CACHE STRING "Directory where lib will install")
-SET (INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "The directory the headers are installed in")
-# SET (CMAKE_MODULES_INSTALL_DIR "${CMAKE_ROOT}/Modules" CACHE PATH "The directory to install FindLibmygpo-qt.cmake to")
 
 # pkg-config
 find_package(PkgConfig)

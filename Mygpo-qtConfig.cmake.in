@@ -8,7 +8,7 @@ set(MYGPO_QT_VERSION_PATCH @MYGPO_QT_VERSION_PATCH@)
 set(MYGPO_QT_VERSION ${MYGPO_QT_VERSION_MAJOR}.${MYGPO_QT_VERSION_MINOR}.${MYGPO_QT_VERSION_PATCH} )
 
 # what is my include directory
-set(BAR_INCLUDES "${rootDir}/@INCLUDE_INSTALL_DIR@")
+set(LIBMYGPO_QT_INCLUDE_DIRS "${rootDir}/@INCLUDE_INSTALL_DIR@")
 
 # import the exported targets
 include(${myDir}/Mygpo-qtTargets.cmake)
