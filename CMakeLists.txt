@@ -14,7 +14,7 @@ include( ${QT_USE_FILE} )
 
 set( MYGPO_LIB_MAJOR_VERSION "1" )
 set( MYGPO_LIB_MINOR_VERSION "0" )
-set( MYGPO_LIB_PATCH_VERSION "4" )
+set( MYGPO_LIB_PATCH_VERSION "5" )
 set( MYGPO_LIB_VERSION "${MYGPO_LIB_MAJOR_VERSION}.${MYGPO_LIB_MINOR_VERSION}.${MYGPO_LIB_PATCH_VERSION}" )
 
 set( MYGPO_LIB_VERSION_SONAME "${MYGPO_LIB_MAJOR_VERSION}")
@@ -44,6 +44,10 @@ set( CPACK_PACKAGE_VERSION_PATCH "${MYGPO_LIB_PATCH_VERSION}" )
 set( CPACK_PACKAGE_VERSION "${MYGPO_LIB_VERSION}" )
 set( CPACK_DEBIAN_PACKAGE_MAINTAINER "gpodder-devel@lists.berlios.de" )
 set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "A c++/qt library to access the APIs provided by gpodder.net." )
+
+set(LIB_INSTALL_DIR_SUFFIX "" CACHE STRING "The directories where to install libraries to")
+set(LIB_INSTALL_DIR lib${LIB_INSTALL_DIR_SUFFIX} )
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt ) 
 
 if( APPLE )
     set( CPACK_GENERATOR "DragNDrop" )
@@ -93,3 +97,29 @@ add_subdirectory( src )
 if(MYGPO_BUILD_TESTS)
     add_subdirectory( tests )
 endif(MYGPO_BUILD_TESTS)
+
+# This "exports" all targets which have been put into the export set "BarExport".
+# This means that cmake generates a file with the given filename, which can later on be loaded
+# by projects using this package.
+# This file contains add_library(bar IMPORTED) statements for each target in the export set, so
+# when loaded later on cmake will create "imported" library targets from these, which can be used
+# in many ways in the same way as a normal library target created via a normal add_library().
+install(EXPORT mygpo-qtExport DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE Mygpo-qtTargets.cmake )
+
+# figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
+# runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
+# This relative path will be configured into the BarConfig.cmake
+file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_DIR} ${CMAKE_INSTALL_PREFIX} )
+
+# Create a BarConfig.cmake file. <name>Config.cmake files are searched by find_package()
+# automatically. We configure that file so that we can put any information we want in it,
+# e.g. version numbers, include directories, etc.
+configure_file(Mygpo-qtConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfig.cmake @ONLY )
+
+# Additionally, when cmake has found a BarConfig.cmake, it can check for a BarConfigVersion.cmake
+# in the same directory when figuring out the version of the package when a version
+# has been specified in the find_package() call, e.g. find_package(Bar 1.0)
+configure_file(Mygpo-qtConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfigVersion.cmake @ONLY )
+
+# Install these two files into the same directory as the generated exports-file.
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfigVersion.cmake DESTINATION ${CMAKECONFIG_INSTALL_DIR} )

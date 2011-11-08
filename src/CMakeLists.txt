@@ -78,6 +78,6 @@ add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} )
 
 target_link_libraries( mygpo-qt ${QJSON_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
 set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_LIB_VERSION} SOVERSION ${MYGPO_LIB_VERSION_SONAME} DEFINE_SYMBOL MYGPO_MAKEDLL)
-install( TARGETS mygpo-qt DESTINATION lib${LIB_SUFFIX} )
+install( TARGETS mygpo-qt EXPORT mygpo-qtExport DESTINATION lib${LIB_SUFFIX} )
 
 install( FILES ${LIBMYGPO_QT_INSTALL_H} DESTINATION  include/mygpo-qt COMPONENT Devel )
