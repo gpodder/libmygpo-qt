@@ -78,8 +78,8 @@ ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 # pkg-config
-find_package(PkgConfig)
 IF (NOT WIN32)
+    FIND_PACKAGE(PkgConfig)
     IF (PKG_CONFIG_FOUND)
         CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libmygpo-qt.pc.in
                             ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
