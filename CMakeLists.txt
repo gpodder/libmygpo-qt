@@ -49,7 +49,6 @@ set(LIB_INSTALL_DIR_SUFFIX "" CACHE STRING "The directories where to install lib
 set(LIB_INSTALL_DIR lib${LIB_INSTALL_DIR_SUFFIX} )
 set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "The directory the headers are installed in")
 set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt ) 
-# SET (CMAKE_MODULES_INSTALL_DIR "${CMAKE_ROOT}/Modules" CACHE PATH "The directory to install FindLibmygpo-qt.cmake to")
 
 if( APPLE )
     set( CPACK_GENERATOR "DragNDrop" )
