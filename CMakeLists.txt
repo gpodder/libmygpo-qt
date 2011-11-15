@@ -5,6 +5,10 @@ project( libmygpo-qt )
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
+# Don't use absolute path in Mygpo-qtTargets-$buildType.cmake
+# (This will have no effect with CMake < 2.8)
+set(QT_USE_IMPORTED_TARGETS TRUE)
+
 find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
 set( QT_DONT_USE_QTGUI TRUE )
 
@@ -45,11 +49,10 @@ set( CPACK_PACKAGE_VERSION "${MYGPO_QT_VERSION}" )
 set( CPACK_DEBIAN_PACKAGE_MAINTAINER "gpodder@freelists.org" )
 set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "A c++/qt library to access the APIs provided by gpodder.net." )
 
-set(LIB_INSTALL_DIR_SUFFIX "" CACHE STRING "The directories where to install libraries to")
-set(LIB_INSTALL_DIR lib${LIB_INSTALL_DIR_SUFFIX} )
+set(LIB_SUFFIX "" CACHE STRING "The directories where to install libraries to")
+set(LIB_INSTALL_DIR lib${LIB_SUFFIX} )
 set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "The directory the headers are installed in")
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt ) 
-# SET (CMAKE_MODULES_INSTALL_DIR "${CMAKE_ROOT}/Modules" CACHE PATH "The directory to install FindLibmygpo-qt.cmake to")
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt )
 
 if( APPLE )
     set( CPACK_GENERATOR "DragNDrop" )
@@ -79,8 +82,8 @@ ADD_CUSTOM_TARGET(uninstall
   "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 
 # pkg-config
-find_package(PkgConfig)
 IF (NOT WIN32)
+    FIND_PACKAGE(PkgConfig)
     IF (PKG_CONFIG_FOUND)
         CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libmygpo-qt.pc.in
                             ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
