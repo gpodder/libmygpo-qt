@@ -6,6 +6,7 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mo
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
 # Don't use absolute path in Mygpo-qtTargets-$buildType.cmake
+# (This will have no effect with CMake < 2.8)
 set(QT_USE_IMPORTED_TARGETS TRUE)
 
 find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
