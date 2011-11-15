@@ -49,10 +49,10 @@ set( CPACK_PACKAGE_VERSION "${MYGPO_QT_VERSION}" )
 set( CPACK_DEBIAN_PACKAGE_MAINTAINER "gpodder@freelists.org" )
 set( CPACK_PACKAGE_DESCRIPTION_SUMMARY "A c++/qt library to access the APIs provided by gpodder.net." )
 
-set(LIB_INSTALL_DIR_SUFFIX "" CACHE STRING "The directories where to install libraries to")
-set(LIB_INSTALL_DIR lib${LIB_INSTALL_DIR_SUFFIX} )
+set(LIB_SUFFIX "" CACHE STRING "The directories where to install libraries to")
+set(LIB_INSTALL_DIR lib${LIB_SUFFIX} )
 set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt" CACHE PATH "The directory the headers are installed in")
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt ) 
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt )
 
 if( APPLE )
     set( CPACK_GENERATOR "DragNDrop" )
