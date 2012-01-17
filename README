@@ -20,7 +20,7 @@ Current Maintainer: Stefan Derkits (HorusHorrendus @ irc.freenode.net)
 
 === Requirements ===
 
--) Qt 4.6 or higher
+-) Qt 4.7 or higher
 -) Cmake 2.6 or higher
 -) QJson
 
