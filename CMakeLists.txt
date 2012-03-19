@@ -23,14 +23,21 @@ set( MYGPO_QT_VERSION "${MYGPO_QT_VERSION_MAJOR}.${MYGPO_QT_VERSION_MINOR}.${MYG
 
 set( MYGPO_QT_SONAME "${MYGPO_QT_VERSION_MAJOR}")
 
+include(CheckCXXCompilerFlag)
+
 if (CMAKE_COMPILER_IS_GNUCXX)
     ADD_DEFINITIONS( -Wcast-align -Wchar-subscripts -Wpointer-arith
        -Wwrite-strings -Wpacked -Wformat-security -Wmissing-format-attribute
        -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor  -Wall -Wextra
-       -Wformat=2 -Wundef -Wlogical-op -Wstack-protector -Wmissing-include-dirs
+       -Wformat=2 -Wundef -Wstack-protector -Wmissing-include-dirs
        -Winit-self -Wunsafe-loop-optimizations  -ggdb3 -fno-inline -DQT_STRICT_ITERATORS )
     if ( NOT WIN32 )
         add_definitions( -fvisibility=hidden )
+    endif()
+
+    check_cxx_compiler_flag( -Wlogical-op GNUCXX_HAS_WLOGICAL_OP )
+    if ( GNUCXX_HAS_WLOGICAL_OP )
+        add_definitions( -Wlogical-op )
     endif()
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
