@@ -395,6 +395,8 @@ public:
 
     DeviceSyncResultPtr deviceSynchronizationStatus( const QString& username );
 
+    DeviceSyncResultPtr setDeviceSynchronizationStatus( const QString& username, const QList<QStringList>& synchronize, const QList<QString>& stopSynchronize );
+
 private:
     ApiRequestPrivate* const d;
 };

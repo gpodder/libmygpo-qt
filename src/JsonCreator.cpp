@@ -70,7 +70,7 @@ QByteArray JsonCreator::episodeActionListToJSON( const QList<EpisodeActionPtr>& 
     return jsonByteArray;
 }
 
-QByteArray mygpo::JsonCreator::renameDeviceStringToJSON( const QString& caption, const QString& type )
+QByteArray JsonCreator::renameDeviceStringToJSON( const QString& caption, const QString& type )
 {
     QJson::Serializer serializer;
     QVariantMap jsonData;
@@ -81,6 +81,22 @@ QByteArray mygpo::JsonCreator::renameDeviceStringToJSON( const QString& caption,
     QByteArray jsonByteArray = serializer.serialize( QVariant( jsonData ) );
     return jsonByteArray;
 
+}
+
+QByteArray JsonCreator::deviceSynchronizationListsToJSON(const QList< QStringList >& synchronize, const QList< QString >& stopSynchronize)
+{
+    QJson::Serializer serializer;
+    QVariantMap jsonData;
+    QVariantList syncVar;
+    foreach( const QStringList& syncEntry, synchronize )
+    {
+        syncVar.append( stringListToQVariantList( syncEntry ) );
+    }
+    QVariant stopVar( stringListToQVariantList( stopSynchronize ) );
+    jsonData.insert( QString( QLatin1String( "synchronize" ) ), syncVar );
+    jsonData.insert( QString( QLatin1String( "stop-synchronize" ) ), stopVar );
+    QByteArray jsonByteArray = serializer.serialize( QVariant( jsonData ) );
+    return jsonByteArray;
 }
 
 QVariantList JsonCreator::urlListToQVariantList( const QList< QUrl >& urls )

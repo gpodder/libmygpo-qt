@@ -27,6 +27,8 @@
 #include <QVariant>
 #include <QList>
 #include <QMap>
+#include <QStringList>
+
 #include "EpisodeAction.h"
 
 class QUrl;
@@ -43,7 +45,7 @@ public:
     static QByteArray saveSettingsToJSON( const QMap<QString, QVariant >& set, const QList<QString>& remove );
     static QByteArray episodeActionListToJSON( const QList<EpisodeActionPtr>& episodeActions );
     static QByteArray renameDeviceStringToJSON( const QString& caption, const QString& type );
-
+    static QByteArray deviceSynchronizationListsToJSON( const QList<QStringList>& synchronize, const QList<QString>& stopSynchronize );
 private:
     static QVariantList urlListToQVariantList( const QList<QUrl>& urls );
     static QVariantList stringListToQVariantList( const QList<QString>& strings );
