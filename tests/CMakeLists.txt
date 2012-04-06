@@ -2,6 +2,8 @@
 # QTEST_MAIN is using QApplication when QT_GUI_LIB is defined
 remove_definitions(-DQT_GUI_LIB)
 remove_definitions(-fvisibility=hidden)
+remove_definitions(-DQT_NO_CAST_FROM_ASCII)
+remove_definitions(-DQT_NO_CAST_TO_ASCII)
 
 set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
@@ -9,6 +11,8 @@ include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_
 
 # UrlBuilder library
 add_library( UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp )
+# JSONCreator library
+add_library( JsonCreator ${TESTOBJECTS_SRCDIR}/JsonCreator.cpp ${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp )
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
@@ -22,3 +26,6 @@ endmacro(add_libmygpo_test)
 
 add_libmygpo_test( UrlBuilderTest.cpp )
 target_link_libraries( UrlBuilderTest UrlBuilder)
+
+add_libmygpo_test( JsonCreatorTest.cpp )
+target_link_libraries( JsonCreatorTest JsonCreator ${QJSON_LIBRARIES} )
