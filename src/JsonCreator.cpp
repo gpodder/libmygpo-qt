@@ -85,18 +85,29 @@ QByteArray JsonCreator::renameDeviceStringToJSON( const QString& caption, const 
 
 QByteArray JsonCreator::deviceSynchronizationListsToJSON(const QList< QStringList >& synchronize, const QList< QString >& stopSynchronize)
 {
-    QJson::Serializer serializer;
-    QVariantMap jsonData;
-    QVariantList syncVar;
+    QString syncVar(QLatin1String("["));
     foreach( const QStringList& syncEntry, synchronize )
     {
-        syncVar.append( stringListToQVariantList( syncEntry ) );
+        QString syncEntryStr(QLatin1String("["));
+        foreach( const QString& str, syncEntry) {
+            syncEntryStr.append(QString(QLatin1String("\"") + str + QLatin1String("\",")));
+        }
+        syncEntryStr.replace(syncEntryStr.size()-1,1,QLatin1String("]"));
+        syncVar.append(syncEntryStr);
+        syncVar.append(QLatin1String(","));
     }
-    QVariant stopVar( stringListToQVariantList( stopSynchronize ) );
-    jsonData.insert( QString( QLatin1String( "synchronize" ) ), syncVar );
-    jsonData.insert( QString( QLatin1String( "stop-synchronize" ) ), stopVar );
-    QByteArray jsonByteArray = serializer.serialize( QVariant( jsonData ) );
-    return jsonByteArray;
+    syncVar.replace(syncVar.size()-1,1,QLatin1String("]"));
+    QString stopVar(QLatin1String("["));
+    foreach( const QString& str, stopSynchronize) {
+            stopVar.append(QString(QLatin1String("\"") + str + QLatin1String("\",")));
+    }
+    stopVar.replace(stopVar.size()-1,1,QLatin1String("]"));
+    QString jsonStr(QLatin1String("{\"synchronize\" : "));
+    jsonStr.append(syncVar);
+    jsonStr.append(QLatin1String(" ,\"stop-synchronize\" : "));
+    jsonStr.append(stopVar);
+    jsonStr.append(QLatin1String(" }"));
+    return jsonStr.toLocal8Bit();
 }
 
 QVariantList JsonCreator::urlListToQVariantList( const QList< QUrl >& urls )
