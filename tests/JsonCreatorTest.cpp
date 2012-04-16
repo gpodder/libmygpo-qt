@@ -68,6 +68,9 @@ void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
     sync2.append(QLatin1String("foobar4"));
     QStringList sync3;
     sync3.append(QLatin1String("alone"));
+    sync.append(sync1);
+    sync.append(sync2);
+    sync.append(sync3);
     QByteArray output = JsonCreator::deviceSynchronizationListsToJSON(sync,stopSync);
     qDebug() << output;
 }
