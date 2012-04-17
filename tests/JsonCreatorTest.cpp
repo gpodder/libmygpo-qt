@@ -55,9 +55,9 @@ void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
 {
     QList<QStringList> sync;
     QList<QString> stopSync;
-    stopSync.append(QLatin1String("stop1"));
-    stopSync.append(QLatin1String("stop2"));
-    stopSync.append(QLatin1String("stop3"));
+    //stopSync.append(QLatin1String("stop1"));
+    //stopSync.append(QLatin1String("stop2"));
+    //stopSync.append(QLatin1String("stop3"));
     QStringList sync1;
     sync1.append(QLatin1String("foo"));
     sync1.append(QLatin1String("bar"));
@@ -67,7 +67,7 @@ void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
     sync2.append(QLatin1String("foobarfoo"));
     sync2.append(QLatin1String("foobar4"));
     QStringList sync3;
-    sync3.append(QLatin1String("alone"));
+    //sync3.append(QLatin1String("alone"));
     sync.append(sync1);
     sync.append(sync2);
     sync.append(sync3);
