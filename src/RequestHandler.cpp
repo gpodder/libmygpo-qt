@@ -60,6 +60,7 @@ QNetworkReply* RequestHandler::postRequest( const QByteArray data, const QString
 {
     QNetworkRequest request( url );
     addAuthData( request );
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QLatin1String("application/json"));
     QNetworkReply* reply = m_nam->post( request, data );
     return reply;
 }
