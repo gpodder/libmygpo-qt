@@ -1,6 +1,7 @@
 /***************************************************************************
 * This file is part of libmygpo-qt                                         *
 * Copyright (c) 2012 Stefan Derkits <stefan@derkits.at>                    *
+* Copyright (c) 2012 Felix Winter <ixos01@gmail.com>                       *
 *                                                                          *
 * This library is free software; you can redistribute it and/or            *
 * modify it under the terms of the GNU Lesser General Public               *
@@ -42,13 +43,29 @@ private slots:
   void cleanup();
 
   /**
-   * Tests for deviceSynchronizationListsToJSON()
+   * Tests for addRemoveSubsToJSON()
    */
-  void testDeviceSynchronizationListsToJSON();
+  void testAddRemoveSubsToJSON();
+
+  /**
+   * Tests for saveSettingsToJSON()
+   */
+  void testSaveSettingsToJSON();
+
   /**
    * Tests for episodeActionListToJSON()
    */
   void testEpisodeActionListToJSON();
+
+  /**
+   * Tests for renameDeviceStringToJSON()
+   */
+  void testRenameDeviceStringToJSON();
+
+  /**
+   * Tests for deviceSynchronizationListsToJSON()
+   */
+  void testDeviceSynchronizationListsToJSON();
 };
 
 }
