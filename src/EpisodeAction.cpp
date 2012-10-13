@@ -26,6 +26,8 @@
 
 using namespace mygpo;
 
+static qulonglong c_maxlonglong = (2^64)-1;
+
 EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent ) : QObject( parent ), q( qq )
 {
     parse( variant );
@@ -218,6 +220,18 @@ EpisodeAction::EpisodeAction( const QVariant& variant, QObject* parent ): QObjec
 
 EpisodeAction::EpisodeAction( const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent )
     : QObject( parent ), d( new EpisodeActionPrivate( this, podcastUrl, episodeUrl, deviceName, action, timestamp, started, position, total ) )
+{
+
+}
+
+EpisodeAction::EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong position, QObject* parent)
+    : QObject( parent ), d( new EpisodeActionPrivate( this, podcastUrl, episodeUrl, deviceName, action, timestamp, c_maxlonglong, position, c_maxlonglong ) )
+{
+
+}
+
+EpisodeAction::EpisodeAction(const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, QObject* parent)
+    : QObject( parent ), d( new EpisodeActionPrivate( this, podcastUrl, episodeUrl, deviceName, action, timestamp, c_maxlonglong, c_maxlonglong, c_maxlonglong ) )
 {
 
 }

@@ -32,6 +32,8 @@
 
 using namespace mygpo;
 
+static qulonglong c_maxlonglong = (2^64)-1;
+
 QByteArray JsonCreator::addRemoveSubsToJSON( const QList< QUrl >& add, const QList< QUrl >& remove )
 {
     QJson::Serializer serializer;
@@ -194,12 +196,17 @@ QVariantMap JsonCreator::episodeActionToQVariantMap( const EpisodeActionPtr epis
 #endif
         map.insert( QLatin1String( "timestamp" ), dateTime.toString(Qt::ISODate) );
     }
-    if( episodeAction->started() != 0 )
-        map.insert( QLatin1String( "started" ), episodeAction->started() );
-    if( episodeAction->position() != 0 )
-        map.insert( QLatin1String( "position" ), episodeAction->position() );
-    if( episodeAction->total() != 0 )
-        map.insert( QLatin1String( "total" ), episodeAction->total() );
-
+    if( actionType == EpisodeAction::Play )
+    {
+        if ( episodeAction->position() != c_maxlonglong )
+        {
+            map.insert( QLatin1String( "position" ), episodeAction->position() );
+            if ( episodeAction->started() != c_maxlonglong && episodeAction->total() != c_maxlonglong )
+            {
+                map.insert( QLatin1String( "started" ), episodeAction->started() );
+                map.insert( QLatin1String( "total" ), episodeAction->total() );
+            }
+        }
+    }
     return map;
 }

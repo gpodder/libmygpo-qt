@@ -45,6 +45,10 @@ private slots:
    * Tests for deviceSynchronizationListsToJSON()
    */
   void testDeviceSynchronizationListsToJSON();
+  /**
+   * Tests for episodeActionListToJSON()
+   */
+  void testEpisodeActionListToJSON();
 };
 
 }

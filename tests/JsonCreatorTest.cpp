@@ -72,7 +72,19 @@ void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
     sync.append(sync2);
     sync.append(sync3);
     QByteArray output = JsonCreator::deviceSynchronizationListsToJSON(sync,stopSync);
-    qDebug() << output;
+    //qDebug() << output;
+}
+
+void JsonCreatorTest::testEpisodeActionListToJSON()
+{
+  EpisodeActionPtr episodeAction1 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am")), QUrl(QLatin1String("http://www.podtrac.com")), QLatin1String("foodev"), EpisodeAction::New, QDateTime::currentMSecsSinceEpoch(), 1, 2, 3));
+  EpisodeActionPtr episodeAction2 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am")), QUrl(QLatin1String("http://www.podtrac.com")), QLatin1String("foodev"), EpisodeAction::Play, QDateTime::currentMSecsSinceEpoch()));
+  EpisodeActionPtr episodeAction3 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am")), QUrl(QLatin1String("http://www.podtrac.com")), QLatin1String("foodev"), EpisodeAction::Play, QDateTime::currentMSecsSinceEpoch(), 10, 123, 321));
+  EpisodeActionPtr episodeAction4 = QSharedPointer<EpisodeAction>(new EpisodeAction(QUrl(QLatin1String("http://leo.am")), QUrl(QLatin1String("http://www.podtrac.com")), QLatin1String("foodev"), EpisodeAction::Play, QDateTime::currentMSecsSinceEpoch(), 10 ));
+  QList<EpisodeActionPtr> episodeActions;
+  episodeActions << episodeAction1 << episodeAction2 << episodeAction3 << episodeAction4;
+  QByteArray output = JsonCreator::episodeActionListToJSON(episodeActions);
+  qDebug() << output;
 }
 
 QTEST_MAIN(JsonCreatorTest)

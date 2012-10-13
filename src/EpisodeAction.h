@@ -52,6 +52,8 @@ public:
     enum ActionType { Download, Play, Delete, New };
     EpisodeAction( const QVariant& variant, QObject* parent = 0 );
     EpisodeAction( const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent = 0 );
+    EpisodeAction( const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong position, QObject* parent = 0 );
+    EpisodeAction( const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, QObject* parent = 0 );
     virtual ~EpisodeAction();
 
     QUrl podcastUrl() const;
