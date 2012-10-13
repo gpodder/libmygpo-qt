@@ -4,13 +4,9 @@
 
 libmygpo-qt is a Qt Library that wraps the gpodder.net Web API (http://wiki.gpodder.org/wiki/Web_Services/API_2)
 
-v1.0 wraps nearly every Request from the gpodder.net API except:
--) Simple API Calls Downloading subscription Lists & Uploading subscription Lists
--) Retrieving Subscription Changes (you should use "Retrieving Updates for a given Device" instead)
-
 === Copyright & License ===
 
-Copyright 2010 - 2011 Stefan Derkits (stefan@derkits.at) , Christian Wagner (christian.wagner86@gmx.at) & Felix Winter (ixos01@gmail.com)
+Copyright 2010 - 2012 Stefan Derkits (stefan@derkits.at) , Christian Wagner (christian.wagner86@gmx.at) & Felix Winter (ixos01@gmail.com)
 
 See COPYING File for License
 
@@ -40,5 +36,7 @@ IRC Channel:             #gpodder on FreeNode (irc.freenode.net)
 -) make
 -) make install (might need root)
 
-To use libmygpo-qt include the Header "ApiRequest.h" into your Code. You can find the cflags & linker flags for libmygpo-qt either via pkg-config (.pc file will be installed to your System) or with the Findlibmygpo-qt.cmake Macro (located in cmake/modules/ )
+To use libmygpo-qt include the Header "ApiRequest.h" into your Code. You can find the cflags & linker flags for libmygpo-qt either via pkg-config (.pc file will be installed to your System)
+or via cmake (Mygpo-qtConfig.cmake will be installed to your system).
+
 You can check the Example Application to see how you can use libmygpo-qt in your Application
