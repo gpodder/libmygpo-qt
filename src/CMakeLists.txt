@@ -1,7 +1,10 @@
 
 include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
+configure_file( Version.h.in ${CMAKE_CURRENT_BINARY_DIR}/Version.h )
+
 set ( LIBMYGPO_QT_SRC
+        Config.cpp
         DeviceSyncResult.cpp
         Settings.cpp
         AddRemoveResult.cpp
@@ -56,6 +59,7 @@ set ( LIBMYGPO_QT_MOC_H
 set ( LIBMYGPO_QT_INSTALL_H
         ApiRequest.h
         mygpo_export.h
+        Config.h
         Podcast.h
         PodcastList.h
         Episode.h
