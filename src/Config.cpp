@@ -27,6 +27,8 @@
 
 using namespace mygpo;
 
+Config* Config::s_instance = 0;
+
 ConfigPrivate::ConfigPrivate( Config* qq ) : q( qq )
 {
   
