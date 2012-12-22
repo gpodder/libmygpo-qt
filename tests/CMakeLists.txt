@@ -7,10 +7,10 @@ remove_definitions(-DQT_NO_CAST_TO_ASCII)
 
 set ( TESTOBJECTS_SRCDIR ${CMAKE_CURRENT_SOURCE_DIR}/../src )
 
-include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${TESTOBJECTS_SRCDIR} )
+include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/../src ${TESTOBJECTS_SRCDIR} )
 
 # UrlBuilder library
-add_library( UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp )
+add_library( UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp ${TESTOBJECTS_SRCDIR}/Config.cpp )
 # JSONCreator library
 QT4_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${TESTOBJECTS_SRCDIR}/EpisodeAction.h ${TESTOBJECTS_SRCDIR}/EpisodeAction_p.h )
 add_library( JsonCreator ${TESTOBJECTS_SRCDIR}/JsonCreator.cpp ${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp ${LIBMYGPO_QT_MOC_SRC})

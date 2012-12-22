@@ -22,6 +22,7 @@
 
 
 #include "UrlBuilder.h"
+#include "Config.h"
 
 #include <QString>
 #include <QStringBuilder>
@@ -29,7 +30,7 @@
 
 using namespace mygpo;
 
-const QString UrlBuilder::s_server = QLatin1String( "http://gpodder.net" );
+const QString UrlBuilder::s_server = Config::instance()->mygpoBaseUrl().toString();
 const QString UrlBuilder::s_api2 = QLatin1String( "/api/2" );
 const QString UrlBuilder::s_api1 = QLatin1String( "/api/1" );
 
