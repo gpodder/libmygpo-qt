@@ -25,27 +25,28 @@
 
 namespace mygpo
 {
-  
+
 class ConfigPrivate
 {
-  
+
 public:
-    //ConfigPrivate* instance();
      ConfigPrivate( Config* qq );
     ~ConfigPrivate();
-        
+
     int majorVersion() const;
     int minorVersion() const;
     int patchVersion() const;
-    
+
     QString version() const;
+
+    QUrl mygpoBaseUrl() const;
+    void setMygpoBaseUrl( const QUrl& mygpoBaseUrl );
 private:
     Config* q;
-    
-    //static ConfigPrivate* s_instance;
-  
+    QUrl m_mygpoBaseUrl;
+
 };
-  
+
 }
 
 #endif // LIBMYGPO_QT_CONFIG_PRIVATE_H

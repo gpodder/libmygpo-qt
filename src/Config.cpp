@@ -29,14 +29,14 @@ using namespace mygpo;
 
 Config* Config::s_instance = 0;
 
-ConfigPrivate::ConfigPrivate( Config* qq ) : q( qq )
+ConfigPrivate::ConfigPrivate( Config* qq ) : q( qq ), m_mygpoBaseUrl( QUrl( QLatin1String( "http://www.gpodder.net" ) ) )
 {
-  
+
 }
 
 ConfigPrivate::~ConfigPrivate()
 {
-  
+
 }
 
 int ConfigPrivate::majorVersion() const
@@ -56,7 +56,17 @@ int ConfigPrivate::patchVersion() const
 
 QString ConfigPrivate::version() const
 {
-    return QString( majorVersion() ) % QLatin1String( "." ) % QString( minorVersion() ) % QLatin1String( "." ) % QString( patchVersion() );
+    return QString( QLatin1String( "%1.%2.%3" ) ).arg( majorVersion() ).arg( minorVersion() ).arg( patchVersion() );
+}
+
+QUrl ConfigPrivate::mygpoBaseUrl() const
+{
+    return m_mygpoBaseUrl;
+}
+
+void ConfigPrivate::setMygpoBaseUrl( const QUrl& mygpoBaseUrl )
+{
+    this->m_mygpoBaseUrl = mygpoBaseUrl;
 }
 
 Config::Config() : d( new ConfigPrivate( this ) )
@@ -79,7 +89,6 @@ int Config::minorVersion() const
     return d->minorVersion();
 }
 
-
 int Config::patchVersion() const
 {
     return d->patchVersion();
@@ -88,6 +97,16 @@ int Config::patchVersion() const
 QString Config::version() const
 {
     return d->version();
+}
+
+QUrl Config::mygpoBaseUrl() const
+{
+    return d->mygpoBaseUrl();
+}
+
+void Config::setMygpoBaseUrl(const QUrl &mygpoBaseUrl)
+{
+    d->setMygpoBaseUrl( mygpoBaseUrl );
 }
 
 Config* Config::instance()

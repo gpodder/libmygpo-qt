@@ -24,27 +24,31 @@
 #include "mygpo_export.h"
 
 #include <QObject>
+#include <QUrl>
 
 namespace mygpo
 {
-  
-class ConfigPrivate;
 
+class ConfigPrivate;
+//TODO: More config entries (mygpo-feedservice baseurl), let class inherit from QObject, set everything as a Property
 class MYGPO_EXPORT Config
 {
-  
+
 public:
     static Config* instance();
-  
+
     int majorVersion() const;
     int minorVersion() const;
     int patchVersion() const;
-    
+
     QString version() const;
+
+    QUrl mygpoBaseUrl() const;
+    void setMygpoBaseUrl( const QUrl& mygpoBaseUrl );
 private:
     Config();
     ~Config();
-    
+
     static Config* s_instance;
   
     ConfigPrivate* const d;
