@@ -1,8 +1,6 @@
 
 include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
-configure_file( Version.h.in ${CMAKE_CURRENT_BINARY_DIR}/Version.h )
-
 set ( LIBMYGPO_QT_SRC
         Config.cpp
         DeviceSyncResult.cpp

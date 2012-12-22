@@ -23,6 +23,9 @@ set( MYGPO_QT_VERSION "${MYGPO_QT_VERSION_MAJOR}.${MYGPO_QT_VERSION_MINOR}.${MYG
 
 set( MYGPO_QT_SONAME "${MYGPO_QT_VERSION_MAJOR}")
 
+#Configure Version.h.in with the actual version number
+configure_file( src/Version.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/Version.h )
+
 include(CheckCXXCompilerFlag)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
