@@ -72,8 +72,14 @@ bool EpisodeActionListPrivate::parse( const QVariant& data )
     foreach( QVariant var, varList )
     {
         QVariant v;
-        v.setValue<mygpo::EpisodeActionPtr> ( mygpo::EpisodeActionPtr( new EpisodeAction( var ) ) );
-        episodeActionList.append( v );
+        EpisodeAction* episodeActionTmpPtr = new EpisodeAction( var );
+        if ( episodeActionTmpPtr->property("valid").toBool() )
+        {
+            v.setValue<mygpo::EpisodeActionPtr> ( mygpo::EpisodeActionPtr( episodeActionTmpPtr ) );
+            episodeActionList.append( v );
+        }
+        else
+            delete episodeActionTmpPtr;
     }
     m_episodeActions = QVariant( episodeActionList );
     return true;

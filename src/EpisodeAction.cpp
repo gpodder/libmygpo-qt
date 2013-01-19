@@ -30,7 +30,8 @@ static qulonglong c_maxlonglong = (2^64)-1;
 
 EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent ) : QObject( parent ), q( qq )
 {
-    parse( variant );
+    bool valid = parse( variant );
+    qq->setProperty("valid", QVariant( valid ) );
 }
 
 EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QUrl& podcastUrl, const QUrl& episodeUrl, const QString& deviceName, EpisodeAction::ActionType action, qulonglong timestamp, qulonglong started, qulonglong position, qulonglong total, QObject* parent )
