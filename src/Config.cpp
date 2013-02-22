@@ -29,7 +29,7 @@ using namespace mygpo;
 
 Config* Config::s_instance = 0;
 
-ConfigPrivate::ConfigPrivate( Config* qq ) : q( qq ), m_mygpoBaseUrl( QUrl( QLatin1String( "http://gpodder.net" ) ) )
+ConfigPrivate::ConfigPrivate( Config* qq ) : q( qq ), m_mygpoBaseUrl( QUrl( QLatin1String( "http://gpodder.net" ) ) ), m_userAgentPrefix( QString() )
 {
 
 }
@@ -69,6 +69,25 @@ void ConfigPrivate::setMygpoBaseUrl( const QUrl& mygpoBaseUrl )
     this->m_mygpoBaseUrl = mygpoBaseUrl;
 }
 
+QString ConfigPrivate::userAgent() const
+{
+    QString userAgent;
+    if ( !m_userAgentPrefix.isEmpty() )
+        userAgent = m_userAgentPrefix % QLatin1String( " " );
+    userAgent = userAgent % QLatin1String( "libmygpo-qt " ) % version();
+    return userAgent;
+}
+
+QString ConfigPrivate::userAgentPrefix() const
+{
+    return m_userAgentPrefix;
+}
+
+void ConfigPrivate::setUserAgentPrefix( const QString& prefix )
+{
+    m_userAgentPrefix = prefix;
+}
+
 Config::Config() : d( new ConfigPrivate( this ) )
 {
 
@@ -104,9 +123,24 @@ QUrl Config::mygpoBaseUrl() const
     return d->mygpoBaseUrl();
 }
 
-void Config::setMygpoBaseUrl(const QUrl &mygpoBaseUrl)
+void Config::setMygpoBaseUrl(const QUrl& mygpoBaseUrl)
 {
     d->setMygpoBaseUrl( mygpoBaseUrl );
+}
+
+QString Config::userAgent() const
+{
+    return d->userAgent();
+}
+
+QString Config::userAgentPrefix() const
+{
+    return d->userAgentPrefix();
+}
+
+void Config::setUserAgentPrefix(const QString& prefix)
+{
+    d->setUserAgentPrefix( prefix );
 }
 
 Config* Config::instance()

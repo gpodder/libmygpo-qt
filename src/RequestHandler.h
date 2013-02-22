@@ -77,7 +77,8 @@ private:
     QString m_password;
     QNetworkAccessManager* m_nam;
 
-    void addAuthData( QNetworkRequest& url );
+    void addAuthData( QNetworkRequest& request );
+    void addUserAgent( QNetworkRequest& request );
 };
 
 }

@@ -41,9 +41,15 @@ public:
 
     QUrl mygpoBaseUrl() const;
     void setMygpoBaseUrl( const QUrl& mygpoBaseUrl );
+
+    QString userAgent() const;
+
+    QString userAgentPrefix() const;
+    void setUserAgentPrefix( const QString& prefix );
 private:
     Config* q;
     QUrl m_mygpoBaseUrl;
+    QString m_userAgentPrefix;
 
 };
 
