@@ -150,6 +150,11 @@ bool EpisodeActionPrivate::parseActionType( const QString& data )
         m_action = EpisodeAction::New;
         return true;
     }
+    else if ( data.compare( QLatin1String( "flattr" ) ) == 0 )
+    {
+        m_action = EpisodeAction::Flattr;
+        return true;
+    }
     else
     {
         return false;

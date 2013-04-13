@@ -184,6 +184,8 @@ QVariantMap JsonCreator::episodeActionToQVariantMap( const EpisodeActionPtr epis
         map.insert( QLatin1String( "action" ), QLatin1String( "play" ) );
     else if( actionType == EpisodeAction::Download )
         map.insert( QLatin1String( "action" ), QLatin1String( "download" ) );
+    else if( actionType == EpisodeAction::Flattr )
+        map.insert( QLatin1String( "action" ), QLatin1String( "flattr" ) );
 
     if( episodeAction->timestamp() != 0 ) {
 #if QT_VERSION >= 0x040700
