@@ -6,7 +6,7 @@ libmygpo-qt is a Qt Library that wraps the gpodder.net Web API (http://wiki.gpod
 
 === Copyright & License ===
 
-Copyright 2010 - 2012 Stefan Derkits (stefan@derkits.at) , Christian Wagner (christian.wagner86@gmx.at) & Felix Winter (ixos01@gmail.com)
+Copyright 2010 - 2013 Stefan Derkits (stefan@derkits.at) , Christian Wagner (christian.wagner86@gmx.at) & Felix Winter (ixos01@gmail.com)
 
 See COPYING File for License
 
@@ -16,7 +16,7 @@ Current Maintainer: Stefan Derkits (HorusHorrendus @ irc.freenode.net)
 
 === Requirements ===
 
--) Qt 4.7 or higher
+-) Qt 4.6 or higher
 -) Cmake 2.6 or higher
 -) QJson
 
