@@ -1,6 +1,6 @@
 CC=g++
-CFLAGS=-c -g -Wall $(shell pkg-config QtGui QtCore QtNetwork libmygpo-qt --cflags)
-LIBS= $(shell pkg-config QtGui QtCore QtNetwork libmygpo-qt --libs)
+CFLAGS=-c -g -Wall $(shell pkg-config libmygpo-qt --cflags)
+LIBS= $(shell pkg-config libmygpo-qt --libs)
 SRCDIR=src
 
 all: main
