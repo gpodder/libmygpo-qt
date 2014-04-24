@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 #include <QCoreApplication>
-#include <QtGui>
 #include <QEventLoop>
+#include <QDebug>
 
 #include <PodcastList.h>
 #include <EpisodeList.h>
