@@ -5,16 +5,49 @@ project( libmygpo-qt )
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
+option(BUILD_WITH_QT4 "Build libmygpo-qt with Qt4 no matter if Qt5 was found" ON)
+
+if( NOT BUILD_WITH_QT4 )
+    find_package(Qt5Core QUIET)
+    if( Qt5Core_DIR )
+        message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
+
+        macro(qt_wrap_cpp)
+            qt5_wrap_cpp(${ARGN})
+        endmacro()
+    endif()
+
+    # pkg-config names of QtCore and QtNetwork are Qt5Core and Qt5Network for
+    # Qt5
+    set(MYGPO_QT_MAJOR_VERSION "5")
+endif()
+
+if( NOT Qt5Core_DIR )
+    message(STATUS "Could not find Qt5, searching for Qt4 instead...")
+    if( MYGPO_BUILD_TESTS )
+        find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
+    else( MYGPO_BUILD_TESTS )
+        find_package( Qt4 COMPONENTS QtCore QtNetwork REQUIRED )
+    endif()
+    set( QT_DONT_USE_QTGUI TRUE )
+    include( ${QT_USE_FILE} )
+
+    macro(qt5_use_modules)
+    endmacro()
+
+    macro(qt_wrap_cpp)
+        qt4_wrap_cpp(${ARGN})
+    endmacro()
+
+    set(ECHONEST_QT_MAJOR_VERSION "")
+
+    # QJson is only required for Qt4
+    find_package(QJSON REQUIRED)
+endif()
+
 # Don't use absolute path in Mygpo-qtTargets-$buildType.cmake
 # (This will have no effect with CMake < 2.8)
-set(QT_USE_IMPORTED_TARGETS TRUE)
-
-find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
-set( QT_DONT_USE_QTGUI TRUE )
-
-find_package(QJSON REQUIRED)
-
-include( ${QT_USE_FILE} )
+# set(QT_USE_IMPORTED_TARGETS TRUE)
 
 set( MYGPO_QT_VERSION_MAJOR "1" )
 set( MYGPO_QT_VERSION_MINOR "0" )

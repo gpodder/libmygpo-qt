@@ -1,5 +1,5 @@
 
-include_directories( ${QT_INCLUDES} ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
 
 set ( LIBMYGPO_QT_SRC
         Config.cpp
@@ -21,6 +21,7 @@ set ( LIBMYGPO_QT_SRC
         DeviceUpdates.cpp
         DeviceList.cpp
         Device.cpp
+        qjsonwrapper/Json.cpp
 )
 
 set ( LIBMYGPO_QT_MOC_H
@@ -74,12 +75,14 @@ set ( LIBMYGPO_QT_INSTALL_H
         AddRemoveResult.h
 )
 
-QT4_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${LIBMYGPO_QT_MOC_H} )
+QT_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${LIBMYGPO_QT_MOC_H} )
 
 add_library( mygpo-qt SHARED ${LIBMYGPO_QT_SRC} ${LIBMYGPO_QT_MOC_SRC} )
 
 target_link_libraries( mygpo-qt ${QJSON_LIBRARIES} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY}  )
 set_target_properties( mygpo-qt PROPERTIES VERSION ${MYGPO_QT_VERSION} SOVERSION ${MYGPO_QT_SONAME} DEFINE_SYMBOL MYGPO_MAKEDLL)
+qt5_use_modules( mygpo-qt Core Network )
+
 install( TARGETS mygpo-qt EXPORT mygpo-qtExport DESTINATION lib${LIB_SUFFIX} )
 
 install( FILES ${LIBMYGPO_QT_INSTALL_H} DESTINATION  include/mygpo-qt COMPONENT Devel )
