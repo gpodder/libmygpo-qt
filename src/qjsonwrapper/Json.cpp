@@ -113,7 +113,7 @@ toJson( const QVariant &variant, bool* ok )
     {
         *ok = true;
     }
-    return doc.toJson();
+    return doc.toJson( QJsonDocument::Compact );
 #else
     QJson::Serializer serializer;
     return serializer.serialize( variant, ok );

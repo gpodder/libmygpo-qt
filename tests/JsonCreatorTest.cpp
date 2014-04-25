@@ -57,12 +57,13 @@ void JsonCreatorTest::testAddRemoveSubsToJSON()
   QList<QUrl> add;
   QList<QUrl> remove;
   QByteArray output;
-  
+
   // test with empty lists
   output = JsonCreator::addRemoveSubsToJSON(add, remove);
+  QString outString1 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected1( QLatin1String( "{\"add\":[],\"remove\":[]}" ) );
+  QCOMPARE(outString1, expected1 );
 
-  QCOMPARE(output, QByteArray("{ \"add\" : [  ], \"remove\" : [  ] }"));
-  
   // test with full lists
   add.append(QUrl(QLatin1String("http://example.com/feed.rss")));
   add.append(QUrl(QLatin1String("http://example.org/podcast.php")));
@@ -70,8 +71,9 @@ void JsonCreatorTest::testAddRemoveSubsToJSON()
   remove.append(QUrl(QLatin1String("http://example.org/podcast.php")));
 
   output = JsonCreator::addRemoveSubsToJSON(add, remove);
-  
-  QCOMPARE(output, QByteArray("{ \"add\" : [ \"http://example.com/feed.rss\", \"http://example.org/podcast.php\" ], \"remove\" : [ \"http://example.org/podcast.php\" ] }"));
+  QString outString2 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected2( QLatin1String("{\"add\":[\"http://example.com/feed.rss\",\"http://example.org/podcast.php\"],\"remove\":[\"http://example.org/podcast.php\"]}"));
+  QCOMPARE(outString2, expected2 );
 }
 
 void JsonCreatorTest::testSaveSettingsToJSON()
@@ -82,9 +84,11 @@ void JsonCreatorTest::testSaveSettingsToJSON()
 
   // test with empty map/list
   output = JsonCreator::saveSettingsToJSON(set, remove);
+  QString outString1 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected1( QLatin1String( "{\"remove\":[],\"set\":{}}" ) );
 
-  QCOMPARE(output, QByteArray("{ \"remove\" : [  ], \"set\" : {  } }"));
-  
+  QCOMPARE( outString1, expected1 );
+
   // test with different settings (String, DateTime, Integer)
   set.insert(QLatin1String("setting4"), QLatin1String("stringvalue"));
   set.insert(QLatin1String("setting5"), QDateTime::fromString(QLatin1String("M1d1y9800:01:02"),
@@ -95,9 +99,11 @@ void JsonCreatorTest::testSaveSettingsToJSON()
   remove.append(QLatin1String("setting2"));
 
   output = JsonCreator::saveSettingsToJSON(set, remove);
+  QString outString2 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected2( QLatin1String( "{\"remove\":[\"setting1\",\"setting2\"],\"set\":{\"setting4\":\"stringvalue\",\"setting5\":\"1998-01-01T00:01:02\",\"setting6\":4}}" ) );
 
-  QCOMPARE(output, QByteArray("{ \"remove\" : [ \"setting1\", \"setting2\" ], \"set\" : { \"setting4\" : \"stringvalue\", \"setting5\" : \"1998-01-01T00:01:02\", \"setting6\" : 4 } }"));
-  
+  QCOMPARE( outString2, expected2 );
+
 }
 
 void JsonCreatorTest::testEpisodeActionListToJSON()
@@ -107,8 +113,9 @@ void JsonCreatorTest::testEpisodeActionListToJSON()
 
   // test with empty list
   output = JsonCreator::episodeActionListToJSON(episodeActions);
-
-  QCOMPARE(output, QByteArray("[  ]"));
+  QString outString1 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected1( QLatin1String( "[]" ) );
+  QCOMPARE( outString1, expected1 );
 
 
   // test with some values
@@ -125,8 +132,10 @@ void JsonCreatorTest::testEpisodeActionListToJSON()
   episodeActions << episode << episode2 << episode3 << episode4 << episode5 << episode6;
 
   output = JsonCreator::episodeActionListToJSON(episodeActions);
-    
-  QCOMPARE(output, QByteArray("[ { \"action\" : \"download\", \"device\" : \"device1\", \"episode\" : \"http://episode.url\", \"podcast\" : \"http://podcast.url\", \"timestamp\" : \"1998-01-01T00:01:02\" }, { \"action\" : \"delete\", \"device\" : \"device3\", \"episode\" : \"http://episode2.url\", \"podcast\" : \"http://podcast2.url\", \"timestamp\" : \"1920-01-01T12:01:02\" }, { \"action\" : \"new\", \"device\" : \"foodev\", \"episode\" : \"http://www.podtrac.com\", \"podcast\" : \"http://leo.am\", \"timestamp\" : \"1998-01-01T00:01:02\" }, { \"action\" : \"play\", \"device\" : \"foodev\", \"episode\" : \"http://www.podtrac.com\", \"podcast\" : \"http://leo.am\", \"timestamp\" : \"1920-01-01T12:01:02\" }, { \"action\" : \"play\", \"device\" : \"foodev\", \"episode\" : \"http://www.podtrac.com\", \"podcast\" : \"http://leo.am\", \"position\" : 123, \"started\" : 10, \"timestamp\" : \"1998-01-01T00:01:02\", \"total\" : 321 }, { \"action\" : \"play\", \"device\" : \"foodev\", \"episode\" : \"http://www.podtrac.com\", \"podcast\" : \"http://leo.am\", \"position\" : 10, \"timestamp\" : \"1998-01-01T00:01:02\" } ]"));
+  QString outString2 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected2( QLatin1String( "[{\"action\":\"download\",\"device\":\"device1\",\"episode\":\"http://episode.url\",\"podcast\":\"http://podcast.url\",\"timestamp\":\"1998-01-01T00:01:02\"},{\"action\":\"delete\",\"device\":\"device3\",\"episode\":\"http://episode2.url\",\"podcast\":\"http://podcast2.url\",\"timestamp\":\"1920-01-01T12:01:02\"},{\"action\":\"new\",\"device\":\"foodev\",\"episode\":\"http://www.podtrac.com\",\"podcast\":\"http://leo.am\",\"timestamp\":\"1998-01-01T00:01:02\"},{\"action\":\"play\",\"device\":\"foodev\",\"episode\":\"http://www.podtrac.com\",\"podcast\":\"http://leo.am\",\"timestamp\":\"1920-01-01T12:01:02\" },{\"action\":\"play\",\"device\":\"foodev\",\"episode\":\"http://www.podtrac.com\",\"podcast\":\"http://leo.am\",\"position\":123,\"started\":10,\"timestamp\":\"1998-01-01T00:01:02\",\"total\":321},{\"action\":\"play\",\"device\":\"foodev\",\"episode\":\"http://www.podtrac.com\",\"podcast\":\"http://leo.am\",\"position\":10,\"timestamp\":\"1998-01-01T00:01:02\"}]" ) );
+
+  QCOMPARE(outString2, expected2 );
 }
 
 void JsonCreatorTest::testRenameDeviceStringToJSON()
@@ -137,17 +146,21 @@ void JsonCreatorTest::testRenameDeviceStringToJSON()
   
   // test with empty values
   output = JsonCreator::renameDeviceStringToJSON(caption, type);
+  QString outString1 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected1( QLatin1String( "{\"caption\":\"\",\"type\":\"\"}" ) );
 
-  QCOMPARE(output, QByteArray("{ \"caption\" : \"\", \"type\" : \"\" }"));
+  QCOMPARE(outString1, expected1 );
 
   // test with some values
   caption = QLatin1String("caption1");
   type = QLatin1String("type1");
 
   output = JsonCreator::renameDeviceStringToJSON(caption, type);
+  QString outString2 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected2( QLatin1String( "{\"caption\":\"caption1\",\"type\":\"type1\"}" ) );
 
-  QCOMPARE(output, QByteArray("{ \"caption\" : \"caption1\", \"type\" : \"type1\" }"));
-  
+  QCOMPARE( outString2, expected2 );
+
 }
 
 void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
@@ -163,7 +176,9 @@ void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
 
   // test with empty lists
   output = JsonCreator::deviceSynchronizationListsToJSON(sync, stopSync);
-  QCOMPARE(output, QByteArray("{\"synchronize\" : [ ] ,\"stop-synchronize\" : [ ] }\n"));
+  QString outString1 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected1( QLatin1String( "{\"synchronize\":[],\"stop-synchronize\":[]}" ) );
+  QCOMPARE( outString1, expected1 );
 
   // test with full lists
   sync1.append(QLatin1String("foo"));
@@ -183,7 +198,9 @@ void JsonCreatorTest::testDeviceSynchronizationListsToJSON()
   stopSync.append(QLatin1String("stop3"));
 
   output = JsonCreator::deviceSynchronizationListsToJSON(sync, stopSync);
-  QCOMPARE(output, QByteArray("{\"synchronize\" : [[\"foo\",\"bar\"],[\"foobar\",\"barfoo\",\"foobarfoo\",\"foobar4\"],[ ]] ,\"stop-synchronize\" : [\"stop1\",\"stop2\",\"stop3\"] }\n"));
+  QString outString2 = QString::fromLatin1( output ).replace( QLatin1String(" "), QLatin1String("") );
+  QString expected2( QLatin1String( "{\"synchronize\":[[\"foo\",\"bar\"],[\"foobar\",\"barfoo\",\"foobarfoo\",\"foobar4\"],[]],\"stop-synchronize\":[\"stop1\",\"stop2\",\"stop3\"]}" ) );
+  QCOMPARE( outString2, expected2 );
 }
 
 QTEST_MAIN(JsonCreatorTest)

@@ -126,7 +126,7 @@ QByteArray JsonCreator::deviceSynchronizationListsToJSON(const QList< QStringLis
     jsonStr.append(syncVar);
     jsonStr.append(QLatin1String(" ,\"stop-synchronize\" : "));
     jsonStr.append(stopVar);
-    jsonStr.append(QLatin1String(" }\n"));
+    jsonStr.append(QLatin1String(" }"));
     return jsonStr.toLocal8Bit();
 }
 
