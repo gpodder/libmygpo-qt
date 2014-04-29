@@ -11,6 +11,7 @@ if( NOT BUILD_WITH_QT4 )
     find_package(Qt5Core QUIET)
     if( Qt5Core_DIR )
         message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
+        set(MYGPO_QT_VERSION_SUFFIX 5)
 
         macro(qt_wrap_cpp)
             qt5_wrap_cpp(${ARGN})
@@ -40,7 +41,7 @@ if( NOT Qt5Core_DIR )
         qt4_wrap_cpp(${ARGN})
     endmacro()
 
-    set(ECHONEST_QT_MAJOR_VERSION "")
+    set(MYGPO_QT_MAJOR_VERSION "")
     set(MYGPO_QT4_QJSON_DEP "Requires.private: QJson")
 
     # QJson is only required for Qt4
@@ -132,11 +133,13 @@ IF (NOT WIN32)
     FIND_PACKAGE(PkgConfig)
     IF (PKG_CONFIG_FOUND)
         CONFIGURE_FILE (${CMAKE_CURRENT_SOURCE_DIR}/libmygpo-qt.pc.in
-                            ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc
+                            ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt${MYGPO_QT_VERSION_SUFFIX}.pc
                             @ONLY)
-         INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+         INSTALL (FILES ${CMAKE_CURRENT_BINARY_DIR}/libmygpo-qt${MYGPO_QT_VERSION_SUFFIX}.pc DESTINATION lib${LIB_SUFFIX}/pkgconfig)
     ENDIF (PKG_CONFIG_FOUND)
 ENDIF (NOT WIN32)
+
+set(MYGPO_QT_TARGET_NAME mygpo-qt${MYGPO_QT_VERSION_SUFFIX} CACHE INTERNAL "" FORCE )
 
 add_subdirectory( src )
 if(MYGPO_BUILD_TESTS)
@@ -149,7 +152,7 @@ endif(MYGPO_BUILD_TESTS)
 # This file contains add_library(bar IMPORTED) statements for each target in the export set, so
 # when loaded later on cmake will create "imported" library targets from these, which can be used
 # in many ways in the same way as a normal library target created via a normal add_library().
-install(EXPORT mygpo-qtExport DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE Mygpo-qtTargets.cmake )
+install(EXPORT ${MYGPO_QT_TARGET_NAME}Export DESTINATION ${CMAKECONFIG_INSTALL_DIR} FILE Mygpo-qt${MYGPO_QT_VERSION_SUFFIX}Targets.cmake )
 
 # figure out the relative path from the installed Config.cmake file to the install prefix (which may be at
 # runtime different from the chosen CMAKE_INSTALL_PREFIX if under Windows the package was installed anywhere)
@@ -159,12 +162,12 @@ file(RELATIVE_PATH relInstallDir ${CMAKE_INSTALL_PREFIX}/${CMAKECONFIG_INSTALL_D
 # Create a BarConfig.cmake file. <name>Config.cmake files are searched by find_package()
 # automatically. We configure that file so that we can put any information we want in it,
 # e.g. version numbers, include directories, etc.
-configure_file(Mygpo-qtConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfig.cmake @ONLY )
+configure_file(Mygpo-qtConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qt${MYGPO_QT_VERSION_SUFFIX}Config.cmake @ONLY )
 
 # Additionally, when cmake has found a BarConfig.cmake, it can check for a BarConfigVersion.cmake
 # in the same directory when figuring out the version of the package when a version
 # has been specified in the find_package() call, e.g. find_package(Bar 1.0)
-configure_file(Mygpo-qtConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfigVersion.cmake @ONLY )
+configure_file(Mygpo-qtConfigVersion.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qt${MYGPO_QT_VERSION_SUFFIX}ConfigVersion.cmake @ONLY )
 
 # Install these two files into the same directory as the generated exports-file.
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qtConfigVersion.cmake DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qt${MYGPO_QT_VERSION_SUFFIX}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/Mygpo-qt${MYGPO_QT_VERSION_SUFFIX}ConfigVersion.cmake DESTINATION ${CMAKECONFIG_INSTALL_DIR} )
