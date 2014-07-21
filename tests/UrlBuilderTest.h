@@ -109,6 +109,12 @@ private slots:
   void testGetAddRemoveSubUrlEmpty();
   void testGetAddRemoveSubUrlSpecialCharacters();
 
+  /**
+   * Tests for getSubscriptionsUrl()
+   */
+  void testGetSubscriptionUrl();
+  void testGetSubscriptionUrlWithoutDevice();
+
   /** These constans must be equal to the constants defined for UrlBuilder */
 private:
   const QString m_server;

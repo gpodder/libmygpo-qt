@@ -462,7 +462,17 @@ int main(int argc, char **argv)
     qDebug() << "TagList2 size: " << tagList2->list().size();
     qDebug() << "";
 
-    qDebug() << "AddRemoveResult";
+
+    reply = req.downloadSubscriptionsJson( "ase23" );
+
+    loop.connect(reply, SIGNAL(finished()), SLOT(quit()));
+    loop.connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(quit()));
+    loop.exec();
+
+    printTitle(QLatin1String("Downloading subscriptions (JSON) [subscriptionsJson(\"ase23\")]"));
+    qDebug() << reply->readAll();
+    qDebug();
+    //qDebug() << "AddRemoveResult";
 
     /*QList<QUrl> add2;
     QList<QUrl> remove2;

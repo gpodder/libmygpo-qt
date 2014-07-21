@@ -262,4 +262,19 @@ void UrlBuilderTest::testGetAddRemoveSubUrlSpecialCharacters() {
             m_server + m_api2 + QLatin1String("/subscriptions/ÖÄÜ/!\"§$%$&/()=?ß{}Ä.json"));
 }
 
+/**
+* Tests for getSubscriptionsUrl()
+*/
+void UrlBuilderTest::testGetSubscriptionUrl()
+{
+    QCOMPARE(UrlBuilder::getSubscriptionsUrl(QLatin1String("user123"), QLatin1String("device456"), UrlBuilder::JSON),
+             m_server + QLatin1String("/subscriptions/user123/device456.json"));
+}
+
+void UrlBuilderTest::testGetSubscriptionUrlWithoutDevice()
+{
+    QCOMPARE(UrlBuilder::getSubscriptionsUrl(QLatin1String("user"), QString(), UrlBuilder::OPML),
+             m_server + QLatin1String("/subscriptions/user.opml"));
+}
+
 QTEST_MAIN(UrlBuilderTest)
