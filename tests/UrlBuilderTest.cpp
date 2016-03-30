@@ -24,7 +24,7 @@
 
 using namespace mygpo;
 
-UrlBuilderTest::UrlBuilderTest() :m_server(QLatin1String("http://gpodder.net")),
+UrlBuilderTest::UrlBuilderTest() :m_server(QLatin1String("https://gpodder.net")),
         m_api2(QLatin1String( "/api/2" )) {
 
 }
