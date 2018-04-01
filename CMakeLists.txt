@@ -1,16 +1,15 @@
-cmake_minimum_required( VERSION 2.6 FATAL_ERROR )
+cmake_minimum_required( VERSION 2.8.9 FATAL_ERROR )
 
 project( libmygpo-qt )
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
-option(BUILD_WITH_QT4 "Build libmygpo-qt with Qt4 no matter if Qt5 was found" ON)
+option(BUILD_WITH_QT4 "Build libmygpo-qt with Qt4 no matter if Qt5 was found" OFF)
 
 if( NOT BUILD_WITH_QT4 )
     find_package(Qt5Core QUIET)
     if( Qt5Core_DIR )
-        message(STATUS "Found Qt5! Be aware that Qt5-support is still experimental and not officially supported!")
         set(MYGPO_QT_VERSION_SUFFIX 5)
 
         macro(qt_wrap_cpp)
@@ -26,6 +25,7 @@ endif()
 
 if( NOT Qt5Core_DIR )
     message(STATUS "Could not find Qt5, searching for Qt4 instead...")
+    message(STATUS "Qt4 Support is deprecated, building with Qt4 is no longer officially supported")
     if( MYGPO_BUILD_TESTS )
         find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
     else( MYGPO_BUILD_TESTS )
@@ -53,8 +53,8 @@ endif()
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
 set( MYGPO_QT_VERSION_MAJOR "1" )
-set( MYGPO_QT_VERSION_MINOR "0" )
-set( MYGPO_QT_VERSION_PATCH "9" )
+set( MYGPO_QT_VERSION_MINOR "1" )
+set( MYGPO_QT_VERSION_PATCH "0" )
 set( MYGPO_QT_VERSION "${MYGPO_QT_VERSION_MAJOR}.${MYGPO_QT_VERSION_MINOR}.${MYGPO_QT_VERSION_PATCH}" )
 
 set( MYGPO_QT_SONAME "${MYGPO_QT_VERSION_MAJOR}")
@@ -114,7 +114,7 @@ include(CPack)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} 
+    add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                          COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
