@@ -99,7 +99,7 @@ set(LIB_SUFFIX "" CACHE STRING "The directories where to install libraries to")
 set(LIB_INSTALL_DIR lib${LIB_SUFFIX} )
 set(LIB_DIR_PKGCONF "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}")
 set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/mygpo-qt${MYGPO_QT_VERSION_SUFFIX}" CACHE PATH "The directory the headers are installed in")
-set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt )
+set(CMAKECONFIG_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/mygpo-qt${MYGPO_QT_VERSION_SUFFIX})
 
 if( APPLE )
     set( CPACK_GENERATOR "DragNDrop" )
