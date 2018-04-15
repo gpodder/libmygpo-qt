@@ -11,11 +11,15 @@ include_directories( ${QJSON_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CU
 
 # UrlBuilder library
 add_library( UrlBuilder ${TESTOBJECTS_SRCDIR}/UrlBuilder.cpp ${TESTOBJECTS_SRCDIR}/Config.cpp )
-qt5_use_modules( UrlBuilder Core )
+if( NOT BUILD_WITH_QT4 )
+    target_link_libraries( UrlBuilder Qt5::Core )
+endif()
 # JSONCreator library
 QT_WRAP_CPP(LIBMYGPO_QT_MOC_SRC ${TESTOBJECTS_SRCDIR}/EpisodeAction.h ${TESTOBJECTS_SRCDIR}/EpisodeAction_p.h )
 add_library( JsonCreator ${TESTOBJECTS_SRCDIR}/JsonCreator.cpp ${TESTOBJECTS_SRCDIR}/EpisodeAction.cpp ${TESTOBJECTS_SRCDIR}/qjsonwrapper/Json.cpp ${LIBMYGPO_QT_MOC_SRC})
-qt5_use_modules( JsonCreator Core Network )
+if( NOT BUILD_WITH_QT4 )
+    target_link_libraries( JsonCreator Qt5::Core Qt5::Network )
+endif()
 
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
@@ -25,7 +29,9 @@ macro(add_libmygpo_test _source)
     add_executable(${_name} ${_source} ${${_name}_MOC_SRC})
     target_link_libraries(${_name} ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTNETWORK_LIBRARY})
     add_test(${_name}-test ${EXECUTABLE_OUTPUT_PATH}/${_name})
-    qt5_use_modules(${_name} Network Test)
+    if( NOT BUILD_WITH_QT4 )
+        target_link_libraries(${_name} Qt5::Network Qt5::Test)
+    endif()
 endmacro(add_libmygpo_test)
 
 add_libmygpo_test( UrlBuilderTest.cpp )

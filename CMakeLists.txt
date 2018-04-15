@@ -34,9 +34,6 @@ else()
     set( QT_DONT_USE_QTGUI TRUE )
     include( ${QT_USE_FILE} )
 
-    macro(qt5_use_modules)
-    endmacro()
-
     macro(qt_wrap_cpp)
         qt4_wrap_cpp(${ARGN})
     endmacro()
