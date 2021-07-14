@@ -6,6 +6,7 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/mo
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
 option(BUILD_WITH_QT4 "Build libmygpo-qt with Qt4" OFF)
+option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
 
 if( NOT BUILD_WITH_QT4 )
     if( MYGPO_BUILD_TESTS )
@@ -76,8 +77,6 @@ if (CMAKE_COMPILER_IS_GNUCXX)
         add_definitions( -Wlogical-op )
     endif()
 endif(CMAKE_COMPILER_IS_GNUCXX)
-
-option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
 
 if(MYGPO_BUILD_TESTS)
     INCLUDE(CTest)
