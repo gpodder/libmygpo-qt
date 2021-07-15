@@ -64,7 +64,11 @@ DevicePrivate::DevicePrivate( const QVariant& var ) : m_id(), m_caption(), m_typ
 
 bool DevicePrivate::parse( const QVariant& var )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( QMetaType::canConvert( var.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if( var.canConvert( QVariant::Map ) )
+#endif
     {
         QVariant vid, vcaption, vtype, vsubscriptions;
         QMap<QString, QVariant> varMap;
@@ -73,10 +77,17 @@ bool DevicePrivate::parse( const QVariant& var )
         vcaption = varMap.value( QLatin1String( "caption" ) );
         vtype = varMap.value( QLatin1String( "type" ) );
         vsubscriptions = varMap.value( QLatin1String( "subscriptions" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+        if( QMetaType::canConvert( vid.metaType(), QMetaType( QMetaType::QString ) ) &&
+                QMetaType::canConvert( vcaption.metaType(), QMetaType( QMetaType::QString ) ) &&
+                QMetaType::canConvert( vtype.metaType(), QMetaType( QMetaType::QString ) ) &&
+                QMetaType::canConvert( vsubscriptions.metaType(), QMetaType( QMetaType::LongLong ) ) )
+#else
         if( vid.canConvert( QVariant::String ) &&
                 vcaption.canConvert( QVariant::String ) &&
                 vtype.canConvert( QVariant::String ) &&
                 vsubscriptions.canConvert( QVariant::LongLong ) )
+#endif
         {
             m_id = vid.toString();
             m_caption = vcaption.toString();

@@ -41,15 +41,27 @@ uint TagPrivate::usage() const
 
 bool TagPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap tagMap = data.toMap();
     QVariant v = tagMap.value( QLatin1String( "tag" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if( !v.canConvert( QVariant::String ) )
+#endif
         return false;
     m_tag = v.toString();
     v = tagMap.value( QLatin1String( "usage" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::UInt ) ) )
+#else
     if( !v.canConvert( QVariant::UInt ) )
+#endif
         return false;
     m_usage = v.toUInt();
     return true;

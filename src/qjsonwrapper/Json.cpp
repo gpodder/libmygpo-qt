@@ -71,9 +71,17 @@ qvariant2qobject( const QVariantMap& variant, QObject* object )
         if ( property.isValid() )
         {
             QVariant value = iter.value();
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+            if ( value.canConvert( property.metaType() ) )
+#else
             if ( value.canConvert( property.type() ) )
+#endif
             {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+                value.convert( property.metaType() );
+#else
                 value.convert( property.type() );
+#endif
                 object->setProperty( iter.key().toLatin1(), value );
             } else if ( QString( QLatin1String("QVariant") ).compare( QLatin1String( property.typeName() ) ) == 0 ) {
                 object->setProperty( iter.key().toLatin1(), value );

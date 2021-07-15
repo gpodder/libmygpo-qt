@@ -54,17 +54,29 @@ QVariant EpisodeActionListPrivate::episodeActions() const
 
 bool EpisodeActionListPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap episodeActionListMap = data.toMap();
 
     QVariant s = episodeActionListMap.value( QLatin1String( "timestamp" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::ULongLong ) ) )
+#else
     if( !s.canConvert( QVariant::ULongLong ) )
+#endif
         return false;
     m_timestamp = s.toULongLong();
 
     s = episodeActionListMap.value( QLatin1String( "actions" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QVariantList ) ) )
+#else
     if( !s.canConvert( QVariant::List ) )
+#endif
         return false;
 
     QVariantList varList = s.toList();

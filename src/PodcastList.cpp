@@ -55,7 +55,11 @@ QVariant PodcastListPrivate::podcasts() const
 
 bool PodcastListPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType(QMetaType::QVariantList ) ) )
+#else
     if( !data.canConvert( QVariant::List ) )
+#endif
         return false;
     QVariantList varList = data.toList();
     QVariantList podcastList;

@@ -64,11 +64,19 @@ QList< QPair< QUrl, QUrl > > AddRemoveResultPrivate::updateUrlsList() const
 
 bool AddRemoveResultPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert(data.metaType(), QMetaType(QMetaType::QVariantMap ) ) )
+#else
     if( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap resultMap = data.toMap();
     QVariant v = resultMap.value( QLatin1String( "timestamp" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert(data.metaType(), QMetaType(QMetaType::ULongLong ) ) )
+#else
     if( !v.canConvert( QVariant::ULongLong ) )
+#endif
         return false;
     m_timestamp = v.toULongLong();
     m_updateUrls = resultMap.value( QLatin1String( "update_urls" ) );

@@ -47,24 +47,40 @@ EpisodeActionPrivate::~EpisodeActionPrivate()
 
 bool EpisodeActionPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap episodeActionMap = data.toMap();
 
     QVariant s = episodeActionMap.value( QLatin1String( "podcast" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if( !s.canConvert( QVariant::Url ) )
+#endif
         return false;
     m_podcastUrl = s.toUrl();
 
     s = episodeActionMap.value( QLatin1String( "episode" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if( !s.canConvert( QVariant::Url ) )
+#endif
         return false;
     m_episodeUrl = s.toUrl();
 
     if( episodeActionMap.contains( QLatin1String( "device" ) ) )
     {
         s = episodeActionMap.value( QLatin1String( "device" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
         if( !s.canConvert( QVariant::String ) )
+#endif
             return false;
         m_deviceName = s.toString();
     }
@@ -74,7 +90,11 @@ bool EpisodeActionPrivate::parse( const QVariant& data )
     }
 
     s = episodeActionMap.value( QLatin1String( "action" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if( !s.canConvert( QVariant::String ) )
+#endif
         return false;
     if( !parseActionType( s.toString() ) )
         return false;
@@ -82,7 +102,11 @@ bool EpisodeActionPrivate::parse( const QVariant& data )
     if( episodeActionMap.contains( QLatin1String( "started" ) ) )
     {
         s = episodeActionMap.value( QLatin1String( "started" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::ULongLong ) ) )
+#else
         if( !s.canConvert( QVariant::ULongLong ) )
+#endif
             return false;
         m_started = s.toULongLong();
     }
@@ -94,7 +118,11 @@ bool EpisodeActionPrivate::parse( const QVariant& data )
     if( episodeActionMap.contains( QLatin1String( "position" ) ) )
     {
         s = episodeActionMap.value( QLatin1String( "position" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::ULongLong ) ) )
+#else
         if( !s.canConvert( QVariant::ULongLong ) )
+#endif
             return false;
         m_position = s.toULongLong();
     }
@@ -106,7 +134,11 @@ bool EpisodeActionPrivate::parse( const QVariant& data )
     if( episodeActionMap.contains( QLatin1String( "total" ) ) )
     {
         s = episodeActionMap.value( QLatin1String( "total" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::ULongLong ) ) )
+#else
         if( !s.canConvert( QVariant::ULongLong ) )
+#endif
             return false;
         m_total = s.toULongLong();
     }
