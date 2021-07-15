@@ -62,6 +62,6 @@ private slots:
 
 };
 
-}
+}  // namespace mygpo
 
 #endif //DEVICEUPDATES_PRIVATE_H

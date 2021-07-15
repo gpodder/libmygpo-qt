@@ -81,6 +81,6 @@ private:
     RequestHandler m_requestHandler;
 };
 
-}
+}  // namespace mygpo
 
 #endif //APIREQUEST_PRIVATE_H

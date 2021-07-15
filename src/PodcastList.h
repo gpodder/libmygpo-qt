@@ -62,6 +62,6 @@ signals:
 
 typedef QSharedPointer<PodcastList> PodcastListPtr;
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_PODCASTLIST_H

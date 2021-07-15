@@ -140,6 +140,6 @@ private:
     static const QString s_api2;
     static const QString s_api1;
 };
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_URLBUILDER_H

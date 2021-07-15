@@ -54,6 +54,6 @@ private slots:
     void error( QNetworkReply::NetworkError error );
 };
 
-}
+}  // namespace mygpo
 
 #endif //ADDREMOVERESULT_PRIVATE_H

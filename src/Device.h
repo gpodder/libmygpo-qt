@@ -64,8 +64,8 @@ private:
 
 typedef QSharedPointer<Device> DevicePtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::DevicePtr );
+Q_DECLARE_METATYPE( mygpo::DevicePtr )
 
 #endif //LIBMYGPO_QT_DEVICE_H

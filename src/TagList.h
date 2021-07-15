@@ -59,8 +59,8 @@ signals:
 
 typedef QSharedPointer<TagList> TagListPtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::TagListPtr );
+Q_DECLARE_METATYPE( mygpo::TagListPtr )
 
 #endif // LIBMYGPO_QT_TAGLIST_H

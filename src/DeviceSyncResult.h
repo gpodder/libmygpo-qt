@@ -61,6 +61,6 @@ signals:
 
 typedef QSharedPointer<DeviceSyncResult> DeviceSyncResultPtr;
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_DEVICESYNCRESULT_H
