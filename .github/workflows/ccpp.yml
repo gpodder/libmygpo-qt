@@ -1,0 +1,195 @@
+name: C/C++ CI
+on: [push, pull_request]
+
+jobs:
+
+  build_opensuse_tumbleweed_qt5:
+    name: Build openSUSE Tumbleweed Qt 5
+    runs-on: ubuntu-latest
+    container:
+      image: opensuse/tumbleweed
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Update packages
+        run: zypper -n --gpg-auto-import-keys ref
+      - name: Upgrade packages
+        run: zypper -n --gpg-auto-import-keys dup
+      - name: Install openSUSE dependencies
+        run: zypper -n --gpg-auto-import-keys install make cmake gcc-c++ libQt5Core-devel libQt5Network-devel libQt5Test-devel
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_WITH_QT5=ON
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+
+  build_opensuse_tumbleweed_qt6:
+    name: Build openSUSE Tumbleweed Qt 6
+    runs-on: ubuntu-latest
+    container:
+      image: opensuse/tumbleweed
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Update packages
+        run: zypper -n --gpg-auto-import-keys ref
+      - name: Upgrade packages
+        run: zypper -n --gpg-auto-import-keys dup
+      - name: Install openSUSE dependencies
+        run: zypper -n --gpg-auto-import-keys install make cmake gcc-c++ qt6-core-devel qt6-network-devel qt6-test-devel
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_WITH_QT6=ON
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+
+  build_debian_buster:
+    name: Build Debian Buster
+    runs-on: ubuntu-latest
+    container:
+      image: debian:buster
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Install Debian dependencies
+        run: apt-get update && apt-get install -y make cmake g++ pkg-config qtbase5-dev
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+
+  build_debian_bullseye:
+    name: Build Debian Bullseye
+    runs-on: ubuntu-latest
+    container:
+      image: debian:bullseye
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Install Debian dependencies
+        run: apt-get update && apt-get install -y make cmake g++ pkg-config qtbase5-dev
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+
+  build_ubuntu_bionic:
+    name: Build Ubuntu Bionic LTS
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:bionic
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Install Ubuntu dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: apt-get update && apt-get install -y make cmake g++ pkg-config qtbase5-dev
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+
+  build_ubuntu_focal:
+    name: Build Ubuntu Focal LTS
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:focal
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Install Ubuntu dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: apt-get update && apt-get install -y make cmake g++ pkg-config qtbase5-dev
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+
+  build-macos-qt5:
+    name: Build macOS Qt 5
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Install packages
+        run: brew install pkgconfig qt5
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        env:
+          MACOSX_DEPLOYMENT_TARGET: 10.15
+          PKG_CONFIG_PATH: /usr/local/lib/pkgconfig
+          Qt5_DIR: /usr/local/opt/qt5/lib/cmake
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_WITH_QT5=ON -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5/lib/cmake
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
+
+  build-macos-qt6:
+    name: Build macOS Qt 6
+    runs-on: macos-10.15
+    steps:
+      - uses: actions/checkout@v1.2.0
+      - name: Install packages
+        run: brew install pkgconfig qt6
+
+      - name: Create Build Environment
+        shell: bash
+        run: cmake -E make_directory build
+      - name: Configure CMake
+        shell: bash
+        env:
+          MACOSX_DEPLOYMENT_TARGET: 10.15
+          PKG_CONFIG_PATH: /usr/local/lib/pkgconfig
+          Qt6_DIR: /usr/local/opt/qt6/lib/cmake
+        working-directory: build
+        run: cmake .. -DCMAKE_BUILD_TYPE=Debug -DBUILD_WITH_QT6=ON -DCMAKE_PREFIX_PATH=/usr/local/opt/qt6/lib/cmake
+      - name: Build
+        shell: bash
+        working-directory: build
+        run: cmake --build . --config Debug
