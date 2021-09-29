@@ -93,7 +93,7 @@ bool DeviceUpdatesPrivate::parse( const QVariant& data )
         return false;
     QVariantMap varMap = data.toMap();
     m_add = varMap.value( QLatin1String( "add" ) );
-    m_remove = varMap.value( QLatin1String( "remove" ) );
+    m_remove = varMap.value( QLatin1String( "rem" ) );
     m_update = varMap.value( QLatin1String( "updates" ) );
     if( varMap.value( QLatin1String( "timestamp" ) ).canConvert( QVariant::LongLong ) )
         m_timestamp = varMap.value( QLatin1String( "timestamp" ) ).toLongLong();
