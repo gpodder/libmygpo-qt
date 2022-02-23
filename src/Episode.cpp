@@ -43,39 +43,75 @@ EpisodePrivate::EpisodePrivate ( Episode* qq, const QVariant& variant, QObject* 
 
 bool EpisodePrivate::parse ( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if ( !data.canConvert ( QVariant::Map ) )
+#endif
         return false;
     QVariantMap episodeMap = data.toMap();
     QVariant s = episodeMap.value ( QLatin1String ( "url" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !s.canConvert ( QVariant::Url ) )
+#endif
         return false;
     m_url = s.toUrl();
     s = episodeMap.value ( QLatin1String ( "title" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( !s.canConvert ( QVariant::String ) )
+#endif
         return false;
     m_title = s.toString();
     s = episodeMap.value ( QLatin1String ( "podcast_url" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !s.canConvert ( QVariant::Url ) )
+#endif
         return false;
     m_podcastUrl = s.toUrl();
     s = episodeMap.value ( QLatin1String ( "podcast_title" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( !s.canConvert ( QVariant::String ) )
+#endif
         return false;
     m_podcastTitle = s.toString();
     s = episodeMap.value ( QLatin1String ( "description" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( !s.canConvert ( QVariant::String ) )
+#endif
         return false;
     m_description = s.toString();
     s = episodeMap.value ( QLatin1String ( "website" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !s.canConvert ( QVariant::Url ) )
+#endif
         return false;
     m_website = s.toUrl();
     s = episodeMap.value ( QLatin1String ( "mygpo_link" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !s.canConvert ( QVariant::Url ) )
+#endif
         return false;
     m_mygpoUrl = s.toUrl();
     s = episodeMap.value ( QLatin1String ( "status" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( s.canConvert ( QVariant::String ) )
+#endif
     {
         QString status = s.toString();
         m_status = Episode::UNKNOWN;
@@ -101,7 +137,11 @@ bool EpisodePrivate::parse ( const QVariant& data )
         m_status = Episode::UNKNOWN;
     }
     s = episodeMap.value( QLatin1String ( "released" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( s.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( s.canConvert( QVariant::String ) )
+#endif
     {
         QString date = s.toString();
         m_released = QDateTime::fromString( date, Qt::ISODate );

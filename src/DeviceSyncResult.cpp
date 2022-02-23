@@ -75,7 +75,11 @@ QList<QString> DeviceSyncResultPrivate::notSynchronizedList() const
 
 bool DeviceSyncResultPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap varMap = data.toMap();
     m_synchronized = varMap.value( QLatin1String( "synchronized" ) );

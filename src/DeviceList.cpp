@@ -54,7 +54,11 @@ void DeviceListPrivate::error( QNetworkReply::NetworkError error )
 
 bool DeviceListPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert(data.metaType(), QMetaType( QMetaType::QVariantList ) ) )
+#else
     if( !data.canConvert( QVariant::List ) )
+#endif
         return false;
 
     QVariantList varList = data.toList();
@@ -63,9 +67,7 @@ bool DeviceListPrivate::parse( const QVariant& data )
     {
         DevicePtr ptr( new Device( var, this ) );
         m_devicesList.append( ptr );
-        QVariant v;
-        v.setValue<DevicePtr>( ptr );
-        devList.append( v );
+        devList.append( QVariant::fromValue<DevicePtr>( ptr ) );
     }
     m_devices = devList;
     return true;

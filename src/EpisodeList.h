@@ -61,6 +61,6 @@ signals:
 
 typedef QSharedPointer<EpisodeList> EpisodeListPtr;
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_EPISODELIST_H

@@ -61,8 +61,8 @@ signals:
 
 typedef QSharedPointer<DeviceList> DeviceListPtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::DeviceListPtr );
+Q_DECLARE_METATYPE( mygpo::DeviceListPtr )
 
 #endif //LIBMYGPO_QT_DEVICELIST_H

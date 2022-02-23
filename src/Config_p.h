@@ -53,6 +53,6 @@ private:
 
 };
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_CONFIG_PRIVATE_H

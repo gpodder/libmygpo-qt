@@ -52,6 +52,6 @@ private slots:
     void error( QNetworkReply::NetworkError error );
 };
 
-}
+}  // namespace mygpo
 
 #endif //DEVICELIST_PRIVATE_H

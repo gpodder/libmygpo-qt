@@ -63,8 +63,8 @@ signals:
 
 typedef QSharedPointer<AddRemoveResult> AddRemoveResultPtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::AddRemoveResultPtr );
+Q_DECLARE_METATYPE( mygpo::AddRemoveResultPtr )
 
 #endif // LIBMYGPO_QT_ADDREMOVERESULT_H

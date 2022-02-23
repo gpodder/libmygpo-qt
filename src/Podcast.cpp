@@ -141,42 +141,78 @@ QUrl Podcast::mygpoUrl() const
 
 bool PodcastPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if ( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap podcastMap = data.toMap();
     QVariant v = podcastMap.value( QLatin1String( "url" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QByteArray ) ) )
+#else
     if ( !v.canConvert( QVariant::ByteArray ) )
+#endif
         return false;
     m_url = QUrl::fromEncoded(v.toByteArray(), QUrl::StrictMode);
     if (!m_url.isValid()) { 
         return false;
     }
     v = podcastMap.value( QLatin1String( "title" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( !v.canConvert( QVariant::String ) )
+#endif
         return false;
     m_title = v.toString();
     v = podcastMap.value( QLatin1String( "description" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QString ) ) )
+#else
     if ( !v.canConvert( QVariant::String ) )
+#endif
         return false;
     m_description = v.toString();
     v = podcastMap.value( QLatin1String( "subscribers" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::Int ) ) )
+#else
     if ( !v.canConvert( QVariant::Int ) )
+#endif
         return false;
     m_subscribers = v.toUInt();
     v = podcastMap.value( QLatin1String( "subscribers_last_week" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::Int ) ) )
+#else
     if ( !v.canConvert( QVariant::Int ) )
+#endif
         return false;
     m_SubscribersLastWeek = v.toUInt();
     v = podcastMap.value( QLatin1String( "logo_url" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !v.canConvert( QVariant::Url ) )
+#endif
         return false;
     m_logoUrl = v.toUrl();
     v = podcastMap.value( QLatin1String( "website" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !v.canConvert( QVariant::Url ) )
+#endif
         return false;
     m_website = v.toUrl();
     v = podcastMap.value( QLatin1String( "mygpo_link" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( v.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
     if ( !v.canConvert( QVariant::Url ) )
+#endif
         return false;
     m_mygpoUrl = v.toUrl();
     return true;

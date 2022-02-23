@@ -62,6 +62,6 @@ private:
     bool parseActionType( const QString& data );
 };
 
-}
+}  // namespace mygpo
 
 #endif //EPISODEACTION_PRIVATE_H

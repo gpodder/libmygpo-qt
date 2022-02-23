@@ -46,6 +46,6 @@ private:
     bool parse( const QVariant& var );
 };
 
-}
+}  // namespace mygpo
 
 #endif //DEVICE_PRIVATE_H

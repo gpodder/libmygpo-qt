@@ -59,6 +59,6 @@ private:
     ConfigPrivate* const d;
 };
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_CONFIG_H

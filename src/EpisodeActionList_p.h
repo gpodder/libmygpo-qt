@@ -56,6 +56,6 @@ private slots:
 
 };
 
-}
+}  // namespace mygpo
 
 #endif //EPISODEACTIONLIST_PRIVATE_H

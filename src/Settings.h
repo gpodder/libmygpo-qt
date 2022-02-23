@@ -61,6 +61,6 @@ signals:
 
 typedef QSharedPointer<Settings> SettingsPtr;
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_SETTINGS_H

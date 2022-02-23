@@ -89,8 +89,8 @@ signals:
 
 typedef QSharedPointer<Episode> EpisodePtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::EpisodePtr );
+Q_DECLARE_METATYPE( mygpo::EpisodePtr )
 
 #endif // LIBMYGPO_QT_EPISODE_H

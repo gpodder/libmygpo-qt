@@ -81,6 +81,6 @@ private:
     void addUserAgent( QNetworkRequest& request );
 };
 
-}
+}  // namespace mygpo
 
 #endif /* LIBMYGPO_QT_REQUESTHANDLER_H_ */

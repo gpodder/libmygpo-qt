@@ -65,7 +65,11 @@ QList< QUrl > DeviceUpdatesPrivate::removeList() const
     QList<QUrl> ret;
     foreach( const QVariant & var, updateVarList )
     {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+        if( QMetaType::canConvert( var.metaType(), QMetaType( QMetaType::QUrl ) ) )
+#else
         if( var.canConvert( QVariant::Url ) )
+#endif
             ret.append( var.toUrl() );
     }
     return ret;
@@ -89,13 +93,21 @@ QList< EpisodePtr > DeviceUpdatesPrivate::updateList() const
 
 bool DeviceUpdatesPrivate::parse( const QVariant& data )
 {
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( data.metaType(), QMetaType( QMetaType::QVariantMap ) ) )
+#else
     if( !data.canConvert( QVariant::Map ) )
+#endif
         return false;
     QVariantMap varMap = data.toMap();
     m_add = varMap.value( QLatin1String( "add" ) );
     m_remove = varMap.value( QLatin1String( "rem" ) );
     m_update = varMap.value( QLatin1String( "updates" ) );
+#if QT_VERSION >= QT_VERSION_CHECK( 6, 0, 0 )
+    if( !QMetaType::canConvert( varMap.value( QLatin1String( "timestamp" ) ).metaType(), QMetaType( QMetaType::LongLong ) ) )
+#else
     if( varMap.value( QLatin1String( "timestamp" ) ).canConvert( QVariant::LongLong ) )
+#endif
         m_timestamp = varMap.value( QLatin1String( "timestamp" ) ).toLongLong();
     return true;
 }

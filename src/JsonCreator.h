@@ -53,6 +53,6 @@ private:
     static QVariantMap episodeActionToQVariantMap( const EpisodeActionPtr episodeAction );
 };
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_JSONPARSER_H

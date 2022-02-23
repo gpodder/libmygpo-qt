@@ -67,6 +67,6 @@ signals:
 
 typedef QSharedPointer<DeviceUpdates> DeviceUpdatesPtr;
 
-}
+}  // namespace mygpo
 
 #endif // LIBMYGPO_QT_DEVICEUPDATES_H

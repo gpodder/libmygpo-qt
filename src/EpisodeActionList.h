@@ -64,8 +64,8 @@ signals:
 
 typedef QSharedPointer<EpisodeActionList> EpisodeActionListPtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::EpisodeActionListPtr );
+Q_DECLARE_METATYPE( mygpo::EpisodeActionListPtr )
 
 #endif // LIBMYGPO_QT_EPISODEACTIONLIST_H

@@ -52,8 +52,8 @@ private:
 
 typedef QSharedPointer<Tag> TagPtr;
 
-}
+}  // namespace mygpo
 
-Q_DECLARE_METATYPE( mygpo::TagPtr );
+Q_DECLARE_METATYPE( mygpo::TagPtr )
 
 #endif // LIBMYGPO_QT_TAG_H

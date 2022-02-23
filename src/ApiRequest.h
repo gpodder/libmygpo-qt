@@ -397,6 +397,6 @@ private:
     ApiRequestPrivate* const d;
 };
 
-}
+}  // namespace mygpo
 
 #endif

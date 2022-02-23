@@ -50,6 +50,6 @@ private slots:
     void error( QNetworkReply::NetworkError error );
 };
 
-}
+}  // namespace mygpo
 
 #endif // PODCASLIST_PRIVATE_H
