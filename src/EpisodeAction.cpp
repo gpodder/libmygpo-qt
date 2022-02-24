@@ -118,7 +118,10 @@ bool EpisodeActionPrivate::parse( const QVariant& data )
     if( episodeActionMap.contains( QLatin1String( "timestamp" ) ) )
     {
         s = episodeActionMap.value( QLatin1String( "timestamp" ) );
-        m_timestamp = s.toULongLong();
+        // timestamp is provided in ISO 8601 format, to be converted to qulonglong
+        // when the server generates the timestamp, it will contain extra
+        // sub-second resolution, which we need to cut off first before converting
+        m_timestamp = static_cast<qulonglong>(QDateTime::fromString(s.toString().section(QLatin1String("."), 0, 0), QLatin1String("yyyy-MM-dd'T'hh:mm:ss")).toMSecsSinceEpoch() / 1000);
     }
     else
     {

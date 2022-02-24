@@ -192,7 +192,7 @@ QVariantMap JsonCreator::episodeActionToQVariantMap( const EpisodeActionPtr epis
         time.addMSecs(episodeAction->timestamp() % 1000 );
         dateTime.setTime(time);
 #endif
-        map.insert( QLatin1String( "timestamp" ), dateTime.toString(Qt::ISODate) );
+        map.insert( QLatin1String( "timestamp" ), dateTime.toUTC().toString(Qt::ISODate) );
     }
     if( actionType == EpisodeAction::Play )
     {
