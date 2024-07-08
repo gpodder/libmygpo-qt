@@ -49,7 +49,7 @@ private:
     Q_DISABLE_COPY( DeviceList )
     DeviceListPrivate* const d;
     friend class DeviceListPrivate;
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

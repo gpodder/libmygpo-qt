@@ -77,7 +77,7 @@ private:
     Q_DISABLE_COPY( Episode )
     EpisodePrivate* const d;
     friend class EpisodePrivate;
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

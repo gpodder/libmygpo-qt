@@ -36,7 +36,7 @@ class UrlBuilderTest : public QObject {
 public:
   UrlBuilderTest();
   virtual ~UrlBuilderTest();
-private slots:
+private Q_SLOTS:
   void initTestCase();
   void cleanupTestCase();
   void init();

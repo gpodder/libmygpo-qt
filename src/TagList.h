@@ -48,7 +48,7 @@ private:
     Q_DISABLE_COPY( TagList )
     TagListPrivate* const d;
     friend class TagListPrivate;
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

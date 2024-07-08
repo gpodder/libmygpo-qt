@@ -56,7 +56,7 @@ private:
     Q_DISABLE_COPY( DeviceUpdates )
     DeviceUpdatesPrivate* const d;
     friend class DeviceUpdatesPrivate;
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

@@ -36,7 +36,7 @@ class JsonCreatorTest : public QObject {
 public:
   JsonCreatorTest();
   virtual ~JsonCreatorTest();
-private slots:
+private Q_SLOTS:
   void initTestCase();
   void cleanupTestCase();
   void init();
