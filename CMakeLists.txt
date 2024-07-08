@@ -5,10 +5,10 @@ project( libmygpo-qt )
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
-option(BUILD_WITH_QT4 "Build libmygpo-qt with Qt4" OFF)
+option(BUILD_WITH_QT6 "Build libmygpo-qt with Qt6" OFF)
 option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
 
-if( NOT BUILD_WITH_QT4 )
+if( NOT BUILD_WITH_QT6 )
     if( MYGPO_BUILD_TESTS )
         find_package(Qt5 REQUIRED COMPONENTS Core Network Test CONFIG)
     else()
@@ -23,27 +23,21 @@ if( NOT BUILD_WITH_QT4 )
     # pkg-config names of QtCore and QtNetwork are Qt5Core and Qt5Network for
     # Qt5
     set(MYGPO_QT_MAJOR_VERSION "5")
-    set(MYGPO_QT4_QJSON_DEP "")
 else()
-    message(STATUS "Could not find Qt5, searching for Qt4 instead...")
-    message(STATUS "Qt4 Support is deprecated, building with Qt4 is no longer officially supported")
+    message(STATUS "Could not find Qt5, searching for Qt6 instead...")
     if( MYGPO_BUILD_TESTS )
-        find_package( Qt4 COMPONENTS QtCore QtNetwork QtTest REQUIRED )
+        find_package( Qt6 COMPONENTS Core Network Test REQUIRED )
     else( MYGPO_BUILD_TESTS )
-        find_package( Qt4 COMPONENTS QtCore QtNetwork REQUIRED )
+        find_package( Qt6 COMPONENTS Core Network REQUIRED )
     endif()
-    set( QT_DONT_USE_QTGUI TRUE )
-    include( ${QT_USE_FILE} )
+    set(MYGPO_QT_VERSION_SUFFIX 6)
 
     macro(qt_wrap_cpp)
-        qt4_wrap_cpp(${ARGN})
+        qt6_wrap_cpp(${ARGN})
     endmacro()
 
-    set(MYGPO_QT_MAJOR_VERSION "")
-    set(MYGPO_QT4_QJSON_DEP "Requires.private: QJson")
+    set(MYGPO_QT_MAJOR_VERSION "6")
 
-    # QJson is only required for Qt4
-    find_package(QJSON REQUIRED)
 endif()
 
 # Don't use absolute path in Mygpo-qtTargets-$buildType.cmake
@@ -51,7 +45,7 @@ endif()
 # set(QT_USE_IMPORTED_TARGETS TRUE)
 
 set( MYGPO_QT_VERSION_MAJOR "1" )
-set( MYGPO_QT_VERSION_MINOR "1" )
+set( MYGPO_QT_VERSION_MINOR "2" )
 set( MYGPO_QT_VERSION_PATCH "0" )
 set( MYGPO_QT_VERSION "${MYGPO_QT_VERSION_MAJOR}.${MYGPO_QT_VERSION_MINOR}.${MYGPO_QT_VERSION_PATCH}" )
 
