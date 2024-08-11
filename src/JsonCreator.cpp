@@ -32,7 +32,7 @@
 
 using namespace mygpo;
 
-static qulonglong c_maxlonglong = (2^64)-1;
+static qulonglong c_maxlonglong = ULLONG_MAX;
 
 QByteArray JsonCreator::addRemoveSubsToJSON( const QList< QUrl >& add, const QList< QUrl >& remove )
 {

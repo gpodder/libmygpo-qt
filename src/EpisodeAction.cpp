@@ -26,7 +26,7 @@
 
 using namespace mygpo;
 
-static qulonglong c_maxlonglong = (2^64)-1;
+static qulonglong c_maxlonglong = ULLONG_MAX;
 
 EpisodeActionPrivate::EpisodeActionPrivate( EpisodeAction* qq, const QVariant& variant, QObject* parent ) : QObject( parent ), q( qq )
 {

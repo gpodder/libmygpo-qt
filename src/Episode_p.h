@@ -60,7 +60,7 @@ private:
     QNetworkReply::NetworkError m_error;
     bool parse ( const QVariant& data );
     bool parse ( const QByteArray& data );
-private slots:
+private Q_SLOTS:
     void parseData();
     void error ( QNetworkReply::NetworkError error );
 

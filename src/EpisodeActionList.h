@@ -52,7 +52,7 @@ public:
 private:
     EpisodeActionListPrivate* const d;
     friend class EpisodeActionListPrivate;
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

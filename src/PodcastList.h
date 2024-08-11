@@ -50,7 +50,7 @@ private:
     PodcastListPrivate* const d;
     friend class PodcastListPrivate;
 
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

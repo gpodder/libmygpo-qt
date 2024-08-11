@@ -66,7 +66,7 @@ private:
     PodcastPrivate* const d;
     friend class PodcastPrivate;
     bool m_copy;		//true if this object was created by the copy-ctor
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/

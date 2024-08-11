@@ -50,7 +50,7 @@ private:
     Q_DISABLE_COPY( DeviceSyncResult )
     DeviceSyncResultPrivate* const d;
     friend class DeviceSyncResultPrivate;
-signals:
+Q_SIGNALS:
     /**Gets emitted when the data is ready to read*/
     void finished();
     /**Gets emitted when an parse error ocurred*/
