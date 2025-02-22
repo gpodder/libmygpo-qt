@@ -10,9 +10,9 @@ option(MYGPO_BUILD_TESTS "Build all unit tests" ON)
 
 if( NOT BUILD_WITH_QT6 )
     if( MYGPO_BUILD_TESTS )
-        find_package(Qt5 REQUIRED COMPONENTS Core Network Test CONFIG)
+        find_package(Qt5 5.15.0 REQUIRED COMPONENTS Core Network Test CONFIG)
     else()
-        find_package(Qt5 REQUIRED COMPONENTS Core Network CONFIG)
+        find_package(Qt5 5.15.0 REQUIRED COMPONENTS Core Network CONFIG)
     endif()
     set(MYGPO_QT_VERSION_SUFFIX 5)
 

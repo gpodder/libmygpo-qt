@@ -29,7 +29,7 @@ using namespace mygpo;
 TagListPrivate::TagListPrivate( TagList* qq, QNetworkReply* reply ) : q( qq ), m_reply( reply ), m_tags( QVariant() ), m_error( QNetworkReply::NoError )
 {
     QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
-    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
+    QObject::connect( m_reply, SIGNAL( errorOccurred( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
 TagListPrivate::~TagListPrivate()
