@@ -29,7 +29,7 @@ using namespace mygpo;
 DeviceListPrivate::DeviceListPrivate( DeviceList* qq, QNetworkReply* reply ) : q( qq ), m_reply( reply ), m_error( QNetworkReply::NoError )
 {
     QObject::connect( m_reply, SIGNAL( finished() ), this, SLOT( parseData() ) );
-    QObject::connect( m_reply, SIGNAL( error( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
+    QObject::connect( m_reply, SIGNAL( errorOccurred( QNetworkReply::NetworkError ) ), this, SLOT( error( QNetworkReply::NetworkError ) ) );
 }
 
 DeviceListPrivate::~DeviceListPrivate()
@@ -64,7 +64,7 @@ bool DeviceListPrivate::parse( const QVariant& data )
         DevicePtr ptr( new Device( var, this ) );
         m_devicesList.append( ptr );
         QVariant v;
-        v.setValue<DevicePtr>( ptr );
+        v.setValue<DevicePtr>( QSharedPointer<mygpo::Device>(ptr) );
         devList.append( v );
     }
     m_devices = devList;

@@ -33,7 +33,7 @@ EpisodePrivate::~EpisodePrivate()
 EpisodePrivate::EpisodePrivate ( Episode* qq, QNetworkReply* reply, QObject* parent ) : QObject ( parent ), m_reply ( reply ), q ( qq ), m_error ( QNetworkReply::NoError )
 {
     QObject::connect ( m_reply, SIGNAL ( finished() ), this, SLOT ( parseData() ) );
-    QObject::connect ( m_reply, SIGNAL ( error ( QNetworkReply::NetworkError ) ), this, SLOT ( error ( QNetworkReply::NetworkError ) ) );
+    QObject::connect ( m_reply, SIGNAL ( errorOccurred ( QNetworkReply::NetworkError ) ), this, SLOT ( error ( QNetworkReply::NetworkError ) ) );
 }
 
 EpisodePrivate::EpisodePrivate ( Episode* qq, const QVariant& variant, QObject* parent ) : QObject ( parent ), m_reply ( 0 ), q ( qq )
